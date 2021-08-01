@@ -156,6 +156,16 @@ component uart_par2ser is
            txd : out  STD_LOGIC);
 end component;
 
+component uart_ser2par is
+    Port ( reset : in  STD_LOGIC;
+           rxd_clk : in  STD_LOGIC;
+           mode : in  STD_LOGIC_VECTOR (2 downto 0);
+           char : out  STD_LOGIC_VECTOR (7 downto 0);
+           ready : buffer  STD_LOGIC;
+           valid : out  STD_LOGIC;
+           rxd : in  STD_LOGIC);
+end component;
+
 -- Misc components
 component sn74hc4040 is
     Port ( clock : in  STD_LOGIC;
@@ -338,6 +348,10 @@ signal hex_clk: std_logic;
 signal hexout_send, hexout_ready, hexout_nrd, hexout_nbusreq, hexout_nbusack: std_logic;
 signal hexout_char: std_logic_vector(7 downto 0);
 signal hexout_a: std_logic_vector(15 downto 0);
+
+-- HEX input path
+signal hexin_ready: std_logic;
+signal hexin_char: std_logic_vector(7 downto 0);
 
 begin
 PMOD(0) <= v_sync;
@@ -526,12 +540,33 @@ hexout: mem2hex Port map (
 txdout: uart_par2ser Port map (
 			reset => reset,
 			txd_clk => baudrate_x1,
-			send => hexout_send,
+			send => hexin_ready, --hexout_send,
 			mode => "000", --switch(4 downto 2), -- no parity (extra stop bit will be generated)
-			data => hexout_char,
+			data => hexin_char, --hexout_char,
          ready => hexout_ready,
          txd => PMOD_RXD		-- looking from the PC side
 		);
+		
+rxdin: uart_ser2par Port map ( 
+			reset => reset,
+         rxd_clk => baudrate_x4,
+         mode => "000", --switch(4 downto 2), -- no parity
+         char => hexin_char,
+         ready => hexin_ready,
+         valid => open, 		-- not yet implemented
+         rxd => PMOD_TXD		-- looking from the PC side
+		);
+		
+on_hexin_ready: process(reset, hexin_ready, hexin_char)
+begin
+	if (reset = '1') then
+		display <= X"3210";
+	else
+		if (rising_edge(hexin_ready)) then
+			display <= display(7 downto 0) & hexin_char;
+		end if;
+	end if;
+end process;
 		
 -- 7 seg LED debug display							
 leds: fourdigitsevensegled Port map ( 
@@ -550,7 +585,7 @@ leds: fourdigitsevensegled Port map (
 with digsel select
 	hexdata <= 	display(3 downto 0) when "00",	
 					display(7 downto 4) when "01",
-					display(11 downto 8) when "11",
+					display(11 downto 8) when "10",
 					display(15 downto 12) when others;
 
 counter: freqcounter Port map ( 
@@ -561,7 +596,7 @@ counter: freqcounter Port map (
 		add => X"0001",
 		cin => '1',
 		cout => open,
-      value => display
+      value => open --display
 	);
 
 baudgen: sn74hc4040 port map (
