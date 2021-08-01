@@ -211,7 +211,7 @@ end process;
 offclk <= (not v_current(14)) or offsetclk;
 
 h_off: offsetreg Port map ( 
-				reset => reset,
+				reset => reset_i,
 				initval => std_logic_vector(to_unsigned(MARGIN_LEFT, 10)),
 				mode => offsetcmd(1 downto 0),
 				clk => offclk,
@@ -221,7 +221,7 @@ h_off: offsetreg Port map (
 
 margin_top <= std_logic_vector(to_unsigned(MARGIN_TOP_TMS, 10)) when (mode_tms = '1') else std_logic_vector(to_unsigned(MARGIN_TOP_TIM, 10));
 v_off: offsetreg Port map ( 
-				reset => reset,
+				reset => reset_i,
 				initval => margin_top,
 				mode => offsetcmd(3 downto 2),
 				clk => offclk,

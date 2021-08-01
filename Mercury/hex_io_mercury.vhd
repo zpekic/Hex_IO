@@ -397,7 +397,7 @@ powergen: sn74hc4040 port map (
 		signal_debounced => button
 	);
 	
-offset_tim <= button(3 downto 0) when (switch_tms = '0') else "0000";
+offset_tim <= button(3 downto 0);-- when (switch_tms = '1') else "0000";
 vga: vga_controller Port map ( 
 		reset => RESET,
       clk => freq25M,
@@ -432,14 +432,12 @@ vram: ram32k8_dualport PORT MAP(
     doutb => vram_douta
   );
 
--- HEX out processor has read access if it managed to grab bus during low HSYNC
+-- HEX out processor has read access if it managed to grab bus during high VSYNC
 vram_addrb <= hexout_a(14 downto 0) when (hexout_nrd = '0') else vga_a; 
 
 tim_window <= x_valid and y_valid;
 vga_window <= v_valid and h_valid;
 
---vga_a <= vga_y & vga_x(8 downto 2);
---vga_a <= vga_y & vga_x(7 downto 1); 
 vga_a <= vga_y(8 downto 1) & vga_x(8 downto 2) when (switch_tms = '1') else vga_y(7 downto 0) & vga_x(8 downto 2); 
 -- TODO: modify VGA controller to expand y from 256 to 384 (2*192) pixels
 vram_wea <= (others => '1'); --sampler_wr_nrd);
@@ -470,7 +468,6 @@ with color_sel select vga_color <=
 	color_white when "00",													-- should never show
 	text_color when "10",													-- text outside tim window
 	video_color(to_integer(unsigned(color_index))) when "11",	-- tim or vdp pixel 
-	--nibble(2) & nibble(2) & nibble(2) & nibble(1) & nibble(1) & nibble(1) & nibble(0) & nibble(0) when "11",	-- tim or vdp pixel 
 	color_black when others;												-- outside pixel area (border)
 	
 -- now convert to VGA 8-bit color
@@ -500,15 +497,10 @@ with h(2 downto 0) select text_pix <=
 text_color <= color_cyan when (text_pix = '1') else color_blue;
 							
 -- common clock for hex input and output processors
-hex_clk <= freq(to_integer(4 + unsigned(switch_hexclk)));
+--hex_clk <= freq(to_integer(4 + unsigned(switch_hexclk)));
 							
 -- memory to serial output path, in Intel Hex format
 hexout_nbusack <= hexout_nbusreq or (not v_sync);
-
---chargen2: chargen_rom Port map ( 
---		a => hexout_a(10 downto 0),
---      d => charpat
---	);
 	
 hexout: mem2hex Port map ( 
 			clk => baudrate_x8, --hex_clk,
@@ -524,7 +516,7 @@ hexout: mem2hex Port map (
 			DBUS => vram_douta,
 			START => button(0),
 			BUSY => open,
-			PAGE => switch,
+			PAGE => "00001111", --switch, -- dump lower 32k
 			COUNTSEL => '0', -- 16 bytes per line
 			TXDREADY => hexout_ready,
 			TXDSEND => hexout_send,
@@ -566,7 +558,7 @@ counter: freqcounter Port map (
       clk => freq1,
       freq => baudrate_x1,
 		bcd => switch_bcd,
-		add => X"0000",
+		add => X"0001",
 		cin => '1',
 		cout => open,
       value => display
