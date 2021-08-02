@@ -76,10 +76,10 @@ with bitSel select txd <=
 			'1' when others;		-- delay
 
 -- drive low when any are being bits transmitted	
-ready <= '1' when (bitSel = "0000") else '0'; 					
+ready <= '1' when (bitSel = X"0") else '0'; 					
 
 -- when ready, listen to rising edge of send signal to start
-bitClk <= send when (ready = '1') else txd_clk;
+bitClk <= send when (bitSel = X"0") else txd_clk;
 
 -- note that when going from 1100 to 0000 this counter shuts itself off, waits for send pulse
 on_bitclk: process(reset, bitClk)
@@ -91,7 +91,7 @@ begin
 			case bitSel is
 				when X"0" =>
 					char <= data;
-					bitSel <= X"1";
+					bitSel <= std_logic_vector(unsigned(bitSel) + 1);
 				when X"C" =>
 					bitSel <= X"0";
 				when others =>

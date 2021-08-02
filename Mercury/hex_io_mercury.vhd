@@ -393,7 +393,7 @@ powergen: sn74hc4040 port map (
 			q(8 downto 0) => open, 
 			q(9) => freq4,	
 			q(10) => freq2,	
-			q(11) =>  freq1	
+			q(11) => freq1	
 		);
 --	
 	debounce_sw: debouncer8channel Port map ( 
@@ -540,9 +540,9 @@ hexout: mem2hex Port map (
 txdout: uart_par2ser Port map (
 			reset => reset,
 			txd_clk => baudrate_x1,
-			send => hexin_ready, --hexout_send,
+			send => hexout_send,
 			mode => "000", --switch(4 downto 2), -- no parity (extra stop bit will be generated)
-			data => hexin_char, --hexout_char,
+			data => hexout_char,
          ready => hexout_ready,
          txd => PMOD_RXD		-- looking from the PC side
 		);
@@ -568,12 +568,15 @@ begin
 	end if;
 end process;
 		
--- 7 seg LED debug display							
+-- 7 seg LED debug display		
+
+showdigit <= "1111" when (freq(9) = '0') else "0000";
+					
 leds: fourdigitsevensegled Port map ( 
 			-- inputs
 			hexdata => hexdata,
 			digsel => digsel,
-			showdigit => "1111",
+			showdigit => showdigit,
 			showdot => "0000",
 			-- outputs
 			anode => AN,
