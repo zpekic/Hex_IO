@@ -71,7 +71,7 @@ entity hex_io_mercury is
 				AN: out std_logic_vector(3 downto 0); 
 				DOT: out std_logic; 
 				-- 4 LEDs on Mercury board (3 and 2 are used by VGA VSYNC and HSYNC)
-				--LED: inout std_logic_vector(3 downto 0);
+				LED: inout std_logic_vector(1 downto 0);
 
 				-- ADC interface
 				-- channel	input
@@ -87,8 +87,8 @@ entity hex_io_mercury is
 				--ADC_MOSI: out std_logic;
 				--ADC_SCK: out std_logic;
 				--ADC_CSN: out std_logic;
-				PS2_DATA: inout std_logic;
-				PS2_CLOCK: inout std_logic;
+				--PS2_DATA: inout std_logic;
+				--PS2_CLOCK: inout std_logic;
 
 				--VGA interface
 				--register state is traced to VGA after each instruction if SW0 = on
@@ -226,6 +226,17 @@ component debouncer8channel is
            signal_debounced : out STD_LOGIC_VECTOR (7 downto 0));
 end component;
 
+component adder16 is
+    Port ( cin : in  STD_LOGIC;
+           a : in  STD_LOGIC_VECTOR (15 downto 0);
+           b : in  STD_LOGIC_VECTOR (15 downto 0);
+           na : in  STD_LOGIC;
+           nb : in  STD_LOGIC;
+           bcd : in  STD_LOGIC;
+           y : out  STD_LOGIC_VECTOR (15 downto 0);
+           cout : out  STD_LOGIC);
+end component;
+
 constant color_transparent:				std_logic_vector(7 downto 0):= "00000000";
 constant color_medgreen: 					std_logic_vector(7 downto 0):= "00010000";
 constant color_dkgreen:						std_logic_vector(7 downto 0):= "00001000";
@@ -293,8 +304,10 @@ alias PMOD_TXD: std_logic is PMOD(6);
 alias PMOD_CTS: std_logic is PMOD(7);
 
 -- debug
-signal hexdata, hexsel, showdigit: std_logic_vector(3 downto 0);
+signal hexdata, showdigit: std_logic_vector(3 downto 0);
 signal charpat: std_logic_vector(7 downto 0);
+signal display, sum: std_logic_vector(15 downto 0);
+signal cin: std_logic;
 ---
 
 --- frequency signals
@@ -335,9 +348,7 @@ alias switch_timpalette: std_logic is switch(0);
 alias switch_tms: std_logic is switch(1);
 alias switch_hexclk: std_logic_vector(2 downto 0) is switch(4 downto 2);
 alias switch_baudrate: std_logic_vector(2 downto 0) is switch(7 downto 5);
-signal vdp_limit: std_logic_vector(5 downto 0);
-signal display: std_logic_vector(15 downto 0);
-signal offset_vdp, offset_tim: std_logic_vector(3 downto 0);
+signal offset_cmd: std_logic_vector(3 downto 0);
 signal color_index, nibble: std_logic_vector(3 downto 0);
 
 -- HEX common 
@@ -411,13 +422,13 @@ powergen: sn74hc4040 port map (
 		signal_debounced => button
 	);
 	
-offset_tim <= button(3 downto 0);-- when (switch_tms = '1') else "0000";
+offset_cmd <= button(3 downto 0);-- when (switch_tms = '1') else "0000";
 vga: vga_controller Port map ( 
 		reset => RESET,
       clk => freq25M,
 		mode_tms => switch_tms,
 		offsetclk => freq4, 
-		offsetcmd => offset_tim, -- in TIM mode, move the window
+		offsetcmd => offset_cmd, 
       hsync => h_sync,
       vsync => v_sync,
 		h_valid => h_valid,
@@ -529,7 +540,7 @@ hexout: mem2hex Port map (
 			ABUS => hexout_a,
 			DBUS => vram_douta,
 			START => button(0),
-			BUSY => open,
+			BUSY => LED(1),
 			PAGE => "00001111", --switch, -- dump lower 32k
 			COUNTSEL => '0', -- 16 bytes per line
 			TXDREADY => hexout_ready,
@@ -557,51 +568,63 @@ rxdin: uart_ser2par Port map (
          rxd => PMOD_TXD		-- looking from the PC side
 		);
 		
-on_hexin_ready: process(reset, hexin_ready, hexin_char)
-begin
-	if (reset = '1') then
-		display <= X"3210";
-	else
-		if (rising_edge(hexin_ready)) then
-			display <= display(7 downto 0) & hexin_char;
-		end if;
-	end if;
-end process;
+--on_hexin_ready: process(reset, hexin_ready, hexin_char)
+--begin
+--	if (reset = '1') then
+--		display <= X"0000";
+--	else
+--		if (rising_edge(hexin_ready)) then
+--			display <= display(7 downto 0) & hexin_char;
+--			--display <= sum;
+--		end if;
+--	end if;
+--end process;
+		
+showdigit <= "1111" when (freq(9) = '0') else "0000";
 		
 -- 7 seg LED debug display		
-
-showdigit <= "1111" when (freq(9) = '0') else "0000";
-					
 leds: fourdigitsevensegled Port map ( 
 			-- inputs
 			hexdata => hexdata,
 			digsel => digsel,
 			showdigit => showdigit,
-			showdot => "0000",
+			showdot => button(3 downto 0),
 			-- outputs
 			anode => AN,
 			segment(7) => DOT,
 			segment(6 downto 0) => A_TO_G
 		);
 
-
 with digsel select
 	hexdata <= 	display(3 downto 0) when "00",	
 					display(7 downto 4) when "01",
 					display(11 downto 8) when "10",
 					display(15 downto 12) when others;
-
+					
 counter: freqcounter Port map ( 
 		reset => RESET,
       clk => freq1,
       freq => baudrate_x1,
 		bcd => switch_bcd,
-		add => X"0001",
-		cin => '1',
+		add => X"0002",
+		cin => '0',
 		cout => open,
-      value => open --display
+      value => display
 	);
 
+--cin <= button(2) or button(3);
+--adder: adder16 Port map ( 
+--				cin => cin,
+--				a(15 downto 4) => X"000",
+--				a(3 downto 0) => hexin_char(3 downto 0),
+--				b => display,
+--				na => button(2),
+--				nb => button(3),
+--				bcd => switch_bcd,
+--				y => sum,
+--				cout => LED(0)
+--			);
+			
 baudgen: sn74hc4040 port map (
 			clock => baudrate_x8,
 			reset => RESET,

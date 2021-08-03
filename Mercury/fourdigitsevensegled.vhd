@@ -43,36 +43,28 @@ end fourdigitsevensegled;
 
 architecture structural of fourdigitsevensegled is
 
---component seven_seg_controller is
---    Port ( dispEN : in STD_LOGIC;
---			  segdata : in STD_LOGIC_VECTOR(3 downto 0);
---			  segselect : in STD_LOGIC_VECTOR(2 downto 0);
---			  seg : out STD_LOGIC_VECTOR(7 downto 0);
---			  an : out STD_LOGIC_VECTOR(5 downto 0));
---end component;
-
 signal internalseg: std_logic_vector(6 downto 0); -- 7th is the dot!
 signal dot: std_logic;
 
 begin
 ---- DP for each digit individually
-	with digsel select
-		dot <= not showdot(0) when "00",
-				 not showdot(1) when "01",
-				 not showdot(2) when "10",
-				 not showdot(3) when "11",
-				 '0' when others;
+	with digsel select dot <= 
+				not showdot(0) when "00",
+				not showdot(1) when "01",
+				not showdot(2) when "10",
+				not showdot(3) when "11",
+				'0' when others;
 ---- decode position
-	with digsel select
-		anode <= 	("111" & not showdigit(0)) when "00",
-						("11" & not showdigit(1) & "1") when "01",
-						("1" & not showdigit(2) & "11") when "10",
-						(not showdigit(3) & "111") when "11",
-						"1111" when others;
-					
+	with digsel select anode <=
+				("111" & not showdigit(0)) when "00",
+				("11" & not showdigit(1) & "1") when "01",
+				("1" & not showdigit(2) & "11") when "10",
+				(not showdigit(3) & "111") when "11",
+				"1111" when others;
+						
 ---- hook up the cathodes
-		with hexdata select
-		internalseg <= 
+
+		with hexdata select internalseg <= 
 				 "0000001" when "0000",   --0
 				 "1001111" when "0001",   --1
 				 "0010010" when "0010",   --2
