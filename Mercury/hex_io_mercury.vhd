@@ -226,17 +226,6 @@ component debouncer8channel is
            signal_debounced : out STD_LOGIC_VECTOR (7 downto 0));
 end component;
 
-component adder16 is
-    Port ( cin : in  STD_LOGIC;
-           a : in  STD_LOGIC_VECTOR (15 downto 0);
-           b : in  STD_LOGIC_VECTOR (15 downto 0);
-           na : in  STD_LOGIC;
-           nb : in  STD_LOGIC;
-           bcd : in  STD_LOGIC;
-           y : out  STD_LOGIC_VECTOR (15 downto 0);
-           cout : out  STD_LOGIC);
-end component;
-
 constant color_transparent:				std_logic_vector(7 downto 0):= "00000000";
 constant color_medgreen: 					std_logic_vector(7 downto 0):= "00010000";
 constant color_dkgreen:						std_logic_vector(7 downto 0):= "00001000";
@@ -606,24 +595,11 @@ counter: freqcounter Port map (
       clk => freq1,
       freq => baudrate_x1,
 		bcd => switch_bcd,
-		add => X"0002",
-		cin => '0',
+		add => X"0001",
+		cin => '1',
 		cout => open,
       value => display
 	);
-
---cin <= button(2) or button(3);
---adder: adder16 Port map ( 
---				cin => cin,
---				a(15 downto 4) => X"000",
---				a(3 downto 0) => hexin_char(3 downto 0),
---				b => display,
---				na => button(2),
---				nb => button(3),
---				bcd => switch_bcd,
---				y => sum,
---				cout => LED(0)
---			);
 			
 baudgen: sn74hc4040 port map (
 			clock => baudrate_x8,
