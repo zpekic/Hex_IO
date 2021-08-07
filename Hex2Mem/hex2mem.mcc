@@ -2,8 +2,8 @@
 //	Hex2Mem Microcode (c) 2021-... zpekic@hotmail.com
 //  Compile with https://github.com/zpekic/MicroCodeCompiler
 //----------------------------------------------------------
-			.code 7, 32, hex2mem_code.mif, hex2mem_code.cgf, hex2mem_code.coe, m2h:hex2mem_code.vhd, hex2mem_code.hex, hex2mem_code.bin, 8;
-			.mapper 8, 7, hex2mem_map.mif, hex2mem_map.cgf, hex2mem_map.coe, m2h:hex2mem_map.vhd, hex2mem_map.hex, hex2mem_map.bin, 1;
+			.code 7, 34, hex2mem_code.mif, hex2mem_code.cgf, hex2mem_code.coe, h2m:hex2mem_code.vhd, hex2mem_code.hex, hex2mem_code.bin, 8;
+			.mapper 8, 7, hex2mem_map.mif, hex2mem_map.cgf, hex2mem_map.coe, h2m:hex2mem_map.vhd, hex2mem_map.hex, hex2mem_map.bin, 1;
 			.controller hex2mem_control_unit.vhd, 4;
 
 // System interface signals
@@ -40,11 +40,11 @@ seq_cond:		.if 4 values
 				-,
 				false			// hard-code to 0
 				default true;
-seq_then:	.then 6 values next, repeat, return, fork, @ default next;				// any label
-seq_else:	.else 6 values next, repeat, return, fork, 0b000000..0b111111, @ default next;	// any value as it can be a trace char
+seq_then:	.then 7 values next, repeat, return, fork, @ default next;				// any label
+seq_else:	.else 7 values next, repeat, return, fork, 0b000000..0b111111, @ default next;	// any value as it can be a trace char
 			
 // contains ASCII char for UART trasmit
-CHAR		.regfield 4 values 
+TXDCHAR		.regfield 4 values 
 				same,
 				char_input,		// to echo incoming character
 				char_space,
@@ -64,11 +64,11 @@ CHAR		.regfield 4 values
 				default same;
 				
 // line counter 4-digit BCD
-lincnt_a: 		.valfield 1 values zero, same default same;	// select adder "a" input, "b" is always 0
+lincnt_a: 		.valfield 1 values zero, lincnt default lincnt;	// select adder "a" input, "b" is always 0
 lincnt_cin:		.valfield 1 values 0, 1 default 0;			// drive carry in to increment
 			
 // position counter 4-digit BCD
-poscnt_a: 		.valfield 1 values zero, same default same;	// select adder "a" input, "b" is always 0
+poscnt_a: 		.valfield 1 values zero, poscnt default poscnt;	// select adder "a" input, "b" is always 0
 poscnt_cin:		.valfield 1 values 0, 1 default 0;			// drive carry in to increment
 			
 // checksum register is currently used for address only
@@ -95,13 +95,17 @@ noop:		.alias if true then next else next;
 back:	    .alias if true then return else return;
 
 // gosub aliases - this works because "jump" pushes return address to stack if both then/else are same
-emit:		.alias if false then emitChar else emitChar, CHAR <=;
+emit:		.alias if false then emitChar else emitChar, TXDCHAR <=;
 print_err:	.alias if false then print_err else print_err;	
 print_crlf:	.alias if false then print_crlf else print_crlf;	
 writemem:	.alias if false then writemem else writemem;	
 
 // other
-clear:		.alias CHAR <= zero, checksum <= zero, poscnt_a = zero,lincnt_a = zero, error <= off;
+poscnt_zero:.alias poscnt_a = zero;
+lincnt_zero:.alias lincnt_a = zero;
+poscnt_inc:	.alias poscnt_cin = 1;
+lincnt_inc:	.alias lincnt_cin = 1;
+clear:		.alias TXDCHAR <= zero, checksum <= zero, poscnt_zero, lincnt_zero, error <= off;
 
 			.org 0;
 //	First 4 microcode locations can't be used branch destinations
@@ -114,11 +118,11 @@ _reset2:	clear;
 
 _reset3:	clear;
 
-//	indicate availablity and wait for start signal
+//	indicate availability and wait for start signal
 //	---------------------------------------------------------------------------
 deadloop:	BUSY = 0, if input_is_zero then repeat else next;
 echo:		emit char_input;
-			poscnt_cin = 1, if true then fork else fork;
+			poscnt_inc, if true then fork else fork;
 
 			.map 0b????????;
 badchar:	error <= on, print_crlf;
@@ -136,8 +140,7 @@ badchar:	error <= on, print_crlf;
 			emit pos1;
 			emit pos0;
 			print_crlf;
-			error <= off;
-nextchar:	input_reset = 1, checksum <= inc, goto deadloop;
+nextchar:	error <= off, input_reset = 1, checksum <= inc, goto deadloop;
 			
 			.map 0x09;	
 tab:		writemem;
@@ -145,11 +148,11 @@ tab:		writemem;
 			
 			.map 0x0A;
 lf:			writemem;
-			lincnt_cin = 1, goto nextchar;
+			lincnt_inc, goto nextchar;
 			
 			.map 0x0D;
 cr:			writemem;
-			poscnt_a = zero, goto nextchar;
+			poscnt_zero, goto nextchar;
 
 			.map ' ';
 space:		writemem;
@@ -161,6 +164,7 @@ colon:		writemem;
 			
 			.map '0' .. '9';
 			.map 'A' .. 'F';
+			.map 'a' .. 'f';
 hexchar:	writemem;
 			goto nextchar;
 					

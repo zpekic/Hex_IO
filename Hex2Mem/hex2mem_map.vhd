@@ -1,5 +1,5 @@
 --------------------------------------------------------
--- mcc V1.0.0616 - Custom microcode compiler (c)2020-... 
+-- mcc V1.0.0807 - Custom microcode compiler (c)2020-... 
 --    https://github.com/zpekic/MicroCodeCompiler
 --------------------------------------------------------
 -- Auto-generated file, do not modify. To customize, create 'mapper_template.vhd' file in mcc.exe folder
@@ -17,17 +17,17 @@ constant MAPPER_ADDRESS_WIDTH: 	positive := 8;
 constant MAPPER_ADDRESS_LAST: 	positive := 255;
 
 
-type m2h_mapper_memory is array(0 to 255) of std_logic_vector(6 downto 0);
+type h2m_mapper_memory is array(0 to 255) of std_logic_vector(6 downto 0);
 
-signal m2h_instructionstart: std_logic_vector(6 downto 0);
+signal h2m_instructionstart: std_logic_vector(6 downto 0);
 
---m2h_instructionstart <= m2h_mapper(to_integer(unsigned(TODO))); -- copy to file containing the control unit. TODO is typically the 'instruction_register'
+--h2m_instructionstart <= h2m_mapper(to_integer(unsigned(TODO))); -- copy to file containing the control unit. TODO is typically the 'instruction_register'
 
 
 
-constant m2h_mapper: m2h_mapper_memory := (
+constant h2m_mapper: h2m_mapper_memory := (
 
--- L0123@0007. .map 0b????????
+-- L0127@0007. .map 0b????????
 0 => "0000111",
 
 1 => "0000111",
@@ -46,18 +46,18 @@ constant m2h_mapper: m2h_mapper_memory := (
 
 8 => "0000111",
 
--- L0142@0018. .map 0x09
-9 => "0011000",
+-- L0145@0017. .map 0x09
+9 => "0010111",
 
--- L0146@001A. .map 0x0A
-10 => "0011010",
+-- L0149@0019. .map 0x0A
+10 => "0011001",
 
 11 => "0000111",
 
 12 => "0000111",
 
--- L0150@001C. .map 0x0D
-13 => "0011100",
+-- L0153@001B. .map 0x0D
+13 => "0011011",
 
 14 => "0000111",
 
@@ -95,8 +95,8 @@ constant m2h_mapper: m2h_mapper_memory := (
 
 31 => "0000111",
 
--- L0154@001E. .map ' '
-32 => "0011110",
+-- L0157@001D. .map ' '
+32 => "0011101",
 
 33 => "0000111",
 
@@ -128,29 +128,29 @@ constant m2h_mapper: m2h_mapper_memory := (
 
 47 => "0000111",
 
--- L0162@0022. .map '0' .. '9'
-48 => "0100010",
+-- L0165@0021. .map '0' .. '9'
+48 => "0100001",
 
-49 => "0000111",
+49 => "0100001",
 
-50 => "0000111",
+50 => "0100001",
 
-51 => "0000111",
+51 => "0100001",
 
-52 => "0000111",
+52 => "0100001",
 
-53 => "0000111",
+53 => "0100001",
 
-54 => "0000111",
+54 => "0100001",
 
-55 => "0000111",
+55 => "0100001",
 
-56 => "0000111",
+56 => "0100001",
 
-57 => "0000111",
+57 => "0100001",
 
--- L0158@0020. .map ':'
-58 => "0100000",
+-- L0161@001F. .map ':'
+58 => "0011111",
 
 59 => "0000111",
 
@@ -164,18 +164,18 @@ constant m2h_mapper: m2h_mapper_memory := (
 
 64 => "0000111",
 
--- L0163@0022. .map 'A' .. 'F'
-65 => "0100010",
+-- L0166@0021. .map 'A' .. 'F'
+65 => "0100001",
 
-66 => "0000111",
+66 => "0100001",
 
-67 => "0000111",
+67 => "0100001",
 
-68 => "0000111",
+68 => "0100001",
 
-69 => "0000111",
+69 => "0100001",
 
-70 => "0000111",
+70 => "0100001",
 
 71 => "0000111",
 
@@ -229,17 +229,18 @@ constant m2h_mapper: m2h_mapper_memory := (
 
 96 => "0000111",
 
-97 => "0000111",
+-- L0167@0021. .map 'a' .. 'f'
+97 => "0100001",
 
-98 => "0000111",
+98 => "0100001",
 
-99 => "0000111",
+99 => "0100001",
 
-100 => "0000111",
+100 => "0100001",
 
-101 => "0000111",
+101 => "0100001",
 
-102 => "0000111",
+102 => "0100001",
 
 103 => "0000111",
 

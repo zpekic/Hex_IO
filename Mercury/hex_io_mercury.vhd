@@ -31,7 +31,6 @@ use IEEE.NUMERIC_STD.ALL;
 -- any Xilinx leaf cells in this code.
 library UNISIM;
 use UNISIM.VComponents.all;
---use work.tms0800_package.all;
 
 entity hex_io_mercury is
     Port ( 
@@ -45,22 +44,22 @@ entity hex_io_mercury is
 				USR_BTN: in std_logic; 
 
 				-- Switches on baseboard
-				-- SW(0) -- direction when scrolling
-				-- SW(1) -- data source selection for 7seg display
-				-- SW(2) -- palette selection (best on)
-				-- SW(3) -- palette selection (best off)
-				-- SW(4) -- off
-				-- SW(5) -- on
-				-- SW(6) -- off
-				-- SW(7)	-- off
+				-- SW(0) -- 
+				-- SW(1) -- 
+				-- SW(2) -- 
+				-- SW(3) -- 
+				-- SW(4) -- 
+				-- SW(5) -- 
+				-- SW(6) -- 
+				-- SW(7)	-- 
 
 				SW: in std_logic_vector(7 downto 0); 
 
 				-- Push buttons on baseboard
-				-- BTN0 - scroll
-				-- BTN1 - video only test pattern (memory not affected)
-				-- BTN2 - fill left/right
-				-- BTN3 - fill top/down
+				-- BTN0 - 
+				-- BTN1 - 
+				-- BTN2 -
+				-- BTN3 -
 				BTN: in std_logic_vector(3 downto 0); 
 
 				-- Stereo audio output on baseboard
@@ -129,7 +128,7 @@ component mem2hex is
     Port ( clk : in  STD_LOGIC;
            reset : in  STD_LOGIC;
 			  --
-   		  debug: out STD_LOGIC_VECTOR(23 downto 0);
+   		  debug: out STD_LOGIC_VECTOR(15 downto 0);
 			  --
            nRD : out  STD_LOGIC;
            nBUSREQ : out STD_LOGIC;
@@ -144,6 +143,29 @@ component mem2hex is
            TXDREADY : in  STD_LOGIC;
 			  TXDSEND: out STD_LOGIC;
            CHAR : out  STD_LOGIC_VECTOR (7 downto 0));
+end component;
+
+component hex2mem is
+    Port ( clk : in  STD_LOGIC;
+           reset : in  STD_LOGIC;
+			  --
+   		  debug: out STD_LOGIC_VECTOR(15 downto 0);
+			  --
+           nWR : out  STD_LOGIC;
+           nBUSREQ : out  STD_LOGIC;
+           nBUSACK : in  STD_LOGIC;
+           nWAIT : in  STD_LOGIC;
+           ABUS : out  STD_LOGIC_VECTOR (15 downto 0);
+           DBUS : out  STD_LOGIC_VECTOR (7 downto 0);
+			  BUSY: out STD_LOGIC;
+			  --
+			  HEXIN_READY: in STD_LOGIC;
+			  HEXIN_CHAR: in STD_LOGIC_VECTOR (7 downto 0);
+			  --
+           ERROR : buffer  STD_LOGIC;
+           TXDREADY : in  STD_LOGIC;
+			  TXDSEND: out STD_LOGIC;
+           TXDCHAR : buffer  STD_LOGIC_VECTOR (7 downto 0));
 end component;
 
 component uart_par2ser is
@@ -226,6 +248,15 @@ component debouncer8channel is
            signal_debounced : out STD_LOGIC_VECTOR (7 downto 0));
 end component;
 
+component clocksync is
+    Port ( reset : in  STD_LOGIC;
+           clk0 : in  STD_LOGIC;
+           clk1 : in  STD_LOGIC;
+           sel0 : in  STD_LOGIC;
+           sel1 : in  STD_LOGIC;
+           clk : out  STD_LOGIC);
+end component;
+
 constant color_transparent:				std_logic_vector(7 downto 0):= "00000000";
 constant color_medgreen: 					std_logic_vector(7 downto 0):= "00010000";
 constant color_dkgreen:						std_logic_vector(7 downto 0):= "00001000";
@@ -274,29 +305,28 @@ signal video_color: color_lookup := (
 
 type prescale_lookup is array (0 to 7) of integer range 0 to 65535;
 signal prescale_value: prescale_lookup := (
-		(50000000 / (16 * 300)),
-		(50000000 / (16 * 600)),
-		(50000000 / (16 * 1200)),
-		(50000000 / (16 * 2400)),
-		(50000000 / (16 * 4800)),
-		(50000000 / (16 * 9600)),
-		(50000000 / (16 * 19200)),
-		(50000000 / (16 * 38400))
+		(96000000 / (16 * 300)),
+		(96000000 / (16 * 600)),
+		(96000000 / (16 * 1200)),
+		(96000000 / (16 * 2400)),
+		(96000000 / (16 * 4800)),
+		(96000000 / (16 * 9600)),
+		(96000000 / (16 * 19200)),
+		(96000000 / (16 * 38400)) - 1
 	);
 	
 signal RESET: std_logic;
 
 -- Connect to PmodUSBUART 
-alias PMOD_RTS: std_logic is PMOD(4);
+alias PMOD_RTS: std_logic is PMOD(4);	-- not used
 alias PMOD_RXD: std_logic is PMOD(5);
 alias PMOD_TXD: std_logic is PMOD(6);
-alias PMOD_CTS: std_logic is PMOD(7);
+alias PMOD_CTS: std_logic is PMOD(7);	-- not used
 
 -- debug
-signal hexdata, showdigit: std_logic_vector(3 downto 0);
+signal hexdata, showdigit, showdot: std_logic_vector(3 downto 0);
 signal charpat: std_logic_vector(7 downto 0);
-signal display, sum: std_logic_vector(15 downto 0);
-signal cin: std_logic;
+signal display, sum, counter_debug, hexin_debug, hexout_debug: std_logic_vector(15 downto 0);
 ---
 
 --- frequency signals
@@ -306,7 +336,7 @@ alias byte_clk: std_logic is freq(4); -- 3MHz
 alias debounce_clk: std_logic is freq(9);
 alias digsel: std_logic_vector(1 downto 0) is freq(11 downto 10);
 signal prescale_baud, prescale_power: integer range 0 to 65535;
-signal freq4096, freq1, freq2, freq4, freq25M: std_logic;		
+signal freq4096, freq1, freq2, freq4, freq8, freq25M: std_logic;		
 
 --- video sync signals
 signal x_valid, y_valid: std_logic;
@@ -325,8 +355,7 @@ signal char, pattern: std_logic_vector(7 downto 0);
 signal text_pix: std_logic;
 
 -- video memory bus
-signal vram_dina, vram_douta: std_logic_vector(7 downto 0);
-signal vdp_vram_dina, tim_vram_dina: std_logic_vector(7 downto 0);
+signal vram_dina, vram_doutb: std_logic_vector(7 downto 0);
 signal vram_addra, vram_addrb: std_logic_vector(14 downto 0);
 signal vram_wea: std_logic_vector(0 downto 0);
 
@@ -334,6 +363,7 @@ signal vram_wea: std_logic_vector(0 downto 0);
 signal switch, button: std_logic_vector(7 downto 0);
 alias switch_bcd: std_logic is switch(0);
 alias switch_timpalette: std_logic is switch(0);
+alias switch_hexout:	std_logic is switch(0);
 alias switch_tms: std_logic is switch(1);
 alias switch_hexclk: std_logic_vector(2 downto 0) is switch(4 downto 2);
 alias switch_baudrate: std_logic_vector(2 downto 0) is switch(7 downto 5);
@@ -345,13 +375,15 @@ signal baudrate_x1, baudrate_x2, baudrate_x4, baudrate_x8: std_logic;
 signal hex_clk: std_logic;
 
 -- HEX output path
-signal hexout_send, hexout_ready, hexout_nrd, hexout_nbusreq, hexout_nbusack: std_logic;
+signal hexout_send, hexout_ready, hexout_nrd, hexout_nbusreq, hexout_nbusack, hexout_start, hexout_serout: std_logic;
 signal hexout_char: std_logic_vector(7 downto 0);
 signal hexout_a: std_logic_vector(15 downto 0);
+signal hexout_clk: std_logic;
 
 -- HEX input path
-signal hexin_ready: std_logic;
-signal hexin_char: std_logic_vector(7 downto 0);
+signal hexin_ready, hexin_txdready, hexin_serout: std_logic;
+signal hexin_char, hexin_txdchar: std_logic_vector(7 downto 0);
+signal hexin_nwr, hexin_a15, hexin_error, hexin_txdsend: std_logic;
 
 begin
 PMOD(0) <= v_sync;
@@ -360,6 +392,8 @@ PMOD(2) <= baudrate_x2;
 PMOD(3) <= baudrate_x4;   
 	
 RESET <= USR_BTN;
+
+-- various clock signal generation
 freq96M <= EXT_CLK;
 	
 clockgen: sn74hc4040 port map (
@@ -368,10 +402,16 @@ clockgen: sn74hc4040 port map (
 			q => freq 
 		);
 		
-prescale: process(CLK, baudrate_x8, freq4096, switch_baudrate)
+on_clk: process(CLK)
 begin
 	if (rising_edge(CLK)) then
 		freq25M <= not freq25M;	-- used for VGA 640*480
+	end if;
+end process;
+		
+prescale: process(freq96M, baudrate_x8, freq4096, switch_baudrate)
+begin
+	if (rising_edge(freq96M)) then
 		if (prescale_baud = 0) then
 			baudrate_x8 <= not baudrate_x8;
 			prescale_baud <= prescale_value(to_integer(unsigned(switch_baudrate)));
@@ -380,7 +420,7 @@ begin
 		end if;
 		if (prescale_power = 0) then
 			freq4096 <= not freq4096;
-			prescale_power <= (50000000 / (2 * 4096));
+			prescale_power <= (96000000 / (2 * 4096));
 		else
 			prescale_power <= prescale_power - 1;
 		end if;
@@ -390,11 +430,21 @@ end process;
 powergen: sn74hc4040 port map (
 			clock => freq4096,
 			reset => RESET,
-			q(8 downto 0) => open, 
+			q(7 downto 0) => open,
+			q(8) => freq8,
 			q(9) => freq4,	
 			q(10) => freq2,	
 			q(11) => freq1	
 		);
+	
+baudgen: sn74hc4040 port map (
+			clock => baudrate_x8,
+			reset => RESET,
+			q(0) => baudrate_x4, 
+			q(1) => baudrate_x2,
+			q(2) => baudrate_x1,
+			q(11 downto 3) => open		
+		);	
 --	
 	debounce_sw: debouncer8channel Port map ( 
 		clock => debounce_clk, 
@@ -411,7 +461,6 @@ powergen: sn74hc4040 port map (
 		signal_debounced => button
 	);
 	
-offset_cmd <= button(3 downto 0);-- when (switch_tms = '1') else "0000";
 vga: vga_controller Port map ( 
 		reset => RESET,
       clk => freq25M,
@@ -443,7 +492,7 @@ vram: ram32k8_dualport PORT MAP(
 		-- vga only reads
     clkb => CLK,
     addrb => vram_addrb,
-    doutb => vram_douta
+    doutb => vram_doutb
   );
 
 -- HEX out processor has read access if it managed to grab bus during high VSYNC
@@ -453,24 +502,23 @@ tim_window <= x_valid and y_valid;
 vga_window <= v_valid and h_valid;
 
 vga_a <= vga_y(8 downto 1) & vga_x(8 downto 2) when (switch_tms = '1') else vga_y(7 downto 0) & vga_x(8 downto 2); 
--- TODO: modify VGA controller to expand y from 256 to 384 (2*192) pixels
-vram_wea <= (others => '1'); --sampler_wr_nrd);
 
---we_in <= switch(0) when (tim_window = '0') else '0';
+-- only allow write from hexin in 0x0000 to 0x7FFF range
+vram_wea <= (others => not (hexin_a15 or hexin_nwr));
 
 -- TIM sample: pixels are stored 11003322
 -- see https://github.com/zpekic/Sys_TIM-011/blob/master/Img2Tim/Img2Tim/Program.cs
 with vga_x(1 downto 0) select pair <=
-	vram_douta(5 downto 4) when "00",
-	vram_douta(7 downto 6) when "01",
-	vram_douta(1 downto 0) when "10",
-	vram_douta(3 downto 2) when others;
+	vram_doutb(5 downto 4) when "00",
+	vram_doutb(7 downto 6) when "01",
+	vram_doutb(1 downto 0) when "10",
+	vram_doutb(3 downto 2) when others;
 
 -- V9958 sample: pixels are stored XRGBXRGB
 -- high nibble contains higher x-coordinate pixel (as sampler shifts MSB <- LSB)
 with vga_x(1) select nibble <=  
-	vram_douta(3 downto 0) when '1',
-	vram_douta(7 downto 4) when others;
+	vram_doutb(3 downto 0) when '1',
+	vram_doutb(7 downto 4) when others;
 
 -- index depends on the V9958 or TIM mode
 --color_index <= '1' & nibble(2 downto 0) when (switch_tms = '1') else '0' & switch_timpalette & pair;	
@@ -512,42 +560,87 @@ text_color <= color_cyan when (text_pix = '1') else color_blue;
 							
 -- common clock for hex input and output processors
 --hex_clk <= freq(to_integer(4 + unsigned(switch_hexclk)));
+with switch_hexclk select hex_clk <=
+	freq1 when "000",		-- slooow
+	baudrate_x2 when "001",
+	baudrate_x4 when "010",
+	baudrate_x8 when "011",
+	freq(3) when "100",	-- 6MHz
+	freq(2) when "101",	-- 12MHz
+	freq(1) when "110",	-- 24MHz
+	freq(0) when others;	-- 48MHz
 							
 -- memory to serial output path, in Intel Hex format
 hexout_nbusack <= hexout_nbusreq or (not v_sync);
 	
 hexout: mem2hex Port map ( 
-			clk => baudrate_x8, --hex_clk,
+			clk => hex_clk,
 			reset => RESET,
-			--
-   		debug => open,
-			--
+			
+   		debug => hexout_debug,
+			
 			nRD => hexout_nrd,
 			nBUSREQ => hexout_nbusreq,
 			nBUSACK => hexout_nbusack, -- access when required and v_sync allows 
 			nWAIT => '1',
 			ABUS => hexout_a,
-			DBUS => vram_douta,
-			START => button(0),
+			DBUS => vram_doutb,
+			START => hexout_start,
 			BUSY => LED(1),
-			PAGE => "00001111", --switch, -- dump lower 32k
-			COUNTSEL => '0', -- 16 bytes per line
+			PAGE => "00001111", 	-- dump lower 32k
+			COUNTSEL => '0', 		-- 16 bytes per line
 			TXDREADY => hexout_ready,
 			TXDSEND => hexout_send,
 			CHAR => hexout_char
 		);							
 
-txdout: uart_par2ser Port map (
+--hexoutsync: clocksync Port map (
+--			reset => reset,
+--			clk0 => hex_clk,
+--			clk1 => baudrate_x8,
+--			sel0 => hexout_ready,
+--			sel1 => hexout_send,
+--			clk => hexout_clk
+--			);
+
+-- serial output of hex file
+hexout_txd: uart_par2ser Port map (
 			reset => reset,
 			txd_clk => baudrate_x1,
 			send => hexout_send,
 			mode => "000", --switch(4 downto 2), -- no parity (extra stop bit will be generated)
 			data => hexout_char,
          ready => hexout_ready,
-         txd => PMOD_RXD		-- looking from the PC side
+         txd => hexout_serout		-- looking from the PC side
 		);
 		
-rxdin: uart_ser2par Port map ( 
+-- serial to memory input path, in Intel Hex format
+hexin: hex2mem Port map ( 
+			clk => hex_clk,
+			reset => reset,
+			--
+			debug => hexin_debug,
+			--
+			nWR => hexin_nwr,
+			nBUSREQ => open,
+			nBUSACK => '0',
+			nWAIT => '1',
+			ABUS(15) => hexin_a15,
+			ABUS(14 downto 0) => vram_addra,
+			DBUS => vram_dina,
+			BUSY => LED(0),
+			-- Receive Hex file stream
+			HEXIN_READY => hexin_ready,
+			HEXIN_CHAR => hexin_char,
+			-- Send echo or error
+			ERROR => hexin_error,
+			TXDREADY => hexin_txdready,
+			TXDSEND => hexin_txdsend,
+			TXDCHAR => hexin_txdchar
+		);
+		
+-- serial input of hex file		
+hexin_rxd: uart_ser2par Port map ( 
 			reset => reset,
          rxd_clk => baudrate_x4,
          mode => "000", --switch(4 downto 2), -- no parity
@@ -556,40 +649,36 @@ rxdin: uart_ser2par Port map (
          valid => open, 		-- not yet implemented
          rxd => PMOD_TXD		-- looking from the PC side
 		);
+
+-- serial output of echo and error during hex file input
+hexin_txd: uart_par2ser Port map (
+			reset => reset,
+			txd_clk => baudrate_x1,
+			send => hexin_txdsend,
+			mode => "000", --switch(4 downto 2), -- no parity (extra stop bit will be generated)
+			data => hexin_txdchar,
+         ready => hexin_txdready,
+         txd => hexin_serout		-- looking from the PC side
+		);
+		
+-- switch 0:
+-- 0: hex input to serial (echo and error info), allow window move on VGA, ignore buttons
+-- 1: hex output to serial, no window move on VGA, but any button click start memory dump in hex
+PMOD_RXD <= hexout_serout when (switch_hexout = '1') else hexin_serout;
+offset_cmd <= 	 "0000" when (switch_hexout = '1') else button(3 downto 0);
+hexout_start <= (button(3) or button(2) or button(1) or button(0)) when (switch_hexout = '1') else '0';
 		
 --on_hexin_ready: process(reset, hexin_ready, hexin_char)
 --begin
 --	if (reset = '1') then
---		display <= X"0000";
+--		hexin_debug <= X"DEAD";
 --	else
 --		if (rising_edge(hexin_ready)) then
---			display <= display(7 downto 0) & hexin_char;
---			--display <= sum;
+--			hexin_debug <= display(7 downto 0) & hexin_char;
 --		end if;
 --	end if;
 --end process;
-		
-showdigit <= "1111" when (freq(9) = '0') else "0000";
-		
--- 7 seg LED debug display		
-leds: fourdigitsevensegled Port map ( 
-			-- inputs
-			hexdata => hexdata,
-			digsel => digsel,
-			showdigit => showdigit,
-			showdot => button(3 downto 0),
-			-- outputs
-			anode => AN,
-			segment(7) => DOT,
-			segment(6 downto 0) => A_TO_G
-		);
-
-with digsel select
-	hexdata <= 	display(3 downto 0) when "00",	
-					display(7 downto 4) when "01",
-					display(11 downto 8) when "10",
-					display(15 downto 12) when others;
-					
+				
 counter: freqcounter Port map ( 
 		reset => RESET,
       clk => freq1,
@@ -598,16 +687,34 @@ counter: freqcounter Port map (
 		add => X"0001",
 		cin => '1',
 		cout => open,
-      value => display
+      value => counter_debug
 	);
 			
-baudgen: sn74hc4040 port map (
-			clock => baudrate_x8,
-			reset => RESET,
-			q(0) => baudrate_x4, 
-			q(1) => baudrate_x2,
-			q(2) => baudrate_x1,
-			q(11 downto 3) => open		
+-- 7 seg LED debug display		
+showdigit <= "1111" when (freq(9) = '0') else "0000";						-- only light up when data inputs settled to prevent "ghosts"
+showdot <= "1111" when ((hexin_error and freq8) = '1') else "0000";	-- flash the dots when hexin is erroring
+
+leds: fourdigitsevensegled Port map ( 
+			-- inputs
+			hexdata => hexdata,
+			digsel => digsel,
+			showdigit => showdigit,
+			showdot => showdot,
+			-- outputs
+			anode => AN,
+			segment(7) => DOT,
+			segment(6 downto 0) => A_TO_G
 		);
+
+with switch(1 downto 0) select
+	display <= 	hexin_debug when "00",
+					hexout_debug when "01",
+					counter_debug when others;
+					
+with digsel select
+	hexdata <= 	display(3 downto 0) when "00",	
+					display(7 downto 4) when "01",
+					display(11 downto 8) when "10",
+					display(15 downto 12) when others;
 
 end;

@@ -1,5 +1,5 @@
 --------------------------------------------------------
--- mcc V1.0.0616 - Custom microcode compiler (c)2020-... 
+-- mcc V1.0.0807 - Custom microcode compiler (c)2020-... 
 --    https://github.com/zpekic/MicroCodeCompiler
 --------------------------------------------------------
 Compiling mem2hex.mcc, pass 1 out of 2.
@@ -15,6 +15,7 @@ L0102@0002._reset2:  if true then next else next
 Line 104: resolved aliases:  noop
 L0104@0003._reset3:  if true then next else next
 
+Warning: mask value 255 detected. Range will be 0 to 255
 Line 113: resolved aliases:  printpage
 L0113@0006.pageloop:  if false then printpage else printpage
 
@@ -398,11 +399,13 @@ Info: line 6 - mapper[00FC] <= '000101'
 Info: line 6 - mapper[00FD] <= '000101'
 Info: line 6 - mapper[00FE] <= '000101'
 Info: line 6 - mapper[00FF] <= '000101'
+Info: 256 mapper locations from 0 to 255 set to value '000101'
 Info: line 5 - code[0005] <= '1_1_1_0000_000000_000000_01_00_00_000_00_0000'
 Info: line 5 - code[0006] <= '1_1_1_1111_010000_010000_00_00_00_000_00_0000'
 Info: line 5 - code[0007] <= '1_1_1_0000_000000_000000_10_00_00_000_00_0000'
 Info: line 5 - code[0008] <= '1_1_1_1001_000000_000110_00_00_00_000_00_0000'
 Warning in line 6: overwriting '000101' with '001001' at mapper[0000]
+Info: Mapper location 0 set to value '001001'
 Info: line 5 - code[0009] <= '1_1_1_1111_110001_110001_01_01_00_000_00_0001'
 Info: line 5 - code[000A] <= '1_1_1_1111_110001_110001_00_00_00_000_00_0010'
 Info: line 5 - code[000B] <= '1_1_1_1111_100011_100011_00_00_11_000_00_0000'
@@ -459,4 +462,14 @@ Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code.c
 Generating code 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code.vhd' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code.hex' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code_lendian.bin' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code_bendian.bin' .
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code_bendian.bin' ... Done.
+Generating mapping: 
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.mif' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.cgf' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.coe' (LF only) ... Done (initialized locations: 256, empty locations: 0, total locations: 256).
+Generating mapper 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.vhd' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.hex' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.bin' ... Done.
+Generating controller
+Generating controller 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_control_unit.vhd' ... Done.
+Success: pass 2 - 14 file(s)

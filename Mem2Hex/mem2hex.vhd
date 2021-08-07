@@ -36,7 +36,7 @@ entity mem2hex is
     Port ( clk : in  STD_LOGIC;
            reset : in  STD_LOGIC;
 			  --
-   		  debug: out STD_LOGIC_VECTOR(23 downto 0);
+   		  debug: out STD_LOGIC_VECTOR(15 downto 0);
 			  --
            nRD : out  STD_LOGIC;
            nBUSREQ : out  STD_LOGIC;
@@ -96,8 +96,8 @@ constant hex2ascii: lookup := (
 );
 
 -- control unit
-signal ui_address: std_logic_vector(5 downto 0);
-signal ui_nextinstr: std_logic_vector(5 downto 0);
+signal ui_address: std_logic_vector(CODE_ADDRESS_WIDTH - 1 downto 0);
+signal ui_nextinstr: std_logic_vector(CODE_ADDRESS_WIDTH - 1 downto 0);
 
 -- internal regs
 signal mem_page: std_logic_vector(2 downto 0); -- 8 pages, 8k each
@@ -115,12 +115,12 @@ signal checksum_y, checksum_r, checksum_s: std_logic_vector(15 downto 0);
 
 begin
 
-debug <= checksum & count;
+debug <= CHAR & "00" & ui_address;
 
 m2h_instructionstart <= m2h_mapper(to_integer(unsigned(PAGE))); -- reuse 8-bits that select 8k blocks as simple (and inefficient) way to detect "noop"
 m2h_uinstruction <= m2h_microcode(to_integer(unsigned(ui_address))); -- copy to file containing the control unit. TODO is typically replace with 'ui_address' control unit output
 
-cu: mem2hex_control_unit
+cu_m2h: mem2hex_control_unit
      Generic map (
             CODE_DEPTH => CODE_ADDRESS_WIDTH,
             IF_WIDTH => CODE_IF_WIDTH
@@ -143,7 +143,7 @@ cu: mem2hex_control_unit
 			  cond(seq_cond_mem_addr_is_zero) => mem_addr_is_zero,
 			  cond(seq_cond_count_is_zero) => count_is_zero,
 			  cond(seq_cond_TXDREADY) => TXDREADY,
-			  cond(seq_cond_TXDSEND) => '1',
+			  cond(seq_cond_TXDSEND) => '1',		-- HACKHACK (this will generate pulse for sending the char)
 			  cond(seq_cond_page_is_zero) => page_is_zero,
 			  cond(10) => '1',
 			  cond(11) => '1',
@@ -157,10 +157,10 @@ cu: mem2hex_control_unit
 		);
 
 -- conditions
-mem_addr_is_zero <= '1' when (mem_addr = "0000000000000") else '0';
+mem_addr_is_zero <= '1' when (mem_addr = "0000000000000") else '0';	-- 8k per page
 count_is_zero <= '1' when (count = X"00") else '0';
-page_match <= PAGE(to_integer(unsigned(mem_page))); 
-page_is_zero <= '1' when (mem_page = "000") else '0';
+page_match <= PAGE(to_integer(unsigned(mem_page))); 						-- each bit selects 1 8k page
+page_is_zero <= '1' when (mem_page = "000") else '0';						-- 8 pages
 
 -- start signal is rising-edge triggered
 on_START: process(reset, START, m2h_BUSY)
@@ -307,8 +307,8 @@ checksum_y <= std_logic_vector(unsigned(checksum_r) + unsigned(checksum_s));
 			else
 				if (rising_edge(clk)) then
 					case m2h_CHAR is
-				--			when CHAR_same =>
-				--				CHAR <= CHAR;
+						when CHAR_same =>
+							CHAR <= CHAR;
 						when CHAR_char_colon =>
 							CHAR <= std_logic_vector(to_unsigned(natural(character'pos(':')), 8));
 						when CHAR_char_space =>
