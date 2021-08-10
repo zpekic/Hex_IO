@@ -54,8 +54,9 @@ char <= data(1) & data(2) & data(3) & data(4) & data(5) & data(6) & data(7) & da
 
 -- for mode = 1XX frame is 11 bits (start + 8 data + parity + stop)
 -- for mode = 0XX frame is 10 bits (start + 8 data + stop)
-frame <= 	  (sr(43 downto 40) & sr(38) & sr(34) & sr(30) & sr(26) & sr(22) & sr(18) & sr(14) & sr(10) & sr(6)) when (mode(2) = '1') 
-			else (sr(39 downto 36) & sr(34) & sr(30) & sr(26) & sr(22) & sr(18) & sr(14) & sr(10) & sr(6)  & '1'); 
+frame <= 	  (sr(43 downto 40) & sr(37) & sr(33) & sr(29) & sr(25) & sr(21) & sr(17) & sr(13) & sr(9) & sr(5)) when (mode(2) = '1') 
+			else (sr(39 downto 36) & sr(33) & sr(29) & sr(25) & sr(21) & sr(17) & sr(13) & sr(9) & sr(5)  & '1'); 
+--			else (sr(39 downto 36) & sr(34) & sr(30) & sr(26) & sr(22) & sr(18) & sr(14) & sr(10) & sr(6)  & '1'); 
 
 -- detect stop and start bits
 stop_bit <= sr(1) and sr(0) and rxd;	-- look ahead 1/4 of baudrate time 

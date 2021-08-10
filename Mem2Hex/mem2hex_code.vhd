@@ -436,8 +436,8 @@ constant m2h_microcode: m2h_code_memory := (
 22 => '1' & '1' & '1' & X"F" & O"55" & O"55" & "00" & "00" & "00" & O"0" & "10" & X"0",
 
 -- L0148@0017.page_byte:  if false then readmem else readmem
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110011 else 110011, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-23 => '1' & '1' & '1' & X"F" & O"63" & O"63" & "00" & "00" & "00" & O"0" & "00" & X"0",
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110100 else 110100, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
+23 => '1' & '1' & '1' & X"F" & O"64" & O"64" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
 -- L0149@0018.  if false then printd else printd
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101101 else 101101, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
@@ -539,32 +539,36 @@ constant m2h_microcode: m2h_code_memory := (
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000010 else 000010, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 48 => '1' & '1' & '1' & X"0" & O"02" & O"02" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0182@0031.emitChar:  if TXDSEND then next else next
+-- L0183@0031.emitChar:  if TXDSEND then next else next
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1000) then 000000 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 49 => '1' & '1' & '1' & X"8" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0183@0032.  if TXDREADY then return else repeat
+-- L0184@0032.emitChar2:  if true then next else next
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000000 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
+50 => '1' & '1' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
+
+-- L0185@0033.  if TXDREADY then return else repeat
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0111) then 000010 else 000001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-50 => '1' & '1' & '1' & X"7" & O"02" & O"01" & "00" & "00" & "00" & O"0" & "00" & X"0",
+51 => '1' & '1' & '1' & X"7" & O"02" & O"01" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0189@0033.readmem:  nBUSREQ = 0
+-- L0191@0034.readmem:  nBUSREQ = 0
 --  nBUSREQ = 0, nRD = 1, BUSY = 1, if (0000) then 000000 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-51 => '0' & '1' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
+52 => '0' & '1' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0190@0034.  nBUSREQ = 0, if nBUSACK then repeat else next
+-- L0192@0035.  nBUSREQ = 0, if nBUSACK then repeat else next
 --  nBUSREQ = 0, nRD = 1, BUSY = 1, if (0010) then 000001 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-52 => '0' & '1' & '1' & X"2" & O"01" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
+53 => '0' & '1' & '1' & X"2" & O"01" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0191@0035.  nBUSREQ = 0, nRD = 0
+-- L0193@0036.  nBUSREQ = 0, nRD = 0
 --  nBUSREQ = 0, nRD = 0, BUSY = 1, if (0000) then 000000 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-53 => '0' & '0' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
+54 => '0' & '0' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0192@0036.  nBUSREQ = 0, nRD = 0, d <= dbus, if nWAIT then return else repeat
+-- L0194@0037.  nBUSREQ = 0, nRD = 0, d <= dbus, if nWAIT then return else repeat
 --  nBUSREQ = 0, nRD = 0, BUSY = 1, if (0001) then 000010 else 000001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 01, CHAR <= 0000;
-54 => '0' & '0' & '1' & X"1" & O"02" & O"01" & "00" & "00" & "00" & O"0" & "01" & X"0",
+55 => '0' & '0' & '1' & X"1" & O"02" & O"01" & "00" & "00" & "00" & O"0" & "01" & X"0",
 
--- 9 location(s) in following ranges will be filled with default value
--- 0037 .. 003F
+-- 8 location(s) in following ranges will be filled with default value
+-- 0038 .. 003F
 
 others => '1' & '1' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0"
 );

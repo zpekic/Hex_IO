@@ -179,7 +179,9 @@ printd:		emit d_hi;
 			back;
 						
 			// "UART" is supposed to signal TDXREADY = 1 when presented 0x00 or when serial trasmit is done
+//emitChar:	noop;
 emitChar:	if TXDSEND then next else next;
+emitChar2:	noop;
 			if TXDREADY then return else repeat;
 
 //emitChar:	if TXDREADY then next else repeat;

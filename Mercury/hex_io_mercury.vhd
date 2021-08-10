@@ -384,30 +384,27 @@ signal hexout_clk: std_logic;
 signal hexin_ready, hexin_txdready, hexin_serout: std_logic;
 signal hexin_char, hexin_txdchar: std_logic_vector(7 downto 0);
 signal hexin_nwr, hexin_a15, hexin_error, hexin_txdsend: std_logic;
+signal hexin_clk: std_logic;
 
 begin
+
+-- bring key frequencies out for convenient measuring
 PMOD(0) <= v_sync;
-PMOD(1) <= baudrate_x1;   
-PMOD(2) <= baudrate_x2;   
-PMOD(3) <= baudrate_x4;   
+PMOD(1) <= h_sync;   
+PMOD(2) <= hex_clk;   
+PMOD(3) <= baudrate_x1;   
 	
+-- button on Mercury board	
 RESET <= USR_BTN;
 
--- various clock signal generation
+-- various clock signal generation (main clock domain is derived from external clock)
 freq96M <= EXT_CLK;
 	
 clockgen: sn74hc4040 port map (
-			clock => freq96M,	-- 96MHz "half-size" crystal on Mercury baseboard
+			clock => freq96M,	-- 96MHz "half-size can" crystal on Mercury baseboard
 			reset => RESET,
 			q => freq 
 		);
-		
-on_clk: process(CLK)
-begin
-	if (rising_edge(CLK)) then
-		freq25M <= not freq25M;	-- used for VGA 640*480
-	end if;
-end process;
 		
 prescale: process(freq96M, baudrate_x8, freq4096, switch_baudrate)
 begin
@@ -445,7 +442,28 @@ baudgen: sn74hc4040 port map (
 			q(2) => baudrate_x1,
 			q(11 downto 3) => open		
 		);	
+		
+-- common clock for hex input and output processors
+--hex_clk <= freq(to_integer(4 + unsigned(switch_hexclk)));
+with switch_hexclk select hex_clk <=
+	freq1 when "000",		-- slooow
+	baudrate_x2 when "001",
+	baudrate_x4 when "010",
+	baudrate_x8 when "011",
+	freq(4) when "100",	-- 3MHz
+	freq(3) when "101",	-- 6MHz	-- TODO: fix for Mem2Hex (last record missing?)
+	freq(2) when "110",	-- 12MHz	-- TODO: fix for Hex2Mem mem write (wait?), works for Mem2Hex 
+	freq(1) when others;	-- 24MHz	-- TODO: fix for Hex2Mem mem write (wait?), fix for Mem2Hex
+
+-- internal 50MHz clock is only used for VGA
+on_clk: process(CLK)
+begin
+	if (rising_edge(CLK)) then
+		freq25M <= not freq25M;	-- close to official 640*480 dot clock
+	end if;
+end process;
 --	
+
 	debounce_sw: debouncer8channel Port map ( 
 		clock => debounce_clk, 
 		reset => RESET,
@@ -461,6 +479,9 @@ baudgen: sn74hc4040 port map (
 		signal_debounced => button
 	);
 	
+-- switch 1:
+-- 0: TIM-011 mode, 2 bits per color, size 512*256 (each pix single), 32k total
+-- 1: TMS-VDP mode, 4 bits per color, size 256*192 (each pix doubled), 32k total	
 vga: vga_controller Port map ( 
 		reset => RESET,
       clk => freq25M,
@@ -558,23 +579,11 @@ with h(2 downto 0) select text_pix <=
 	
 text_color <= color_cyan when (text_pix = '1') else color_blue;
 							
--- common clock for hex input and output processors
---hex_clk <= freq(to_integer(4 + unsigned(switch_hexclk)));
-with switch_hexclk select hex_clk <=
-	freq1 when "000",		-- slooow
-	baudrate_x2 when "001",
-	baudrate_x4 when "010",
-	baudrate_x8 when "011",
-	freq(3) when "100",	-- 6MHz
-	freq(2) when "101",	-- 12MHz
-	freq(1) when "110",	-- 24MHz
-	freq(0) when others;	-- 48MHz
-							
 -- memory to serial output path, in Intel Hex format
 hexout_nbusack <= hexout_nbusreq or (not v_sync);
 	
 hexout: mem2hex Port map ( 
-			clk => hex_clk,
+			clk => hexout_clk,
 			reset => RESET,
 			
    		debug => hexout_debug,
@@ -592,18 +601,11 @@ hexout: mem2hex Port map (
 			TXDREADY => hexout_ready,
 			TXDSEND => hexout_send,
 			CHAR => hexout_char
-		);							
-
---hexoutsync: clocksync Port map (
---			reset => reset,
---			clk0 => hex_clk,
---			clk1 => baudrate_x8,
---			sel0 => hexout_ready,
---			sel1 => hexout_send,
---			clk => hexout_clk
---			);
-
+		);			
+		
 -- serial output of hex file
+hexout_clk <= '1' when (hexout_ready = '0') else hex_clk;
+
 hexout_txd: uart_par2ser Port map (
 			reset => reset,
 			txd_clk => baudrate_x1,
@@ -616,7 +618,7 @@ hexout_txd: uart_par2ser Port map (
 		
 -- serial to memory input path, in Intel Hex format
 hexin: hex2mem Port map ( 
-			clk => hex_clk,
+			clk => hexin_clk,
 			reset => reset,
 			--
 			debug => hexin_debug,
@@ -651,6 +653,8 @@ hexin_rxd: uart_ser2par Port map (
 		);
 
 -- serial output of echo and error during hex file input
+hexin_clk <= '1' when (hexin_txdready = '0') else hex_clk;
+
 hexin_txd: uart_par2ser Port map (
 			reset => reset,
 			txd_clk => baudrate_x1,

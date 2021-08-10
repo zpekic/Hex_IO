@@ -55,8 +55,8 @@ TXDCHAR		.regfield 4 values
 				zero,
 				pos0,			// bcd counter for character position in line
 				pos1,
-				pos2,
-				pos3,
+				inp0,
+				inp1,			// input character
 				lin0,			// bcd counter for line
 				lin1,
 				lin2,
@@ -126,22 +126,95 @@ echo:		emit char_input;
 
 			.map 0b????????;
 badchar:	error <= on, print_crlf;
-			emit char_E;
+			emit char_E;		// ERR
 			emit char_R;
 			emit char_R;
 			emit char_space;
-			emit lin3;
+			emit lin3;			// 9999 line number (decimal)
 			emit lin2;
 			emit lin1;
 			emit lin0;
 			emit char_space;
-			emit pos3;
-			emit pos2;
-			emit pos1;
+			emit pos1;			// 99 char position in the line (decimal)
 			emit pos0;
+			emit char_space;
+			emit inp1;			// FF hex code of offending char
+			emit inp0;
 			print_crlf;
 nextchar:	error <= off, input_reset = 1, checksum <= inc, goto deadloop;
 			
+			// with mapping like this lower 4 bits of mapper can be reused as ASCII to HEX decode
+			.org 0x20;
+			.map '0';
+			goto hexchar;
+			
+			.org 0x21;
+			.map '1';
+			goto hexchar;
+
+			.org 0x22;
+			.map '2';
+			goto hexchar;
+
+			.org 0x23;
+			.map '3';
+			goto hexchar;
+
+			.org 0x24;
+			.map '4';
+			goto hexchar;
+
+			.org 0x25;
+			.map '5';
+			goto hexchar;
+
+			.org 0x26;
+			.map '6';
+			goto hexchar;
+
+			.org 0x27;
+			.map '7';
+			goto hexchar;
+
+			.org 0x28;
+			.map '8';
+			goto hexchar;
+
+			.org 0x29;
+			.map '9';
+			goto hexchar;
+
+			.org 0x2a;
+			.map 'a';
+			.map 'A';
+			goto hexchar;
+
+			.org 0x2b;
+			.map 'b';
+			.map 'B';
+			goto hexchar;
+
+			.org 0x2c;
+			.map 'c';
+			.map 'C';
+			goto hexchar;
+
+			.org 0x2d;
+			.map 'd';
+			.map 'D';
+			goto hexchar;
+
+			.org 0x2e;
+			.map 'e';
+			.map 'E';
+			goto hexchar;
+
+			.org 0x2f;
+			.map 'f';
+			.map 'F';
+hexchar:	writemem;
+			goto nextchar;
+
 			.map 0x09;	
 tab:		writemem;
 			goto nextchar;
@@ -161,20 +234,18 @@ space:		writemem;
 			.map ':';
 colon:		writemem;
 			goto nextchar;
-			
-			.map '0' .. '9';
-			.map 'A' .. 'F';
-			.map 'a' .. 'f';
-hexchar:	writemem;
-			goto nextchar;
 					
 print_crlf: emit char_cr;
 			emit char_lf;
 			back;
 			
 			// "UART" is supposed to signal TDXREADY = 1 when presented 0x00 or when serial trasmit is done
+//emitChar:	noop;
 emitChar:	if TXDSEND then next else next;
+emitChar2:	noop;
 			if TXDREADY then return else repeat;
+			
+			
 			
 			// ask CPU for memory, then read 1 byte with any number of optional wait cycles
 writemem:	nBUSREQ = 0;

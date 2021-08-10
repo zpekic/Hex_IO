@@ -124,7 +124,10 @@ L0178@002F.  checksum <= add_d, if false then emitChar else emitChar, CHAR <= ch
 Line 179: resolved aliases:  back
 L0179@0030.  if true then return else return
 
-Success: pass 1 193 line(s) read, 84 statement(s) parsed.
+Line 184: resolved aliases:  noop
+L0184@0032.emitChar2:  if true then next else next
+
+Success: pass 1 195 line(s) read, 85 statement(s) parsed.
 Compiling mem2hex.mcc, pass 2 out of 2.
 Field 'nBUSREQ' 33 .. 33
 Field 'nRD' 32 .. 32
@@ -420,7 +423,7 @@ Info: line 5 - code[0013] <= '1_1_1_1111_110001_110001_00_00_00_000_00_0010'
 Info: line 5 - code[0014] <= '1_1_1_1111_100011_100011_00_00_01_000_00_0000'
 Info: line 5 - code[0015] <= '1_1_1_1111_100111_100111_00_00_00_000_00_0000'
 Info: line 5 - code[0016] <= '1_1_1_1111_101101_101101_00_00_00_000_10_0000'
-Info: line 5 - code[0017] <= '1_1_1_1111_110011_110011_00_00_00_000_00_0000'
+Info: line 5 - code[0017] <= '1_1_1_1111_110100_110100_00_00_00_000_00_0000'
 Info: line 5 - code[0018] <= '1_1_1_1111_101101_101101_00_00_00_000_00_0000'
 Info: line 5 - code[0019] <= '1_1_1_0000_000000_000000_00_10_10_000_00_0000'
 Info: line 5 - code[001A] <= '1_1_1_0110_000000_010111_00_00_00_000_00_0000'
@@ -447,18 +450,19 @@ Info: line 5 - code[002E] <= '1_1_1_1111_110001_110001_00_00_00_000_00_0111'
 Info: line 5 - code[002F] <= '1_1_1_1111_110001_110001_00_00_00_100_00_0010'
 Info: line 5 - code[0030] <= '1_1_1_0000_000010_000010_00_00_00_000_00_0000'
 Info: line 5 - code[0031] <= '1_1_1_1000_000000_000000_00_00_00_000_00_0000'
-Info: line 5 - code[0032] <= '1_1_1_0111_000010_000001_00_00_00_000_00_0000'
-Info: line 5 - code[0033] <= '0_1_1_0000_000000_000000_00_00_00_000_00_0000'
-Info: line 5 - code[0034] <= '0_1_1_0010_000001_000000_00_00_00_000_00_0000'
-Info: line 5 - code[0035] <= '0_0_1_0000_000000_000000_00_00_00_000_00_0000'
-Info: line 5 - code[0036] <= '0_0_1_0001_000010_000001_00_00_00_000_01_0000'
+Info: line 5 - code[0032] <= '1_1_1_0000_000000_000000_00_00_00_000_00_0000'
+Info: line 5 - code[0033] <= '1_1_1_0111_000010_000001_00_00_00_000_00_0000'
+Info: line 5 - code[0034] <= '0_1_1_0000_000000_000000_00_00_00_000_00_0000'
+Info: line 5 - code[0035] <= '0_1_1_0010_000001_000000_00_00_00_000_00_0000'
+Info: line 5 - code[0036] <= '0_0_1_0000_000000_000000_00_00_00_000_00_0000'
+Info: line 5 - code[0037] <= '0_0_1_0001_000010_000001_00_00_00_000_01_0000'
 Generating code: 
-Warning in line 5: found 9 uninitialized locations:
-0037 .. 003F
+Warning in line 5: found 8 uninitialized locations:
+0038 .. 003F
 
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code.mif' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code.cgf' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code.coe' (LF only) ... Done (initialized locations: 55, empty locations: 9, total locations: 64).
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code.coe' (LF only) ... Done (initialized locations: 56, empty locations: 8, total locations: 64).
 Generating code 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code.vhd' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code.hex' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code_lendian.bin' ... Done.
@@ -470,6 +474,4 @@ Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.co
 Generating mapper 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.vhd' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.hex' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.bin' ... Done.
-Generating controller
-Generating controller 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_control_unit.vhd' ... Done.
-Success: pass 2 - 14 file(s)
+G

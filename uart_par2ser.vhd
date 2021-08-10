@@ -62,17 +62,18 @@ with mode select p_bit <=
 with bitSel select txd <= 		
 			'1'     when X"0", -- high while not busy
 			'1'	  when X"1", -- delay 1 (to sync with txd_clk)
-			'0' 	  when X"2", -- start bit
-			char(0) when X"3",   -- data
-			char(1) when X"4",
-			char(2) when X"5",
-			char(3) when X"6",
-			char(4) when X"7",
-			char(5) when X"8",
-			char(6) when X"9",
-			char(7) when X"A",
-			p_bit   when X"B",	-- parity or stop
-			'1' 	  when X"C",	-- stop
+			'1'	  when X"2", -- delay 2 
+			'0' 	  when X"3", -- start bit
+			char(0) when X"4",   -- data
+			char(1) when X"5",
+			char(2) when X"6",
+			char(3) when X"7",
+			char(4) when X"8",
+			char(5) when X"9",
+			char(6) when X"A",
+			char(7) when X"B",
+			p_bit   when X"C",	-- parity or stop
+			'1' 	  when X"D",	-- stop
 			'1' when others;		-- delay
 
 -- drive low when any are being bits transmitted	
@@ -92,7 +93,7 @@ begin
 				when X"0" =>
 					char <= data;
 					bitSel <= std_logic_vector(unsigned(bitSel) + 1);
-				when X"C" =>
+				when X"E" =>
 					bitSel <= X"0";
 				when others =>
 					bitSel <= std_logic_vector(unsigned(bitSel) + 1);

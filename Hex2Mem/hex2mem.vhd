@@ -127,8 +127,8 @@ signal lincnt_a, lincnt_sum: std_logic_vector(15 downto 0);
 
 begin
 
---debug <= input & "0" & ui_address;
-debug <= input & TXDCHAR;
+debug <= input & "0" & ui_address;
+--debug <= input & TXDCHAR;
 
 h2m_instructionstart <= h2m_mapper(to_integer(unsigned(input))); -- hex char input is the "instruction"
 h2m_uinstruction <= h2m_microcode(to_integer(unsigned(ui_address))); -- copy to file containing the control unit. TODO is typically replace with 'ui_address' control unit output
@@ -223,12 +223,12 @@ ascii <= hex2ascii(to_integer(unsigned(hex)));
 with h2m_TXDCHAR select hex <= 
 			poscnt(3 downto 0) when TXDCHAR_pos0,
 			poscnt(7 downto 4) when TXDCHAR_pos1,
-			poscnt(11 downto 8) when TXDCHAR_pos2,
-			poscnt(15 downto 12) when TXDCHAR_pos3,
-			input(3 downto 0) when TXDCHAR_lin0,
-			input(7 downto 4) when TXDCHAR_lin1,
-			checksum(11 downto 8) when TXDCHAR_lin2,
-			checksum(15 downto 12) when TXDCHAR_lin3,
+			input(3 downto 0) when TXDCHAR_inp0,
+			input(7 downto 4) when TXDCHAR_inp1,
+			lincnt(3 downto 0) when TXDCHAR_lin0,
+			lincnt(7 downto 4) when TXDCHAR_lin1,
+			lincnt(11 downto 8) when TXDCHAR_lin2,
+			lincnt(15 downto 12) when TXDCHAR_lin3,
 			X"0" when others;
 		
 ---- End boilerplate code

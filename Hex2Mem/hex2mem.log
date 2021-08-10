@@ -53,69 +53,120 @@ Line 137: resolved aliases:  emit
 L0137@0010.  if false then emitChar else emitChar, TXDCHAR <= char_space
 
 Line 138: resolved aliases:  emit
-L0138@0011.  if false then emitChar else emitChar, TXDCHAR <= pos3
+L0138@0011.  if false then emitChar else emitChar, TXDCHAR <= pos1
 
 Line 139: resolved aliases:  emit
-L0139@0012.  if false then emitChar else emitChar, TXDCHAR <= pos2
+L0139@0012.  if false then emitChar else emitChar, TXDCHAR <= pos0
 
 Line 140: resolved aliases:  emit
-L0140@0013.  if false then emitChar else emitChar, TXDCHAR <= pos1
+L0140@0013.  if false then emitChar else emitChar, TXDCHAR <= char_space
 
 Line 141: resolved aliases:  emit
-L0141@0014.  if false then emitChar else emitChar, TXDCHAR <= pos0
+L0141@0014.  if false then emitChar else emitChar, TXDCHAR <= inp1
 
-Line 142: resolved aliases:  print_crlf
-L0142@0015.  if false then print_crlf else print_crlf
+Line 142: resolved aliases:  emit
+L0142@0015.  if false then emitChar else emitChar, TXDCHAR <= inp0
 
-Line 143: resolved aliases:  goto
-L0143@0016.nextchar:  error <= off, input_reset = 1, checksum <= inc, if false then next else deadloop
+Line 143: resolved aliases:  print_crlf
+L0143@0016.  if false then print_crlf else print_crlf
 
-Line 146: resolved aliases:  writemem
-L0146@0017.tab:  if false then writemem else writemem
+Line 144: resolved aliases:  goto
+L0144@0017.nextchar:  error <= off, input_reset = 1, checksum <= inc, if false then next else deadloop
 
-Line 147: resolved aliases:  goto
-L0147@0018.  if false then next else nextchar
+Line 149: resolved aliases:  goto
+L0149@0020.  if false then next else hexchar
 
-Line 150: resolved aliases:  writemem
-L0150@0019.lf:  if false then writemem else writemem
+Line 153: resolved aliases:  goto
+L0153@0021.  if false then next else hexchar
 
-Line 151: resolved aliases:  lincnt_inc, goto
-L0151@001A.  lincnt_cin = 1, if false then next else nextchar
+Line 157: resolved aliases:  goto
+L0157@0022.  if false then next else hexchar
 
-Line 154: resolved aliases:  writemem
-L0154@001B.cr:  if false then writemem else writemem
+Line 161: resolved aliases:  goto
+L0161@0023.  if false then next else hexchar
 
-Line 155: resolved aliases:  poscnt_zero, goto
-L0155@001C.  poscnt_a = zero, if false then next else nextchar
-
-Line 158: resolved aliases:  writemem
-L0158@001D.space:  if false then writemem else writemem
-
-Line 159: resolved aliases:  goto
-L0159@001E.  if false then next else nextchar
-
-Line 162: resolved aliases:  writemem
-L0162@001F.colon:  if false then writemem else writemem
-
-Line 163: resolved aliases:  goto
-L0163@0020.  if false then next else nextchar
-
-Line 168: resolved aliases:  writemem
-L0168@0021.hexchar:  if false then writemem else writemem
+Line 165: resolved aliases:  goto
+L0165@0024.  if false then next else hexchar
 
 Line 169: resolved aliases:  goto
-L0169@0022.  if false then next else nextchar
+L0169@0025.  if false then next else hexchar
 
-Line 171: resolved aliases:  emit
-L0171@0023.print_crlf:  if false then emitChar else emitChar, TXDCHAR <= char_cr
+Line 173: resolved aliases:  goto
+L0173@0026.  if false then next else hexchar
 
-Line 172: resolved aliases:  emit
-L0172@0024.  if false then emitChar else emitChar, TXDCHAR <= char_lf
+Line 177: resolved aliases:  goto
+L0177@0027.  if false then next else hexchar
 
-Line 173: resolved aliases:  back
-L0173@0025.  if true then return else return
+Line 181: resolved aliases:  goto
+L0181@0028.  if false then next else hexchar
 
-Success: pass 1 184 line(s) read, 83 statement(s) parsed.
+Line 185: resolved aliases:  goto
+L0185@0029.  if false then next else hexchar
+
+Line 190: resolved aliases:  goto
+L0190@002A.  if false then next else hexchar
+
+Line 195: resolved aliases:  goto
+L0195@002B.  if false then next else hexchar
+
+Line 200: resolved aliases:  goto
+L0200@002C.  if false then next else hexchar
+
+Line 205: resolved aliases:  goto
+L0205@002D.  if false then next else hexchar
+
+Line 210: resolved aliases:  goto
+L0210@002E.  if false then next else hexchar
+
+Line 215: resolved aliases:  writemem
+L0215@002F.hexchar:  if false then writemem else writemem
+
+Line 216: resolved aliases:  goto
+L0216@0030.  if false then next else nextchar
+
+Line 219: resolved aliases:  writemem
+L0219@0031.tab:  if false then writemem else writemem
+
+Line 220: resolved aliases:  goto
+L0220@0032.  if false then next else nextchar
+
+Line 223: resolved aliases:  writemem
+L0223@0033.lf:  if false then writemem else writemem
+
+Line 224: resolved aliases:  lincnt_inc, goto
+L0224@0034.  lincnt_cin = 1, if false then next else nextchar
+
+Line 227: resolved aliases:  writemem
+L0227@0035.cr:  if false then writemem else writemem
+
+Line 228: resolved aliases:  poscnt_zero, goto
+L0228@0036.  poscnt_a = zero, if false then next else nextchar
+
+Line 231: resolved aliases:  writemem
+L0231@0037.space:  if false then writemem else writemem
+
+Line 232: resolved aliases:  goto
+L0232@0038.  if false then next else nextchar
+
+Line 235: resolved aliases:  writemem
+L0235@0039.colon:  if false then writemem else writemem
+
+Line 236: resolved aliases:  goto
+L0236@003A.  if false then next else nextchar
+
+Line 238: resolved aliases:  emit
+L0238@003B.print_crlf:  if false then emitChar else emitChar, TXDCHAR <= char_cr
+
+Line 239: resolved aliases:  emit
+L0239@003C.  if false then emitChar else emitChar, TXDCHAR <= char_lf
+
+Line 240: resolved aliases:  back
+L0240@003D.  if true then return else return
+
+Line 245: resolved aliases:  noop
+L0245@003F.emitChar2:  if true then next else next
+
+Success: pass 1 255 line(s) read, 135 statement(s) parsed.
 Compiling hex2mem.mcc, pass 2 out of 2.
 Field 'nBUSREQ' 33 .. 33
 Field 'nWR' 32 .. 32
@@ -136,7 +187,7 @@ Info: line 5 - code[0001] <= '1_1_1_0000_0000000_0000000_0111_0_0_0_0_01_10_0'
 Info: line 5 - code[0002] <= '1_1_1_0000_0000000_0000000_0111_0_0_0_0_01_10_0'
 Info: line 5 - code[0003] <= '1_1_1_0000_0000000_0000000_0111_0_0_0_0_01_10_0'
 Info: line 5 - code[0004] <= '1_1_0_0011_0000001_0000000_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[0005] <= '1_1_1_1111_0100110_0100110_0001_1_0_1_0_00_00_0'
+Info: line 5 - code[0005] <= '1_1_1_1111_0111110_0111110_0001_1_0_1_0_00_00_0'
 Info: line 5 - code[0006] <= '1_1_1_0000_0000011_0000011_0000_1_0_1_1_00_00_0'
 Info: line 6 - mapper[0000] <= '0000111'
 Info: line 6 - mapper[0001] <= '0000111'
@@ -395,88 +446,128 @@ Info: line 6 - mapper[00FD] <= '0000111'
 Info: line 6 - mapper[00FE] <= '0000111'
 Info: line 6 - mapper[00FF] <= '0000111'
 Info: 256 mapper locations from 0 to 255 set to value '0000111'
-Info: line 5 - code[0007] <= '1_1_1_1111_0100011_0100011_0000_1_0_1_0_00_01_0'
-Info: line 5 - code[0008] <= '1_1_1_1111_0100110_0100110_0101_1_0_1_0_00_00_0'
-Info: line 5 - code[0009] <= '1_1_1_1111_0100110_0100110_0110_1_0_1_0_00_00_0'
-Info: line 5 - code[000A] <= '1_1_1_1111_0100110_0100110_0110_1_0_1_0_00_00_0'
-Info: line 5 - code[000B] <= '1_1_1_1111_0100110_0100110_0010_1_0_1_0_00_00_0'
-Info: line 5 - code[000C] <= '1_1_1_1111_0100110_0100110_1111_1_0_1_0_00_00_0'
-Info: line 5 - code[000D] <= '1_1_1_1111_0100110_0100110_1110_1_0_1_0_00_00_0'
-Info: line 5 - code[000E] <= '1_1_1_1111_0100110_0100110_1101_1_0_1_0_00_00_0'
-Info: line 5 - code[000F] <= '1_1_1_1111_0100110_0100110_1100_1_0_1_0_00_00_0'
-Info: line 5 - code[0010] <= '1_1_1_1111_0100110_0100110_0010_1_0_1_0_00_00_0'
-Info: line 5 - code[0011] <= '1_1_1_1111_0100110_0100110_1011_1_0_1_0_00_00_0'
-Info: line 5 - code[0012] <= '1_1_1_1111_0100110_0100110_1010_1_0_1_0_00_00_0'
-Info: line 5 - code[0013] <= '1_1_1_1111_0100110_0100110_1001_1_0_1_0_00_00_0'
-Info: line 5 - code[0014] <= '1_1_1_1111_0100110_0100110_1000_1_0_1_0_00_00_0'
-Info: line 5 - code[0015] <= '1_1_1_1111_0100011_0100011_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[0016] <= '1_1_1_1111_0000000_0000100_0000_1_0_1_0_10_10_1'
-Warning in line 6: overwriting '0000111' with '0010111' at mapper[0009]
-Info: Mapper location 9 set to value '0010111'
-Info: line 5 - code[0017] <= '1_1_1_1111_0101000_0101000_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[0018] <= '1_1_1_1111_0000000_0010110_0000_1_0_1_0_00_00_0'
-Warning in line 6: overwriting '0000111' with '0011001' at mapper[000A]
-Info: Mapper location 10 set to value '0011001'
-Info: line 5 - code[0019] <= '1_1_1_1111_0101000_0101000_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[001A] <= '1_1_1_1111_0000000_0010110_0000_1_1_1_0_00_00_0'
-Warning in line 6: overwriting '0000111' with '0011011' at mapper[000D]
-Info: Mapper location 13 set to value '0011011'
-Info: line 5 - code[001B] <= '1_1_1_1111_0101000_0101000_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[001C] <= '1_1_1_1111_0000000_0010110_0000_1_0_0_0_00_00_0'
-Warning in line 6: overwriting '0000111' with '0011101' at mapper[0020]
-Info: Mapper location 32 set to value '0011101'
-Info: line 5 - code[001D] <= '1_1_1_1111_0101000_0101000_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[001E] <= '1_1_1_1111_0000000_0010110_0000_1_0_1_0_00_00_0'
-Warning in line 6: overwriting '0000111' with '0011111' at mapper[003A]
-Info: Mapper location 58 set to value '0011111'
-Info: line 5 - code[001F] <= '1_1_1_1111_0101000_0101000_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[0020] <= '1_1_1_1111_0000000_0010110_0000_1_0_1_0_00_00_0'
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0030]
+Info: line 5 - code[0007] <= '1_1_1_1111_0111011_0111011_0000_1_0_1_0_00_01_0'
+Info: line 5 - code[0008] <= '1_1_1_1111_0111110_0111110_0101_1_0_1_0_00_00_0'
+Info: line 5 - code[0009] <= '1_1_1_1111_0111110_0111110_0110_1_0_1_0_00_00_0'
+Info: line 5 - code[000A] <= '1_1_1_1111_0111110_0111110_0110_1_0_1_0_00_00_0'
+Info: line 5 - code[000B] <= '1_1_1_1111_0111110_0111110_0010_1_0_1_0_00_00_0'
+Info: line 5 - code[000C] <= '1_1_1_1111_0111110_0111110_1111_1_0_1_0_00_00_0'
+Info: line 5 - code[000D] <= '1_1_1_1111_0111110_0111110_1110_1_0_1_0_00_00_0'
+Info: line 5 - code[000E] <= '1_1_1_1111_0111110_0111110_1101_1_0_1_0_00_00_0'
+Info: line 5 - code[000F] <= '1_1_1_1111_0111110_0111110_1100_1_0_1_0_00_00_0'
+Info: line 5 - code[0010] <= '1_1_1_1111_0111110_0111110_0010_1_0_1_0_00_00_0'
+Info: line 5 - code[0011] <= '1_1_1_1111_0111110_0111110_1001_1_0_1_0_00_00_0'
+Info: line 5 - code[0012] <= '1_1_1_1111_0111110_0111110_1000_1_0_1_0_00_00_0'
+Info: line 5 - code[0013] <= '1_1_1_1111_0111110_0111110_0010_1_0_1_0_00_00_0'
+Info: line 5 - code[0014] <= '1_1_1_1111_0111110_0111110_1011_1_0_1_0_00_00_0'
+Info: line 5 - code[0015] <= '1_1_1_1111_0111110_0111110_1010_1_0_1_0_00_00_0'
+Info: line 5 - code[0016] <= '1_1_1_1111_0111011_0111011_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[0017] <= '1_1_1_1111_0000000_0000100_0000_1_0_1_0_10_10_1'
+Warning in line 6: overwriting '0000111' with '0100000' at mapper[0030]
+Info: Mapper location 48 set to value '0100000'
+Info: line 5 - code[0020] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
 Warning in line 6: overwriting '0000111' with '0100001' at mapper[0031]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0032]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0033]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0034]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0035]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0036]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0037]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0038]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0039]
-Info: 10 mapper locations from 48 to 57 set to value '0100001'
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0041]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0042]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0043]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0044]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0045]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0046]
-Info: 6 mapper locations from 65 to 70 set to value '0100001'
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0061]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0062]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0063]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0064]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0065]
-Warning in line 6: overwriting '0000111' with '0100001' at mapper[0066]
-Info: 6 mapper locations from 97 to 102 set to value '0100001'
-Info: line 5 - code[0021] <= '1_1_1_1111_0101000_0101000_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[0022] <= '1_1_1_1111_0000000_0010110_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[0023] <= '1_1_1_1111_0100110_0100110_0011_1_0_1_0_00_00_0'
-Info: line 5 - code[0024] <= '1_1_1_1111_0100110_0100110_0100_1_0_1_0_00_00_0'
-Info: line 5 - code[0025] <= '1_1_1_0000_0000010_0000010_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[0026] <= '1_1_1_0101_0000000_0000000_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[0027] <= '1_1_1_0100_0000010_0000001_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[0028] <= '0_1_1_0000_0000000_0000000_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[0029] <= '0_1_1_0010_0000001_0000000_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[002A] <= '0_0_1_0000_0000000_0000000_0000_1_0_1_0_00_00_0'
-Info: line 5 - code[002B] <= '0_0_1_0001_0000010_0000001_0000_1_0_1_0_00_00_0'
+Info: Mapper location 49 set to value '0100001'
+Info: line 5 - code[0021] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0100010' at mapper[0032]
+Info: Mapper location 50 set to value '0100010'
+Info: line 5 - code[0022] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0100011' at mapper[0033]
+Info: Mapper location 51 set to value '0100011'
+Info: line 5 - code[0023] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0100100' at mapper[0034]
+Info: Mapper location 52 set to value '0100100'
+Info: line 5 - code[0024] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0100101' at mapper[0035]
+Info: Mapper location 53 set to value '0100101'
+Info: line 5 - code[0025] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0100110' at mapper[0036]
+Info: Mapper location 54 set to value '0100110'
+Info: line 5 - code[0026] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0100111' at mapper[0037]
+Info: Mapper location 55 set to value '0100111'
+Info: line 5 - code[0027] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0101000' at mapper[0038]
+Info: Mapper location 56 set to value '0101000'
+Info: line 5 - code[0028] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0101001' at mapper[0039]
+Info: Mapper location 57 set to value '0101001'
+Info: line 5 - code[0029] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0101010' at mapper[0061]
+Info: Mapper location 97 set to value '0101010'
+Warning in line 6: overwriting '0000111' with '0101010' at mapper[0041]
+Info: Mapper location 65 set to value '0101010'
+Info: line 5 - code[002A] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0101011' at mapper[0062]
+Info: Mapper location 98 set to value '0101011'
+Warning in line 6: overwriting '0000111' with '0101011' at mapper[0042]
+Info: Mapper location 66 set to value '0101011'
+Info: line 5 - code[002B] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0101100' at mapper[0063]
+Info: Mapper location 99 set to value '0101100'
+Warning in line 6: overwriting '0000111' with '0101100' at mapper[0043]
+Info: Mapper location 67 set to value '0101100'
+Info: line 5 - code[002C] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0101101' at mapper[0064]
+Info: Mapper location 100 set to value '0101101'
+Warning in line 6: overwriting '0000111' with '0101101' at mapper[0044]
+Info: Mapper location 68 set to value '0101101'
+Info: line 5 - code[002D] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0101110' at mapper[0065]
+Info: Mapper location 101 set to value '0101110'
+Warning in line 6: overwriting '0000111' with '0101110' at mapper[0045]
+Info: Mapper location 69 set to value '0101110'
+Info: line 5 - code[002E] <= '1_1_1_1111_0000000_0101111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0101111' at mapper[0066]
+Info: Mapper location 102 set to value '0101111'
+Warning in line 6: overwriting '0000111' with '0101111' at mapper[0046]
+Info: Mapper location 70 set to value '0101111'
+Info: line 5 - code[002F] <= '1_1_1_1111_1000001_1000001_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[0030] <= '1_1_1_1111_0000000_0010111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0110001' at mapper[0009]
+Info: Mapper location 9 set to value '0110001'
+Info: line 5 - code[0031] <= '1_1_1_1111_1000001_1000001_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[0032] <= '1_1_1_1111_0000000_0010111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0110011' at mapper[000A]
+Info: Mapper location 10 set to value '0110011'
+Info: line 5 - code[0033] <= '1_1_1_1111_1000001_1000001_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[0034] <= '1_1_1_1111_0000000_0010111_0000_1_1_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0110101' at mapper[000D]
+Info: Mapper location 13 set to value '0110101'
+Info: line 5 - code[0035] <= '1_1_1_1111_1000001_1000001_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[0036] <= '1_1_1_1111_0000000_0010111_0000_1_0_0_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0110111' at mapper[0020]
+Info: Mapper location 32 set to value '0110111'
+Info: line 5 - code[0037] <= '1_1_1_1111_1000001_1000001_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[0038] <= '1_1_1_1111_0000000_0010111_0000_1_0_1_0_00_00_0'
+Warning in line 6: overwriting '0000111' with '0111001' at mapper[003A]
+Info: Mapper location 58 set to value '0111001'
+Info: line 5 - code[0039] <= '1_1_1_1111_1000001_1000001_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[003A] <= '1_1_1_1111_0000000_0010111_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[003B] <= '1_1_1_1111_0111110_0111110_0011_1_0_1_0_00_00_0'
+Info: line 5 - code[003C] <= '1_1_1_1111_0111110_0111110_0100_1_0_1_0_00_00_0'
+Info: line 5 - code[003D] <= '1_1_1_0000_0000010_0000010_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[003E] <= '1_1_1_0101_0000000_0000000_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[003F] <= '1_1_1_0000_0000000_0000000_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[0040] <= '1_1_1_0100_0000010_0000001_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[0041] <= '0_1_1_0000_0000000_0000000_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[0042] <= '0_1_1_0010_0000001_0000000_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[0043] <= '0_0_1_0000_0000000_0000000_0000_1_0_1_0_00_00_0'
+Info: line 5 - code[0044] <= '0_0_1_0001_0000010_0000001_0000_1_0_1_0_00_00_0'
 Generating code: 
-Warning in line 5: found 84 uninitialized locations:
-002C .. 007F
+Warning in line 5: found 67 uninitialized locations:
+0018 .. 001F
+0045 .. 007F
 
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.mif' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.cgf' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.coe' (LF only) ... Done (initialized locations: 44, empty locations: 84, total locations: 128).
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.coe' (LF only) ... Done (initialized locations: 61, empty locations: 67, total locations: 128).
 Generating code 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.vhd' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.hex' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code_lendian.bin' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code_bendian.bin' ... Done.
 Generating mapping: 
-Writing 'C:\Users\zoltanp\Documents\HexC
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.mif' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.cgf' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.coe' (LF only) ... Done (initialized locations: 256, empty locations: 0, total locations: 256).
+Generating mapper 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\He
