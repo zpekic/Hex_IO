@@ -162,6 +162,7 @@ component hex2mem is
 			  HEXIN_READY: in STD_LOGIC;
 			  HEXIN_CHAR: in STD_LOGIC_VECTOR (7 downto 0);
 			  --
+			  TRACEENABLED: in STD_LOGIC;
            ERROR : buffer  STD_LOGIC;
            TXDREADY : in  STD_LOGIC;
 			  TXDSEND: out STD_LOGIC;
@@ -604,7 +605,7 @@ hexout: mem2hex Port map (
 		);			
 		
 -- serial output of hex file
-hexout_clk <= '1' when (hexout_ready = '0') else hex_clk;
+hexout_clk <= hex_clk when (hexout_ready = '0') else hex_clk;
 
 hexout_txd: uart_par2ser Port map (
 			reset => reset,
@@ -635,6 +636,7 @@ hexin: hex2mem Port map (
 			HEXIN_READY => hexin_ready,
 			HEXIN_CHAR => hexin_char,
 			-- Send echo or error
+			TRACEENABLED => '1',
 			ERROR => hexin_error,
 			TXDREADY => hexin_txdready,
 			TXDSEND => hexin_txdsend,
@@ -653,7 +655,7 @@ hexin_rxd: uart_ser2par Port map (
 		);
 
 -- serial output of echo and error during hex file input
-hexin_clk <= '1' when (hexin_txdready = '0') else hex_clk;
+hexin_clk <= hex_clk when (hexin_txdready = '0') else hex_clk;
 
 hexin_txd: uart_par2ser Port map (
 			reset => reset,

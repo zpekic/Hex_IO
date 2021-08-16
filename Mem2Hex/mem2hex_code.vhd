@@ -363,212 +363,208 @@ constant m2h_microcode: m2h_code_memory := (
 --  nBUSREQ = 1, nRD = 1, BUSY = 0, if (0011) then 000011 else 000100, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0101;
 4 => '1' & '1' & '0' & X"3" & O"03" & O"04" & "00" & "00" & "00" & O"0" & "00" & X"5",
 
--- L0112@0005.  mem_page <= zero
+-- L0115@0005.  mem_page <= zero
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000000 else 000000, mem_page <= 01, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 5 => '1' & '1' & '1' & X"0" & O"00" & O"00" & "01" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0113@0006.pageloop:  if false then printpage else printpage
+-- L0116@0006.pageloop:  if false then printpage else printpage
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 010000 else 010000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 6 => '1' & '1' & '1' & X"F" & O"20" & O"20" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0114@0007.  mem_page <= inc
+-- L0117@0007.  mem_page <= inc
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000000 else 000000, mem_page <= 10, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 7 => '1' & '1' & '1' & X"0" & O"00" & O"00" & "10" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0115@0008.  if page_is_zero then next else pageloop
+-- L0118@0008.  if page_is_zero then next else pageloop
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1001) then 000000 else 000110, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 8 => '1' & '1' & '1' & X"9" & O"00" & O"06" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0120@0009.  mem_page <= zero, mem_addr <= zero, if false then emitChar else emitChar, CHAR <= char_colon
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 01, mem_addr <= 01, count <= 00, checksum <= 000, d <= 00, CHAR <= 0001;
-9 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "01" & "01" & "00" & O"0" & "00" & X"1",
+-- L0125@0009.  mem_page <= zero, mem_addr <= zero, if false then emitChar else emitChar, CHAR <= char_colon
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 01, mem_addr <= 01, count <= 00, checksum <= 000, d <= 00, CHAR <= 0001;
+9 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "01" & "01" & "00" & O"0" & "00" & X"1",
 
--- L0121@000A.  if false then emitChar else emitChar, CHAR <= char_space
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0010;
-10 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"2",
+-- L0126@000A.  if false then emitChar else emitChar, CHAR <= char_space
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0010;
+10 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"2",
 
--- L0123@000B.  count <= zero, if false then printcount else printcount
+-- L0128@000B.  count <= zero, if false then printcount else printcount
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 100011 else 100011, mem_page <= 00, mem_addr <= 00, count <= 11, checksum <= 000, d <= 00, CHAR <= 0000;
 11 => '1' & '1' & '1' & X"F" & O"43" & O"43" & "00" & "00" & "11" & O"0" & "00" & X"0",
 
--- L0125@000C.  if false then printaddr else printaddr
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 100111 else 100111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-12 => '1' & '1' & '1' & X"F" & O"47" & O"47" & "00" & "00" & "00" & O"0" & "00" & X"0",
+-- L0130@000C.  if false then printaddr else printaddr
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 100110 else 100110, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
+12 => '1' & '1' & '1' & X"F" & O"46" & O"46" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0127@000D.  d <= one, if false then printd else printd
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101101 else 101101, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 11, CHAR <= 0000;
-13 => '1' & '1' & '1' & X"F" & O"55" & O"55" & "00" & "00" & "00" & O"0" & "11" & X"0",
+-- L0132@000D.  d <= one, if false then printd else printd
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101100 else 101100, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 11, CHAR <= 0000;
+13 => '1' & '1' & '1' & X"F" & O"54" & O"54" & "00" & "00" & "00" & O"0" & "11" & X"0",
 
--- L0129@000E.  if false then lineend else lineend
+-- L0134@000E.  if false then lineend else lineend
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 011101 else 011101, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 14 => '1' & '1' & '1' & X"F" & O"35" & O"35" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0132@000F.  if false then next else deadloop
+-- L0137@000F.  if false then next else deadloop
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 000000 else 000100, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 15 => '1' & '1' & '1' & X"F" & O"00" & O"04" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0134@0010.printpage:  mem_addr <= zero, if page_match then next else return
+-- L0139@0010.printpage:  mem_addr <= zero, if page_match then next else return
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0100) then 000000 else 000010, mem_page <= 00, mem_addr <= 01, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 16 => '1' & '1' & '1' & X"4" & O"00" & O"02" & "00" & "01" & "00" & O"0" & "00" & X"0",
 
--- L0136@0011.page_line:  if true then next else next
+-- L0141@0011.page_line:  if true then next else next
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000000 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 17 => '1' & '1' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0138@0012.  if false then emitChar else emitChar, CHAR <= char_colon
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0001;
-18 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"1",
+-- L0143@0012.  if false then emitChar else emitChar, CHAR <= char_colon
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0001;
+18 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"1",
 
--- L0139@0013.  if false then emitChar else emitChar, CHAR <= char_space
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0010;
-19 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"2",
+-- L0145@0013.  if false then emitChar else emitChar, CHAR <= char_space
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0010;
+19 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"2",
 
--- L0141@0014.  count <= load, if false then printcount else printcount
+-- L0147@0014.  count <= load, if false then printcount else printcount
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 100011 else 100011, mem_page <= 00, mem_addr <= 00, count <= 01, checksum <= 000, d <= 00, CHAR <= 0000;
 20 => '1' & '1' & '1' & X"F" & O"43" & O"43" & "00" & "00" & "01" & O"0" & "00" & X"0",
 
--- L0143@0015.  if false then printaddr else printaddr
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 100111 else 100111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-21 => '1' & '1' & '1' & X"F" & O"47" & O"47" & "00" & "00" & "00" & O"0" & "00" & X"0",
+-- L0149@0015.  if false then printaddr else printaddr
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 100110 else 100110, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
+21 => '1' & '1' & '1' & X"F" & O"46" & O"46" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0145@0016.  d <= zero, if false then printd else printd
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101101 else 101101, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 10, CHAR <= 0000;
-22 => '1' & '1' & '1' & X"F" & O"55" & O"55" & "00" & "00" & "00" & O"0" & "10" & X"0",
+-- L0151@0016.  d <= zero, if false then printd else printd
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101100 else 101100, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 10, CHAR <= 0000;
+22 => '1' & '1' & '1' & X"F" & O"54" & O"54" & "00" & "00" & "00" & O"0" & "10" & X"0",
 
--- L0148@0017.page_byte:  if false then readmem else readmem
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110100 else 110100, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-23 => '1' & '1' & '1' & X"F" & O"64" & O"64" & "00" & "00" & "00" & O"0" & "00" & X"0",
+-- L0154@0017.page_byte:  if false then readmem else readmem
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110011 else 110011, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
+23 => '1' & '1' & '1' & X"F" & O"63" & O"63" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0149@0018.  if false then printd else printd
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101101 else 101101, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-24 => '1' & '1' & '1' & X"F" & O"55" & O"55" & "00" & "00" & "00" & O"0" & "00" & X"0",
+-- L0155@0018.  if false then printd else printd
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101100 else 101100, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
+24 => '1' & '1' & '1' & X"F" & O"54" & O"54" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0150@0019.  mem_addr <= inc, count <= dec
+-- L0156@0019.  mem_addr <= inc, count <= dec
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000000 else 000000, mem_page <= 00, mem_addr <= 10, count <= 10, checksum <= 000, d <= 00, CHAR <= 0000;
 25 => '1' & '1' & '1' & X"0" & O"00" & O"00" & "00" & "10" & "10" & O"0" & "00" & X"0",
 
--- L0151@001A.  if count_is_zero then next else page_byte
+-- L0157@001A.  if count_is_zero then next else page_byte
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0110) then 000000 else 010111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 26 => '1' & '1' & '1' & X"6" & O"00" & O"27" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0153@001B.  if false then lineend else lineend
+-- L0160@001B.  if false then lineend else lineend
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 011101 else 011101, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 27 => '1' & '1' & '1' & X"F" & O"35" & O"35" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0155@001C.  if mem_addr_is_zero then return else page_line
+-- L0163@001C.  if mem_addr_is_zero then return else page_line
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0101) then 000010 else 010001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 28 => '1' & '1' & '1' & X"5" & O"02" & O"21" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0157@001D.lineend:  checksum <= complement
+-- L0166@001D.lineend:  checksum <= complement
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000000 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 101, d <= 00, CHAR <= 0000;
 29 => '1' & '1' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"5" & "00" & X"0",
 
--- L0158@001E.  if false then emitChar else emitChar, CHAR <= checksum_hi
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1110;
-30 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"E",
+-- L0167@001E.  if false then emitChar else emitChar, CHAR <= checksum_hi
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1110;
+30 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"E",
 
--- L0159@001F.  if false then emitChar else emitChar, CHAR <= checksum_lo
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1111;
-31 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"F",
+-- L0168@001F.  if false then emitChar else emitChar, CHAR <= checksum_lo
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1111;
+31 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"F",
 
--- L0160@0020.  if false then emitChar else emitChar, CHAR <= char_cr
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0011;
-32 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"3",
+-- L0169@0020.  if false then emitChar else emitChar, CHAR <= char_cr
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0011;
+32 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"3",
 
--- L0161@0021.  if false then emitChar else emitChar, CHAR <= char_lf
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0100;
-33 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"4",
+-- L0170@0021.  if false then emitChar else emitChar, CHAR <= char_lf
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0100;
+33 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"4",
 
--- L0162@0022.  if true then return else return
+-- L0171@0022.  if true then return else return
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000010 else 000010, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
 34 => '1' & '1' & '1' & X"0" & O"02" & O"02" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0164@0023.printcount:  if false then emitChar else emitChar, CHAR <= count_hi
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1000;
-35 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"8",
+-- L0173@0023.printcount:  if false then emitChar else emitChar, CHAR <= count_hi
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1000;
+35 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"8",
 
--- L0165@0024.  if false then emitChar else emitChar, CHAR <= count_lo
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1001;
-36 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"9",
+-- L0174@0024.  if false then emitChar else emitChar, CHAR <= count_lo
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1001;
+36 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"9",
 
--- L0166@0025.  checksum <= count, if false then emitChar else emitChar, CHAR <= char_space
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 001, d <= 00, CHAR <= 0010;
-37 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"1" & "00" & X"2",
+-- L0175@0025.  checksum <= count, if false then next else printspace
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 000000 else 101010, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 001, d <= 00, CHAR <= 0000;
+37 => '1' & '1' & '1' & X"F" & O"00" & O"52" & "00" & "00" & "00" & O"1" & "00" & X"0",
 
--- L0167@0026.  if true then return else return
+-- L0177@0026.printaddr:  if false then emitChar else emitChar, CHAR <= addr_msb_hi
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1010;
+38 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"A",
+
+-- L0178@0027.  checksum <= add_addr_msb, if false then emitChar else emitChar, CHAR <= addr_msb_lo
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 011, d <= 00, CHAR <= 1011;
+39 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"3" & "00" & X"B",
+
+-- L0179@0028.  if false then emitChar else emitChar, CHAR <= addr_lsb_hi
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1100;
+40 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"C",
+
+-- L0180@0029.  checksum <= add_addr_lsb, if false then emitChar else emitChar, CHAR <= addr_lsb_lo
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 010, d <= 00, CHAR <= 1101;
+41 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"2" & "00" & X"D",
+
+-- L0181@002A.printspace:  if false then emitChar else emitChar, CHAR <= char_space
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0010;
+42 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"2",
+
+-- L0182@002B.  if true then return else return
 --  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000010 else 000010, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-38 => '1' & '1' & '1' & X"0" & O"02" & O"02" & "00" & "00" & "00" & O"0" & "00" & X"0",
+43 => '1' & '1' & '1' & X"0" & O"02" & O"02" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0169@0027.printaddr:  if false then emitChar else emitChar, CHAR <= addr_msb_hi
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1010;
-39 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"A",
+-- L0184@002C.printd:  if false then emitChar else emitChar, CHAR <= d_hi
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0110;
+44 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"6",
 
--- L0170@0028.  checksum <= add_addr_msb, if false then emitChar else emitChar, CHAR <= addr_msb_lo
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 011, d <= 00, CHAR <= 1011;
-40 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"3" & "00" & X"B",
+-- L0185@002D.  if false then emitChar else emitChar, CHAR <= d_lo
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 101111 else 101111, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0111;
+45 => '1' & '1' & '1' & X"F" & O"57" & O"57" & "00" & "00" & "00" & O"0" & "00" & X"7",
 
--- L0171@0029.  if false then emitChar else emitChar, CHAR <= addr_lsb_hi
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 1100;
-41 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"C",
+-- L0186@002E.  checksum <= add_d, if false then next else printspace
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 000000 else 101010, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 100, d <= 00, CHAR <= 0000;
+46 => '1' & '1' & '1' & X"F" & O"00" & O"52" & "00" & "00" & "00" & O"4" & "00" & X"0",
 
--- L0172@002A.  checksum <= add_addr_lsb, if false then emitChar else emitChar, CHAR <= addr_lsb_lo
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 010, d <= 00, CHAR <= 1101;
-42 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"2" & "00" & X"D",
+-- L0192@002F.emitChar:  if TXDREADY then next else repeat
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0111) then 000000 else 000001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
+47 => '1' & '1' & '1' & X"7" & O"00" & O"01" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0173@002B.  if false then emitChar else emitChar, CHAR <= char_space
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0010;
-43 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"2",
+-- L0193@0030.  if TXDREADY then next else repeat
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0111) then 000000 else 000001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
+48 => '1' & '1' & '1' & X"7" & O"00" & O"01" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0174@002C.  if true then return else return
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000010 else 000010, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-44 => '1' & '1' & '1' & X"0" & O"02" & O"02" & "00" & "00" & "00" & O"0" & "00" & X"0",
+-- L0194@0031.  if TXDREADY then next else repeat
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0111) then 000000 else 000001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
+49 => '1' & '1' & '1' & X"7" & O"00" & O"01" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0176@002D.printd:  if false then emitChar else emitChar, CHAR <= d_hi
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0110;
-45 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"6",
+-- L0195@0032.  if TXDSEND then return else return
+--  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1000) then 000010 else 000010, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
+50 => '1' & '1' & '1' & X"8" & O"02" & O"02" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0177@002E.  if false then emitChar else emitChar, CHAR <= d_lo
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0111;
-46 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"0" & "00" & X"7",
-
--- L0178@002F.  checksum <= add_d, if false then emitChar else emitChar, CHAR <= char_space
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1111) then 110001 else 110001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 100, d <= 00, CHAR <= 0010;
-47 => '1' & '1' & '1' & X"F" & O"61" & O"61" & "00" & "00" & "00" & O"4" & "00" & X"2",
-
--- L0179@0030.  if true then return else return
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000010 else 000010, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-48 => '1' & '1' & '1' & X"0" & O"02" & O"02" & "00" & "00" & "00" & O"0" & "00" & X"0",
-
--- L0183@0031.emitChar:  if TXDSEND then next else next
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (1000) then 000000 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-49 => '1' & '1' & '1' & X"8" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
-
--- L0184@0032.emitChar2:  if true then next else next
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0000) then 000000 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-50 => '1' & '1' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
-
--- L0185@0033.  if TXDREADY then return else repeat
---  nBUSREQ = 1, nRD = 1, BUSY = 1, if (0111) then 000010 else 000001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-51 => '1' & '1' & '1' & X"7" & O"02" & O"01" & "00" & "00" & "00" & O"0" & "00" & X"0",
-
--- L0191@0034.readmem:  nBUSREQ = 0
+-- L0198@0033.readmem:  nBUSREQ = 0
 --  nBUSREQ = 0, nRD = 1, BUSY = 1, if (0000) then 000000 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-52 => '0' & '1' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
+51 => '0' & '1' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0192@0035.  nBUSREQ = 0, if nBUSACK then repeat else next
+-- L0199@0034.  nBUSREQ = 0, if nBUSACK then repeat else next
 --  nBUSREQ = 0, nRD = 1, BUSY = 1, if (0010) then 000001 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-53 => '0' & '1' & '1' & X"2" & O"01" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
+52 => '0' & '1' & '1' & X"2" & O"01" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0193@0036.  nBUSREQ = 0, nRD = 0
+-- L0200@0035.  nBUSREQ = 0, nRD = 0
 --  nBUSREQ = 0, nRD = 0, BUSY = 1, if (0000) then 000000 else 000000, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 00, CHAR <= 0000;
-54 => '0' & '0' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
+53 => '0' & '0' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0",
 
--- L0194@0037.  nBUSREQ = 0, nRD = 0, d <= dbus, if nWAIT then return else repeat
+-- L0201@0036.  nBUSREQ = 0, nRD = 0, d <= dbus, if nWAIT then return else repeat
 --  nBUSREQ = 0, nRD = 0, BUSY = 1, if (0001) then 000010 else 000001, mem_page <= 00, mem_addr <= 00, count <= 00, checksum <= 000, d <= 01, CHAR <= 0000;
-55 => '0' & '0' & '1' & X"1" & O"02" & O"01" & "00" & "00" & "00" & O"0" & "01" & X"0",
+54 => '0' & '0' & '1' & X"1" & O"02" & O"01" & "00" & "00" & "00" & O"0" & "01" & X"0",
 
--- 8 location(s) in following ranges will be filled with default value
--- 0038 .. 003F
+-- 9 location(s) in following ranges will be filled with default value
+-- 0037 .. 003F
 
 others => '1' & '1' & '1' & X"0" & O"00" & O"00" & "00" & "00" & "00" & O"0" & "00" & X"0"
 );

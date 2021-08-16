@@ -27,7 +27,7 @@ signal m2h_instructionstart: std_logic_vector(5 downto 0);
 
 constant m2h_mapper: m2h_mapper_memory := (
 
--- L0118@0009. .map 0b00000000
+-- L0122@0009. .map 0b00000000
 0 => O"11",
 
 1 => O"05",

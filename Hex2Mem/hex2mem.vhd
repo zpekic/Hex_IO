@@ -49,6 +49,7 @@ entity hex2mem is
 			  HEXIN_READY: in STD_LOGIC;
 			  HEXIN_CHAR: in STD_LOGIC_VECTOR (7 downto 0);
 			  --
+			  TRACEENABLED: in STD_LOGIC;
            ERROR : buffer  STD_LOGIC;
            TXDREADY : in  STD_LOGIC;
 			  TXDSEND: out STD_LOGIC;
@@ -108,22 +109,48 @@ constant hex2ascii: lookup := (
 	std_logic_vector(to_unsigned(natural(character'pos('F')), 8))
 );
 
+-- internal RAM is 64*8, enough to hold a 32 byte record. Locations are:
+--	0x3B - colon (position only, not actually stored)
+constant ptr_colon: std_logic_vector(5 downto 0) 	:= "111011";
+-- 0x3C - length (usually 0x10)
+constant ptr_len: std_logic_vector(5 downto 0) := "111100";
+--	0x3D - address, high byte
+constant ptr_addr_hi: std_logic_vector(5 downto 0) := "111101";
+--	0x3E - address, low byte
+constant ptr_addr_lo: std_logic_vector(5 downto 0) := "111110";
+--	0x3F - type (usually 0x00)
+constant ptr_type: std_logic_vector(5 downto 0) 	:= "111111";
+--	0x00 - <length - 1> - data bytes from the HEX file record
+--  <length> - checksum value (lower byte)
+type ram64x8 is array(0 to 63) of std_logic_vector(7 downto 0);
+signal data: ram64x8;
+signal ram: std_logic_vector(7 downto 0);
+signal ram_addr: std_logic_vector(5 downto 0);
+signal ram_ext: std_logic_vector(15 downto 0);
+
 -- control unit
 signal ui_address: std_logic_vector(CODE_ADDRESS_WIDTH - 1 downto 0);
 signal ui_nextinstr: std_logic_vector(CODE_ADDRESS_WIDTH -1  downto 0);
 
 -- internal regs
 signal checksum: std_logic_vector(15 downto 0); 
-signal input: std_logic_vector(7 downto 0);
+signal input: std_logic_vector(7 downto 0); -- current 
+signal prev_is_crorlf, prev_is_spaceortab: std_logic; -- remember previous inputs
 signal poscnt: std_logic_vector(15 downto 0);
 signal lincnt: std_logic_vector(15 downto 0);
+signal hexcnt: std_logic_vector(6 downto 0);	-- hexcnt(0) selects upper or lower hex nibble in the data byte
+alias  bytecnt: std_logic_vector(5 downto 0) is hexcnt(6 downto 1); -- 64 bytes RAM
+signal address: std_logic_vector(15 downto 0);
 
 -- internal signals
-signal input_is_zero: std_logic;
-signal hex: std_logic_vector(3 downto 0);
+signal input_is_zero, bytecnt_at_colon: std_logic;
+signal hexout: std_logic_vector(3 downto 0);
 signal ascii: std_logic_vector(7 downto 0);
 signal poscnt_a, poscnt_sum: std_logic_vector(15 downto 0);
 signal lincnt_a, lincnt_sum: std_logic_vector(15 downto 0);
+alias hexin: std_logic_vector(3 downto 0) is h2m_instructionstart(3 downto 0);
+signal lin_chk: std_logic_vector(15 downto 0);
+signal pos_ram: std_logic_vector(7 downto 0);
 
 begin
 
@@ -154,11 +181,11 @@ cu_h2m: hex2mem_control_unit
 			  cond(seq_cond_input_is_zero) => input_is_zero,
 			  cond(seq_cond_TXDREADY) => TXDREADY,
 			  cond(seq_cond_TXDSEND) => '1', -- HACKHACK (this will generate pulse for sending the char)
-			  cond(6) => '1',
-			  cond(7) => '1',
-			  cond(8) => '1',
-			  cond(9) => '1',
-			  cond(10) => '1',
+			  cond(seq_cond_TRACEENABLED) => traceenabled,
+			  cond(seq_cond_bytecnt_at_colon) => '1',
+			  cond(seq_cond_hexcnt_is_odd) => hexcnt(0),
+			  cond(seq_cond_prev_is_crorlf) => prev_is_crorlf,
+			  cond(seq_cond_prev_is_spaceortab) => prev_is_spaceortab,
 			  cond(11) => '1',
 			  cond(12) => '1',
 			  cond(13) => '1',
@@ -171,6 +198,7 @@ cu_h2m: hex2mem_control_unit
 
 -- conditions
 input_is_zero <= '1' when (input = X"00") else '0';
+bytecnt_at_colon <= '1' when (bytecnt = ptr_colon) else '0';
 
 -- hack that saves 1 microcode bit width
 TXDSEND <= '1' when (unsigned(h2m_seq_cond) = seq_cond_TXDSEND) else '0';
@@ -187,9 +215,9 @@ nWR <= h2m_nWR when (nBUSACK = '0') else 'Z';
 BUSY <= h2m_BUSY;
 ---- End boilerplate code
 
-ABUS <= checksum when (nBUSACK = '0') else "ZZZZZZZZZZZZZZZZ";
+ABUS <= address when (nBUSACK = '0') else "ZZZZZZZZZZZZZZZZ";
 
-DBUS <= input when (nBUSACK = '0') else "ZZZZZZZZ";
+DBUS <= ram when (nBUSACK = '0') else "ZZZZZZZZ";
 
 ---- Start boilerplate code (use with utmost caution!)
  update_TXDCHAR: process(clk, h2m_TXDCHAR)
@@ -198,8 +226,8 @@ DBUS <= input when (nBUSACK = '0') else "ZZZZZZZZ";
 		case h2m_TXDCHAR is
 			when TXDCHAR_same =>
 				TXDCHAR <= TXDCHAR;
-			when TXDCHAR_char_input =>
-				TXDCHAR <= input;
+			when TXDCHAR_char_F =>
+				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('F')), 8));
 			when TXDCHAR_char_space =>
 				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos(' ')), 8));
 			when TXDCHAR_char_cr =>
@@ -210,6 +238,16 @@ DBUS <= input when (nBUSACK = '0') else "ZZZZZZZZ";
 				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('E')), 8));
 			when TXDCHAR_char_R =>
 				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('R')), 8));
+			when TXDCHAR_char_I =>
+				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('I')), 8));
+			when TXDCHAR_char_H =>
+				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('H')), 8));
+			when TXDCHAR_char_A =>
+				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('A')), 8));
+			when TXDCHAR_char_C =>
+				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('C')), 8));
+			when TXDCHAR_char_EQU =>
+				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('=')), 8));
 			when TXDCHAR_zero =>
 				TXDCHAR <= (others => '0');
 			when others =>
@@ -217,20 +255,46 @@ DBUS <= input when (nBUSACK = '0') else "ZZZZZZZZ";
 		end case;
  end if;
 end process;
+---- End boilerplate code
+lin_chk <= lincnt when (ERROR = '1') else checksum; -- saves input on the MUX below
+pos_ram <= poscnt(7 downto 0) when (ERROR = '1') else ram; -- saves input on the MUX below
 
-ascii <= hex2ascii(to_integer(unsigned(hex)));
-
-with h2m_TXDCHAR select hex <= 
-			poscnt(3 downto 0) when TXDCHAR_pos0,
-			poscnt(7 downto 4) when TXDCHAR_pos1,
+with h2m_TXDCHAR select hexout <= 
+			pos_ram(3 downto 0) when TXDCHAR_pos_ram0,
+			pos_ram(7 downto 4) when TXDCHAR_pos_ram1,
 			input(3 downto 0) when TXDCHAR_inp0,
 			input(7 downto 4) when TXDCHAR_inp1,
-			lincnt(3 downto 0) when TXDCHAR_lin0,
-			lincnt(7 downto 4) when TXDCHAR_lin1,
-			lincnt(11 downto 8) when TXDCHAR_lin2,
-			lincnt(15 downto 12) when TXDCHAR_lin3,
+			lin_chk(3 downto 0) when TXDCHAR_lin_chk0,
+			lin_chk(7 downto 4) when TXDCHAR_lin_chk1,
+			lin_chk(11 downto 8) when TXDCHAR_lin_chk2,
+			lin_chk(15 downto 12) when TXDCHAR_lin_chk3,
+			hexcnt(3 downto 0) when TXDCHAR_hexcnt0,
+			'0' & hexcnt(6 downto 4) when TXDCHAR_hexcnt1,
+			address(3 downto 0) when TXDCHAR_addr0,
+			address(7 downto 4) when TXDCHAR_addr1,
+			address(11 downto 8) when TXDCHAR_addr2,
+			address(15 downto 12) when TXDCHAR_addr3,
+			prev_is_crorlf & "00" & prev_is_crorlf when TXDCHAR_flags,
 			X"0" when others;
-		
+
+ascii <= hex2ascii(to_integer(unsigned(hexout)));
+
+---- Start boilerplate code (use with utmost caution!)
+ update_hexcnt: process(clk, h2m_hexcnt)
+ begin
+	if (rising_edge(clk)) then
+		case h2m_hexcnt is
+--			when hexcnt_same =>
+--				hexcnt <= hexcnt;
+			when hexcnt_inc =>
+				hexcnt <= std_logic_vector(unsigned(hexcnt) + 1);
+			when hexcnt_ptr_colon =>
+				hexcnt <= ptr_colon & '0';
+			when others =>
+				null;
+		end case;
+ end if;
+ end process;
 ---- End boilerplate code
 
 -- Line BCD counter
@@ -276,6 +340,28 @@ begin
 end process;
 
 ---- Start boilerplate code (use with utmost caution!)
+ with h2m_ram_addr select ram_addr <=
+      --bytecnt when ram_addr_bytecnt, -- default value
+      ptr_len when ram_addr_ptr_len,
+      ptr_addr_hi when ram_addr_ptr_addr_hi,
+      ptr_addr_lo when ram_addr_ptr_addr_lo,
+      ptr_type when ram_addr_ptr_type,
+      bytecnt when others;
+---- End boilerplate code
+
+ram <= data(to_integer(unsigned(ram_addr)));
+
+update_data: process(clk, h2m_ram_write)
+begin
+	if (rising_edge(clk)) then
+		if (h2m_ram_write = '1') then
+			data(to_integer(unsigned(ram_addr))) <= ram(3 downto 0) & hexin;
+		end if;
+	end if;
+end process;
+
+ram_ext <= X"00" & ram;
+---- Start boilerplate code (use with utmost caution!)
  update_checksum: process(clk, h2m_checksum)
  begin
 	if (rising_edge(clk)) then
@@ -284,8 +370,8 @@ end process;
 --				checksum <= checksum;
 			when checksum_zero =>
 				checksum <= (others => '0');
-			when checksum_inc =>
-				checksum <= std_logic_vector(unsigned(checksum) + 1);
+			when checksum_add_ram =>
+				checksum <= std_logic_vector(unsigned(checksum) + unsigned(ram_ext));
 			when others =>
 				null;
 		end case;
@@ -311,14 +397,48 @@ end process;
  end process;
 -- End boilerplate code
 
+---- Start boilerplate code (use with utmost caution!)
+ update_address: process(clk, h2m_address)
+ begin
+	if (rising_edge(clk)) then
+		case h2m_address is
+--			when address_same =>
+--				address <= address;
+			when address_inc =>
+				address <= std_logic_vector(unsigned(address) + 1);
+			when address_shift8ram =>
+				address <= address(7 downto 0) & ram;
+			when others =>
+				null;
+		end case;
+ end if;
+ end process;
+---- End boilerplate code
+
 -- input register is clocked by ser 2 par UART, and cleared by reset or internal signal
-on_hexin_ready: process(reset, h2m_input_reset, HEXIN_READY, HEXIN_CHAR)
+on_hexin_ready: process(reset, h2m_input_reset, HEXIN_READY, HEXIN_CHAR, input)
 begin
 	if ((reset or h2m_input_reset) = '1') then
 		input <= X"00";
+		prev_is_spaceortab <= '0';
+		prev_is_crorlf <= '0';
 	else
 		if (rising_edge(HEXIN_READY)) then
 			input <= HEXIN_CHAR;
+			-- set some flags based on previously received character
+			case (input) is
+				when X"0A" =>
+				when X"0D" =>
+					prev_is_spaceortab <= '0';
+					prev_is_crorlf <= '1';
+				when X"20" =>
+				when X"09" =>
+					prev_is_spaceortab <= '1';
+					prev_is_crorlf <= '0';
+				when others =>
+					prev_is_spaceortab <= '0';
+					prev_is_crorlf <= '0';
+			end case;
 		end if;
 	end if;
 end process;
