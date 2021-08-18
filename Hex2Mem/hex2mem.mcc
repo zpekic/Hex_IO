@@ -53,7 +53,7 @@ TXDCHAR		.regfield 5 values
 				char_E,			// 'E' in "ERR"
 				char_R,			// 'R' in "ERR"
 				char_I,
-				char_H,
+				char_B,
 				char_A,
 				char_C,
 				char_EQU,
@@ -70,14 +70,14 @@ TXDCHAR		.regfield 5 values
 				lin_chk1,
 				lin_chk2,
 				lin_chk3,
-				hexcnt0,
-				hexcnt1,
+				bytecnt0,
+				bytecnt1,
 				addr0,
 				addr1,
 				addr2,
 				addr3,
-				flags,
-				-
+				flags0,
+				flags1
 				default same;
 				
 // line counter 4-digit BCD
@@ -195,100 +195,117 @@ badchar:	error <= on, print_crlf;
 			emit lin_chk1;
 			emit lin_chk0;
 			emit char_space;
-			emit pos_ram1;			// 99 char position in the line (decimal)
+			emit pos_ram1;		// 99 char position in the line (decimal)
 			emit pos_ram0;
 			emit char_space;
 			emit inp1;			// FF hex code of offending char
 			emit inp0;
-			print_crlf;
+			emit char_space;
+			emit char_F;		// F=<flags>
+			emit char_EQU;
+			emit flags1;
+			emit flags0;
+			error <= off, print_crlf;
 nextchar:	trace;			
-			error <= off, input_reset = 1, goto deadloop;
+			input_reset = 1, goto deadloop;
 			
 			// with mapping like this lower 4 bits of mapper can be reused as ASCII to HEX decode
 			.org 0x20;
 			.map '0';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 			
 			.org 0x21;
 			.map '1';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x22;
 			.map '2';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x23;
 			.map '3';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x24;
 			.map '4';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x25;
 			.map '5';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x26;
 			.map '6';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x27;
 			.map '7';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x28;
 			.map '8';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x29;
 			.map '9';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x2a;
 			.map 'a';
 			.map 'A';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x2b;
 			.map 'b';
 			.map 'B';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x2c;
 			.map 'c';
 			.map 'C';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x2d;
 			.map 'd';
 			.map 'D';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x2e;
 			.map 'e';
 			.map 'E';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, goto hexchar;
+			ram_write = 1, ram_addr = bytecnt, goto hexchar;
 
 			.org 0x2f;
 			.map 'f';
 			.map 'F';
-			ram_write = 1, ram_addr = bytecnt, hexcnt <= inc;
-hexchar:	if bytecnt_at_colon then badchar else next;
-			if hexcnt_is_odd then nextchar else next;
-			ram_addr = bytecnt, checksum <= add_ram, goto nextchar;
+			ram_write = 1, ram_addr = bytecnt;
+hexchar:	if bytecnt_at_colon then badchar;
+			if hexcnt_is_odd then next else dontadd;
+			ram_addr = bytecnt, checksum <= add_ram;
+dontadd:	hexcnt <= inc, goto nextchar;
 
 			.map 0x0A;	// LF (line feed) - try to make it work for Windows (CR,LF) and other (LF only) files
 			if prev_is_crorlf then nextchar else newline;		// ignore subsequent cr/lf
 			
 			.map 0x0D;	// CR (carriage return)
 			if prev_is_crorlf then nextchar else next;			// ignore subsequent cr/lf	
-newline:	hexcnt <= ptr_colon, poscnt_zero, lincnt_inc, if hexcnt_is_odd then badchar else nextchar; // should not come between 2 hex characters
+newline:	hexcnt <= ptr_colon, poscnt_zero, lincnt_inc, if hexcnt_is_odd then next else next; // should not come between 2 hex characters
 
+nextram:	emit char_R;		// Rxx=yy
+			emit bytecnt1;			
+			emit bytecnt0;
+			emit char_EQU;
+			emit pos_ram1;
+			emit pos_ram0;
+			print_crlf;
+			hexcnt <= inc;
+			hexcnt <= inc;
+			if bytecnt_at_colon then nextchar else nextram;
+			
 			.map 0x09;	// treat tabs and spaces same way	
 			.map ' ';
 space:		if prev_is_spaceortab then nextchar else next;	// ignore a run of spaces or tabs
-			if hexcnt_is_odd then badchar else nextchar;	// two hex chars need to stick together!
+			if hexcnt_is_odd then nextchar else badchar;	// two hex chars need to stick together!
 
 			.map ':';
 colon:		if bytecnt_at_colon then next else badchar;
@@ -306,10 +323,10 @@ trace:		if TRACEENABLED then next else return;
 			emit inp0;
 			emit char_space;
 
-			emit char_H;		// H=<hex counter>
+			emit char_B;		// B=<byte counter>
 			emit char_EQU;
-			emit hexcnt1;			
-			emit hexcnt0;
+			emit bytecnt1;			
+			emit bytecnt0;
 			emit char_space;
 
 			emit char_R;		// R=<ram>
@@ -334,9 +351,10 @@ trace:		if TRACEENABLED then next else return;
 			emit lin_chk0;
 			emit char_space;
 			
-			emit char_F;		// F=<checksum>
+			emit char_F;		// F=<flags>
 			emit char_EQU;
-			emit flags;
+			emit flags1;
+			emit flags0;
 			print_crlf;
 			back;
 		

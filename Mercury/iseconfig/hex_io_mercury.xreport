@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2021-08-15T23:14:40</DateModified>
+  <DateModified>2021-08-17T23:04:10</DateModified>
   <ModuleName>hex_io_mercury</ModuleName>
-  <SummaryTimeStamp>2021-08-15T22:50:55</SummaryTimeStamp>
+  <SummaryTimeStamp>2021-08-17T22:51:18</SummaryTimeStamp>
   <SavedFilePath>C:/Users/zoltanp/Documents/HexCalc/Hex_IO/Hex_IO/Mercury/iseconfig/hex_io_mercury.xreport</SavedFilePath>
   <ImplementationReportsDirectory>C:/Users/zoltanp/Documents/HexCalc/Hex_IO/Hex_IO/Mercury\</ImplementationReportsDirectory>
   <DateInitialized>2021-07-17T22:43:22</DateInitialized>

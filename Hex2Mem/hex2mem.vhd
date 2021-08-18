@@ -145,7 +145,7 @@ signal address: std_logic_vector(15 downto 0);
 -- internal signals
 signal input_is_zero, bytecnt_at_colon: std_logic;
 signal hexout: std_logic_vector(3 downto 0);
-signal ascii: std_logic_vector(7 downto 0);
+signal ascii, flags: std_logic_vector(7 downto 0);
 signal poscnt_a, poscnt_sum: std_logic_vector(15 downto 0);
 signal lincnt_a, lincnt_sum: std_logic_vector(15 downto 0);
 alias hexin: std_logic_vector(3 downto 0) is h2m_instructionstart(3 downto 0);
@@ -182,7 +182,7 @@ cu_h2m: hex2mem_control_unit
 			  cond(seq_cond_TXDREADY) => TXDREADY,
 			  cond(seq_cond_TXDSEND) => '1', -- HACKHACK (this will generate pulse for sending the char)
 			  cond(seq_cond_TRACEENABLED) => traceenabled,
-			  cond(seq_cond_bytecnt_at_colon) => '1',
+			  cond(seq_cond_bytecnt_at_colon) => bytecnt_at_colon,
 			  cond(seq_cond_hexcnt_is_odd) => hexcnt(0),
 			  cond(seq_cond_prev_is_crorlf) => prev_is_crorlf,
 			  cond(seq_cond_prev_is_spaceortab) => prev_is_spaceortab,
@@ -240,8 +240,8 @@ DBUS <= ram when (nBUSACK = '0') else "ZZZZZZZZ";
 				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('R')), 8));
 			when TXDCHAR_char_I =>
 				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('I')), 8));
-			when TXDCHAR_char_H =>
-				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('H')), 8));
+			when TXDCHAR_char_B =>
+				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('B')), 8));
 			when TXDCHAR_char_A =>
 				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('A')), 8));
 			when TXDCHAR_char_C =>
@@ -256,8 +256,10 @@ DBUS <= ram when (nBUSACK = '0') else "ZZZZZZZZ";
  end if;
 end process;
 ---- End boilerplate code
+
 lin_chk <= lincnt when (ERROR = '1') else checksum; -- saves input on the MUX below
 pos_ram <= poscnt(7 downto 0) when (ERROR = '1') else ram; -- saves input on the MUX below
+flags <= prev_is_spaceortab & "00" & prev_is_crorlf & bytecnt_at_colon & "00" & hexcnt(0); 
 
 with h2m_TXDCHAR select hexout <= 
 			pos_ram(3 downto 0) when TXDCHAR_pos_ram0,
@@ -268,15 +270,34 @@ with h2m_TXDCHAR select hexout <=
 			lin_chk(7 downto 4) when TXDCHAR_lin_chk1,
 			lin_chk(11 downto 8) when TXDCHAR_lin_chk2,
 			lin_chk(15 downto 12) when TXDCHAR_lin_chk3,
-			hexcnt(3 downto 0) when TXDCHAR_hexcnt0,
-			'0' & hexcnt(6 downto 4) when TXDCHAR_hexcnt1,
+			bytecnt(3 downto 0) when TXDCHAR_bytecnt0,
+			"00" & bytecnt(5 downto 4) when TXDCHAR_bytecnt1,
 			address(3 downto 0) when TXDCHAR_addr0,
 			address(7 downto 4) when TXDCHAR_addr1,
 			address(11 downto 8) when TXDCHAR_addr2,
 			address(15 downto 12) when TXDCHAR_addr3,
-			prev_is_crorlf & "00" & prev_is_crorlf when TXDCHAR_flags,
-			X"0" when others;
+			flags(7 downto 4) when TXDCHAR_flags1,
+			flags(3 downto 0) when TXDCHAR_flags0,
+			X"F" when others;
 
+--with h2m_TXDCHAR select hexout <= 
+--			X"1" when TXDCHAR_pos_ram0,
+--			X"2" when TXDCHAR_pos_ram1,
+--			X"3" when TXDCHAR_inp0,
+--			X"4" when TXDCHAR_inp1,
+--			X"5" when TXDCHAR_lin_chk0,
+--			X"6" when TXDCHAR_lin_chk1,
+--			X"7" when TXDCHAR_lin_chk2,
+--			X"8" when TXDCHAR_lin_chk3,
+--			X"9" when TXDCHAR_bytecnt0,
+--			X"A" when TXDCHAR_bytecnt1,
+--			X"B" when TXDCHAR_addr0,
+--			X"C" when TXDCHAR_addr1,
+--			X"D" when TXDCHAR_addr2,
+--			X"E" when TXDCHAR_addr3,
+--			X"F" when TXDCHAR_flags,
+--			X"0" when others;
+			
 ascii <= hex2ascii(to_integer(unsigned(hexout)));
 
 ---- Start boilerplate code (use with utmost caution!)
@@ -351,7 +372,7 @@ end process;
 
 ram <= data(to_integer(unsigned(ram_addr)));
 
-update_data: process(clk, h2m_ram_write)
+update_data: process(clk, h2m_ram_write, ram, hexin)
 begin
 	if (rising_edge(clk)) then
 		if (h2m_ram_write = '1') then
@@ -362,7 +383,7 @@ end process;
 
 ram_ext <= X"00" & ram;
 ---- Start boilerplate code (use with utmost caution!)
- update_checksum: process(clk, h2m_checksum)
+ update_checksum: process(clk, h2m_checksum, ram_ext)
  begin
 	if (rising_edge(clk)) then
 		case h2m_checksum is
@@ -427,12 +448,10 @@ begin
 			input <= HEXIN_CHAR;
 			-- set some flags based on previously received character
 			case (input) is
-				when X"0A" =>
-				when X"0D" =>
+				when X"0A"|X"0D" =>
 					prev_is_spaceortab <= '0';
 					prev_is_crorlf <= '1';
-				when X"20" =>
-				when X"09" =>
+				when X"20"|X"09" =>
 					prev_is_spaceortab <= '1';
 					prev_is_crorlf <= '0';
 				when others =>

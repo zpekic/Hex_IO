@@ -64,181 +64,221 @@ L0201@0013.  if false then emitChar else emitChar, TXDCHAR <= inp1
 Line 202: resolved aliases:  emit
 L0202@0014.  if false then emitChar else emitChar, TXDCHAR <= inp0
 
-Line 203: resolved aliases:  print_crlf
-L0203@0015.  if false then print_crlf else print_crlf
+Line 203: resolved aliases:  emit
+L0203@0015.  if false then emitChar else emitChar, TXDCHAR <= char_space
 
-Line 204: resolved aliases:  trace
-L0204@0016.nextchar:  if false then trace else trace
+Line 204: resolved aliases:  emit
+L0204@0016.  if false then emitChar else emitChar, TXDCHAR <= char_F
 
-Line 205: resolved aliases:  goto
-L0205@0017.  error <= off, input_reset = 1, if false then next else deadloop
+Line 205: resolved aliases:  emit
+L0205@0017.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+
+Line 206: resolved aliases:  emit
+L0206@0018.  if false then emitChar else emitChar, TXDCHAR <= flags1
+
+Line 207: resolved aliases:  emit
+L0207@0019.  if false then emitChar else emitChar, TXDCHAR <= flags0
+
+Line 208: resolved aliases:  print_crlf
+L0208@001A.  error <= off, if false then print_crlf else print_crlf
+
+Line 209: resolved aliases:  trace
+L0209@001B.nextchar:  if false then trace else trace
 
 Line 210: resolved aliases:  goto
-L0210@0020.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+L0210@001C.  input_reset = 1, if false then next else deadloop
 
-Line 214: resolved aliases:  goto
-L0214@0021.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+Line 215: resolved aliases:  goto
+L0215@0020.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
-Line 218: resolved aliases:  goto
-L0218@0022.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+Line 219: resolved aliases:  goto
+L0219@0021.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
-Line 222: resolved aliases:  goto
-L0222@0023.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+Line 223: resolved aliases:  goto
+L0223@0022.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
-Line 226: resolved aliases:  goto
-L0226@0024.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+Line 227: resolved aliases:  goto
+L0227@0023.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
-Line 230: resolved aliases:  goto
-L0230@0025.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+Line 231: resolved aliases:  goto
+L0231@0024.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
-Line 234: resolved aliases:  goto
-L0234@0026.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+Line 235: resolved aliases:  goto
+L0235@0025.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
-Line 238: resolved aliases:  goto
-L0238@0027.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+Line 239: resolved aliases:  goto
+L0239@0026.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
-Line 242: resolved aliases:  goto
-L0242@0028.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+Line 243: resolved aliases:  goto
+L0243@0027.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
-Line 246: resolved aliases:  goto
-L0246@0029.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+Line 247: resolved aliases:  goto
+L0247@0028.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
 Line 251: resolved aliases:  goto
-L0251@002A.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+L0251@0029.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
 Line 256: resolved aliases:  goto
-L0256@002B.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+L0256@002A.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
 Line 261: resolved aliases:  goto
-L0261@002C.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+L0261@002B.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
 Line 266: resolved aliases:  goto
-L0266@002D.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+L0266@002C.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
 Line 271: resolved aliases:  goto
-L0271@002E.  ram_write = 1, ram_addr = bytecnt, hexcnt <= inc, if false then next else hexchar
+L0271@002D.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
-Line 279: resolved aliases:  goto
-L0279@0032.  ram_addr = bytecnt, checksum <= add_ram, if false then next else nextchar
+Line 276: resolved aliases:  goto
+L0276@002E.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 
-Line 286: resolved aliases:  lincnt_inc, poscnt_zero
-L0286@0035.newline:  hexcnt <= ptr_colon, poscnt_a = zero, lincnt_cin = 1, if hexcnt_is_odd then badchar else nextchar
+Warning: else clause missing in if statement, default value '' will be used
+Line 285: resolved aliases:  goto
+L0285@0033.dontadd:  hexcnt <= inc, if false then next else nextchar
 
-Line 296: resolved aliases:  goto
-L0296@003A.  hexcnt <= inc, if false then next else nextchar
+Line 292: resolved aliases:  lincnt_inc, poscnt_zero
+L0292@0036.newline:  hexcnt <= ptr_colon, poscnt_a = zero, lincnt_cin = 1, if hexcnt_is_odd then next else next
+
+Line 294: resolved aliases:  emit
+L0294@0037.nextram:  if false then emitChar else emitChar, TXDCHAR <= char_R
+
+Line 295: resolved aliases:  emit
+L0295@0038.  if false then emitChar else emitChar, TXDCHAR <= bytecnt1
+
+Line 296: resolved aliases:  emit
+L0296@0039.  if false then emitChar else emitChar, TXDCHAR <= bytecnt0
+
+Line 297: resolved aliases:  emit
+L0297@003A.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
 
 Line 298: resolved aliases:  emit
-L0298@003B.print_crlf:  if false then emitChar else emitChar, TXDCHAR <= char_cr
+L0298@003B.  if false then emitChar else emitChar, TXDCHAR <= pos_ram1
 
 Line 299: resolved aliases:  emit
-L0299@003C.  if false then emitChar else emitChar, TXDCHAR <= char_lf
+L0299@003C.  if false then emitChar else emitChar, TXDCHAR <= pos_ram0
 
-Line 300: resolved aliases:  back
-L0300@003D.  if true then return else return
+Line 300: resolved aliases:  print_crlf
+L0300@003D.  if false then print_crlf else print_crlf
 
-Line 303: resolved aliases:  emit
-L0303@003F.  if false then emitChar else emitChar, TXDCHAR <= char_I
-
-Line 304: resolved aliases:  emit
-L0304@0040.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
-
-Line 305: resolved aliases:  emit
-L0305@0041.  if false then emitChar else emitChar, TXDCHAR <= inp1
-
-Line 306: resolved aliases:  emit
-L0306@0042.  if false then emitChar else emitChar, TXDCHAR <= inp0
-
-Line 307: resolved aliases:  emit
-L0307@0043.  if false then emitChar else emitChar, TXDCHAR <= char_space
-
-Line 309: resolved aliases:  emit
-L0309@0044.  if false then emitChar else emitChar, TXDCHAR <= char_H
-
-Line 310: resolved aliases:  emit
-L0310@0045.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
-
-Line 311: resolved aliases:  emit
-L0311@0046.  if false then emitChar else emitChar, TXDCHAR <= hexcnt1
-
-Line 312: resolved aliases:  emit
-L0312@0047.  if false then emitChar else emitChar, TXDCHAR <= hexcnt0
-
-Line 313: resolved aliases:  emit
-L0313@0048.  if false then emitChar else emitChar, TXDCHAR <= char_space
+Line 313: resolved aliases:  goto
+L0313@0045.  hexcnt <= inc, if false then next else nextchar
 
 Line 315: resolved aliases:  emit
-L0315@0049.  if false then emitChar else emitChar, TXDCHAR <= char_R
+L0315@0046.print_crlf:  if false then emitChar else emitChar, TXDCHAR <= char_cr
 
 Line 316: resolved aliases:  emit
-L0316@004A.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+L0316@0047.  if false then emitChar else emitChar, TXDCHAR <= char_lf
 
-Line 317: resolved aliases:  emit
-L0317@004B.  if false then emitChar else emitChar, TXDCHAR <= pos_ram1
+Line 317: resolved aliases:  back
+L0317@0048.  if true then return else return
 
-Line 318: resolved aliases:  emit
-L0318@004C.  if false then emitChar else emitChar, TXDCHAR <= pos_ram0
-
-Line 319: resolved aliases:  emit
-L0319@004D.  if false then emitChar else emitChar, TXDCHAR <= char_space
+Line 320: resolved aliases:  emit
+L0320@004A.  if false then emitChar else emitChar, TXDCHAR <= char_I
 
 Line 321: resolved aliases:  emit
-L0321@004E.  if false then emitChar else emitChar, TXDCHAR <= char_A
+L0321@004B.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
 
 Line 322: resolved aliases:  emit
-L0322@004F.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+L0322@004C.  if false then emitChar else emitChar, TXDCHAR <= inp1
 
 Line 323: resolved aliases:  emit
-L0323@0050.  if false then emitChar else emitChar, TXDCHAR <= addr3
+L0323@004D.  if false then emitChar else emitChar, TXDCHAR <= inp0
 
 Line 324: resolved aliases:  emit
-L0324@0051.  if false then emitChar else emitChar, TXDCHAR <= addr2
-
-Line 325: resolved aliases:  emit
-L0325@0052.  if false then emitChar else emitChar, TXDCHAR <= addr1
+L0324@004E.  if false then emitChar else emitChar, TXDCHAR <= char_space
 
 Line 326: resolved aliases:  emit
-L0326@0053.  if false then emitChar else emitChar, TXDCHAR <= addr0
+L0326@004F.  if false then emitChar else emitChar, TXDCHAR <= char_B
 
 Line 327: resolved aliases:  emit
-L0327@0054.  if false then emitChar else emitChar, TXDCHAR <= char_space
+L0327@0050.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+
+Line 328: resolved aliases:  emit
+L0328@0051.  if false then emitChar else emitChar, TXDCHAR <= bytecnt1
 
 Line 329: resolved aliases:  emit
-L0329@0055.  if false then emitChar else emitChar, TXDCHAR <= char_C
+L0329@0052.  if false then emitChar else emitChar, TXDCHAR <= bytecnt0
 
 Line 330: resolved aliases:  emit
-L0330@0056.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
-
-Line 331: resolved aliases:  emit
-L0331@0057.  if false then emitChar else emitChar, TXDCHAR <= lin_chk3
+L0330@0053.  if false then emitChar else emitChar, TXDCHAR <= char_space
 
 Line 332: resolved aliases:  emit
-L0332@0058.  if false then emitChar else emitChar, TXDCHAR <= lin_chk2
+L0332@0054.  if false then emitChar else emitChar, TXDCHAR <= char_R
 
 Line 333: resolved aliases:  emit
-L0333@0059.  if false then emitChar else emitChar, TXDCHAR <= lin_chk1
+L0333@0055.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
 
 Line 334: resolved aliases:  emit
-L0334@005A.  if false then emitChar else emitChar, TXDCHAR <= lin_chk0
+L0334@0056.  if false then emitChar else emitChar, TXDCHAR <= pos_ram1
 
 Line 335: resolved aliases:  emit
-L0335@005B.  if false then emitChar else emitChar, TXDCHAR <= char_space
+L0335@0057.  if false then emitChar else emitChar, TXDCHAR <= pos_ram0
 
-Line 337: resolved aliases:  emit
-L0337@005C.  if false then emitChar else emitChar, TXDCHAR <= char_F
+Line 336: resolved aliases:  emit
+L0336@0058.  if false then emitChar else emitChar, TXDCHAR <= char_space
 
 Line 338: resolved aliases:  emit
-L0338@005D.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+L0338@0059.  if false then emitChar else emitChar, TXDCHAR <= char_A
 
 Line 339: resolved aliases:  emit
-L0339@005E.  if false then emitChar else emitChar, TXDCHAR <= flags
+L0339@005A.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
 
-Line 340: resolved aliases:  print_crlf
-L0340@005F.  if false then print_crlf else print_crlf
+Line 340: resolved aliases:  emit
+L0340@005B.  if false then emitChar else emitChar, TXDCHAR <= addr3
 
-Line 341: resolved aliases:  back
-L0341@0060.  if true then return else return
+Line 341: resolved aliases:  emit
+L0341@005C.  if false then emitChar else emitChar, TXDCHAR <= addr2
 
-Success: pass 1 358 line(s) read, 177 statement(s) parsed.
+Line 342: resolved aliases:  emit
+L0342@005D.  if false then emitChar else emitChar, TXDCHAR <= addr1
+
+Line 343: resolved aliases:  emit
+L0343@005E.  if false then emitChar else emitChar, TXDCHAR <= addr0
+
+Line 344: resolved aliases:  emit
+L0344@005F.  if false then emitChar else emitChar, TXDCHAR <= char_space
+
+Line 346: resolved aliases:  emit
+L0346@0060.  if false then emitChar else emitChar, TXDCHAR <= char_C
+
+Line 347: resolved aliases:  emit
+L0347@0061.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+
+Line 348: resolved aliases:  emit
+L0348@0062.  if false then emitChar else emitChar, TXDCHAR <= lin_chk3
+
+Line 349: resolved aliases:  emit
+L0349@0063.  if false then emitChar else emitChar, TXDCHAR <= lin_chk2
+
+Line 350: resolved aliases:  emit
+L0350@0064.  if false then emitChar else emitChar, TXDCHAR <= lin_chk1
+
+Line 351: resolved aliases:  emit
+L0351@0065.  if false then emitChar else emitChar, TXDCHAR <= lin_chk0
+
+Line 352: resolved aliases:  emit
+L0352@0066.  if false then emitChar else emitChar, TXDCHAR <= char_space
+
+Line 354: resolved aliases:  emit
+L0354@0067.  if false then emitChar else emitChar, TXDCHAR <= char_F
+
+Line 355: resolved aliases:  emit
+L0355@0068.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+
+Line 356: resolved aliases:  emit
+L0356@0069.  if false then emitChar else emitChar, TXDCHAR <= flags1
+
+Line 357: resolved aliases:  emit
+L0357@006A.  if false then emitChar else emitChar, TXDCHAR <= flags0
+
+Line 358: resolved aliases:  print_crlf
+L0358@006B.  if false then print_crlf else print_crlf
+
+Line 359: resolved aliases:  back
+L0359@006C.  if true then return else return
+
+Success: pass 1 376 line(s) read, 194 statement(s) parsed.
 Compiling hex2mem.mcc, pass 2 out of 2.
 Field 'nBUSREQ' 47 .. 47
 Field 'nWR' 46 .. 46
@@ -522,163 +562,181 @@ Info: line 6 - mapper[00FD] <= '0000110'
 Info: line 6 - mapper[00FE] <= '0000110'
 Info: line 6 - mapper[00FF] <= '0000110'
 Info: 256 mapper locations from 0 to 255 set to value '0000110'
-Info: line 5 - code[0006] <= '1_1_1_1111_0111011_0111011_00000_1_0_1_0_00_0_000_00_00_01_0_00000'
-Info: line 5 - code[0007] <= '1_1_1_1111_1100001_1100001_00101_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0008] <= '1_1_1_1111_1100001_1100001_00110_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0009] <= '1_1_1_1111_1100001_1100001_00110_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[000A] <= '1_1_1_1111_1100001_1100001_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[000B] <= '1_1_1_1111_1100001_1100001_10111_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[000C] <= '1_1_1_1111_1100001_1100001_10110_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[000D] <= '1_1_1_1111_1100001_1100001_10101_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[000E] <= '1_1_1_1111_1100001_1100001_10100_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[000F] <= '1_1_1_1111_1100001_1100001_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0010] <= '1_1_1_1111_1100001_1100001_10001_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0011] <= '1_1_1_1111_1100001_1100001_10000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0012] <= '1_1_1_1111_1100001_1100001_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0013] <= '1_1_1_1111_1100001_1100001_10011_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0014] <= '1_1_1_1111_1100001_1100001_10010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0015] <= '1_1_1_1111_0111011_0111011_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0016] <= '1_1_1_1111_0111110_0111110_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0017] <= '1_1_1_1111_0000000_0000100_00000_1_0_1_0_00_0_000_00_00_10_1_00000'
+Info: line 5 - code[0006] <= '1_1_1_1111_1000110_1000110_00000_1_0_1_0_00_0_000_00_00_01_0_00000'
+Info: line 5 - code[0007] <= '1_1_1_1111_1101101_1101101_00101_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0008] <= '1_1_1_1111_1101101_1101101_00110_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0009] <= '1_1_1_1111_1101101_1101101_00110_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[000A] <= '1_1_1_1111_1101101_1101101_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[000B] <= '1_1_1_1111_1101101_1101101_10111_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[000C] <= '1_1_1_1111_1101101_1101101_10110_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[000D] <= '1_1_1_1111_1101101_1101101_10101_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[000E] <= '1_1_1_1111_1101101_1101101_10100_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[000F] <= '1_1_1_1111_1101101_1101101_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0010] <= '1_1_1_1111_1101101_1101101_10001_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0011] <= '1_1_1_1111_1101101_1101101_10000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0012] <= '1_1_1_1111_1101101_1101101_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0013] <= '1_1_1_1111_1101101_1101101_10011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0014] <= '1_1_1_1111_1101101_1101101_10010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0015] <= '1_1_1_1111_1101101_1101101_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0016] <= '1_1_1_1111_1101101_1101101_00001_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0017] <= '1_1_1_1111_1101101_1101101_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0018] <= '1_1_1_1111_1101101_1101101_11111_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0019] <= '1_1_1_1111_1101101_1101101_11110_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[001A] <= '1_1_1_1111_1000110_1000110_00000_1_0_1_0_00_0_000_00_00_10_0_00000'
+Info: line 5 - code[001B] <= '1_1_1_1111_1001001_1001001_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[001C] <= '1_1_1_1111_0000000_0000100_00000_1_0_1_0_00_0_000_00_00_00_1_00000'
 Warning in line 6: overwriting '0000110' with '0100000' at mapper[0030]
 Info: Mapper location 48 set to value '0100000'
-Info: line 5 - code[0020] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[0020] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0100001' at mapper[0031]
 Info: Mapper location 49 set to value '0100001'
-Info: line 5 - code[0021] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[0021] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0100010' at mapper[0032]
 Info: Mapper location 50 set to value '0100010'
-Info: line 5 - code[0022] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[0022] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0100011' at mapper[0033]
 Info: Mapper location 51 set to value '0100011'
-Info: line 5 - code[0023] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[0023] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0100100' at mapper[0034]
 Info: Mapper location 52 set to value '0100100'
-Info: line 5 - code[0024] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[0024] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0100101' at mapper[0035]
 Info: Mapper location 53 set to value '0100101'
-Info: line 5 - code[0025] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[0025] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0100110' at mapper[0036]
 Info: Mapper location 54 set to value '0100110'
-Info: line 5 - code[0026] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[0026] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0100111' at mapper[0037]
 Info: Mapper location 55 set to value '0100111'
-Info: line 5 - code[0027] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[0027] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0101000' at mapper[0038]
 Info: Mapper location 56 set to value '0101000'
-Info: line 5 - code[0028] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[0028] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0101001' at mapper[0039]
 Info: Mapper location 57 set to value '0101001'
-Info: line 5 - code[0029] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[0029] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0101010' at mapper[0061]
 Info: Mapper location 97 set to value '0101010'
 Warning in line 6: overwriting '0000110' with '0101010' at mapper[0041]
 Info: Mapper location 65 set to value '0101010'
-Info: line 5 - code[002A] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[002A] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0101011' at mapper[0062]
 Info: Mapper location 98 set to value '0101011'
 Warning in line 6: overwriting '0000110' with '0101011' at mapper[0042]
 Info: Mapper location 66 set to value '0101011'
-Info: line 5 - code[002B] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[002B] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0101100' at mapper[0063]
 Info: Mapper location 99 set to value '0101100'
 Warning in line 6: overwriting '0000110' with '0101100' at mapper[0043]
 Info: Mapper location 67 set to value '0101100'
-Info: line 5 - code[002C] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[002C] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0101101' at mapper[0064]
 Info: Mapper location 100 set to value '0101101'
 Warning in line 6: overwriting '0000110' with '0101101' at mapper[0044]
 Info: Mapper location 68 set to value '0101101'
-Info: line 5 - code[002D] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[002D] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0101110' at mapper[0065]
 Info: Mapper location 101 set to value '0101110'
 Warning in line 6: overwriting '0000110' with '0101110' at mapper[0045]
 Info: Mapper location 69 set to value '0101110'
-Info: line 5 - code[002E] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[002E] <= '1_1_1_1111_0000000_0110000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Warning in line 6: overwriting '0000110' with '0101111' at mapper[0066]
 Info: Mapper location 102 set to value '0101111'
 Warning in line 6: overwriting '0000110' with '0101111' at mapper[0046]
 Info: Mapper location 70 set to value '0101111'
-Info: line 5 - code[002F] <= '1_1_1_0000_0000000_0000000_00000_1_0_1_0_00_1_000_01_00_00_0_00000'
+Info: line 5 - code[002F] <= '1_1_1_0000_0000000_0000000_00000_1_0_1_0_00_1_000_00_00_00_0_00000'
 Info: line 5 - code[0030] <= '1_1_1_0111_0000110_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0031] <= '1_1_1_1000_0010110_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0032] <= '1_1_1_1111_0000000_0010110_00000_1_0_1_0_00_0_000_00_10_00_0_00000'
-Warning in line 6: overwriting '0000110' with '0110011' at mapper[000A]
-Info: Mapper location 10 set to value '0110011'
-Info: line 5 - code[0033] <= '1_1_1_1001_0010110_0110101_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Warning in line 6: overwriting '0000110' with '0110100' at mapper[000D]
-Info: Mapper location 13 set to value '0110100'
-Info: line 5 - code[0034] <= '1_1_1_1001_0010110_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0035] <= '1_1_1_1000_0000110_0010110_00000_1_1_0_0_00_0_000_10_00_00_0_00000'
-Warning in line 6: overwriting '0000110' with '0110110' at mapper[0009]
-Info: Mapper location 9 set to value '0110110'
-Warning in line 6: overwriting '0000110' with '0110110' at mapper[0020]
-Info: Mapper location 32 set to value '0110110'
-Info: line 5 - code[0036] <= '1_1_1_1010_0010110_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0037] <= '1_1_1_1000_0000110_0010110_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Warning in line 6: overwriting '0000110' with '0111000' at mapper[003A]
-Info: Mapper location 58 set to value '0111000'
-Info: line 5 - code[0038] <= '1_1_1_0111_0000000_0000110_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0039] <= '1_1_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_01_00_00_0_00000'
-Info: line 5 - code[003A] <= '1_1_1_1111_0000000_0010110_00000_1_0_1_0_00_0_000_01_00_00_0_00000'
-Info: line 5 - code[003B] <= '1_1_1_1111_1100001_1100001_00011_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[003C] <= '1_1_1_1111_1100001_1100001_00100_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[003D] <= '1_1_1_0000_0000010_0000010_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[003E] <= '1_1_1_0110_0000000_0000010_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[003F] <= '1_1_1_1111_1100001_1100001_00111_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0040] <= '1_1_1_1111_1100001_1100001_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0041] <= '1_1_1_1111_1100001_1100001_10011_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0042] <= '1_1_1_1111_1100001_1100001_10010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0043] <= '1_1_1_1111_1100001_1100001_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0044] <= '1_1_1_1111_1100001_1100001_01000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0045] <= '1_1_1_1111_1100001_1100001_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0046] <= '1_1_1_1111_1100001_1100001_11001_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0047] <= '1_1_1_1111_1100001_1100001_11000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0048] <= '1_1_1_1111_1100001_1100001_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0049] <= '1_1_1_1111_1100001_1100001_00110_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[004A] <= '1_1_1_1111_1100001_1100001_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[004B] <= '1_1_1_1111_1100001_1100001_10001_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[004C] <= '1_1_1_1111_1100001_1100001_10000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[004D] <= '1_1_1_1111_1100001_1100001_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[004E] <= '1_1_1_1111_1100001_1100001_01001_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[004F] <= '1_1_1_1111_1100001_1100001_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0050] <= '1_1_1_1111_1100001_1100001_11101_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0051] <= '1_1_1_1111_1100001_1100001_11100_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0052] <= '1_1_1_1111_1100001_1100001_11011_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0053] <= '1_1_1_1111_1100001_1100001_11010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0054] <= '1_1_1_1111_1100001_1100001_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0055] <= '1_1_1_1111_1100001_1100001_01010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0056] <= '1_1_1_1111_1100001_1100001_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0057] <= '1_1_1_1111_1100001_1100001_10111_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0058] <= '1_1_1_1111_1100001_1100001_10110_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0059] <= '1_1_1_1111_1100001_1100001_10101_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[005A] <= '1_1_1_1111_1100001_1100001_10100_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[005B] <= '1_1_1_1111_1100001_1100001_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[005C] <= '1_1_1_1111_1100001_1100001_00001_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[005D] <= '1_1_1_1111_1100001_1100001_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[005E] <= '1_1_1_1111_1100001_1100001_11110_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[005F] <= '1_1_1_1111_0111011_0111011_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0060] <= '1_1_1_0000_0000010_0000010_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0061] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0062] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0063] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0064] <= '1_1_1_0101_0000010_0000010_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0065] <= '0_1_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0066] <= '0_1_1_0010_0000001_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0067] <= '0_0_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
-Info: line 5 - code[0068] <= '0_0_1_0001_0000010_0000001_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0031] <= '1_1_1_1000_0000000_0110011_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0032] <= '1_1_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_00_10_00_0_00000'
+Info: line 5 - code[0033] <= '1_1_1_1111_0000000_0011011_00000_1_0_1_0_00_0_000_01_00_00_0_00000'
+Warning in line 6: overwriting '0000110' with '0110100' at mapper[000A]
+Info: Mapper location 10 set to value '0110100'
+Info: line 5 - code[0034] <= '1_1_1_1001_0011011_0110110_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Warning in line 6: overwriting '0000110' with '0110101' at mapper[000D]
+Info: Mapper location 13 set to value '0110101'
+Info: line 5 - code[0035] <= '1_1_1_1001_0011011_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0036] <= '1_1_1_1000_0000000_0000000_00000_1_1_0_0_00_0_000_10_00_00_0_00000'
+Info: line 5 - code[0037] <= '1_1_1_1111_1101101_1101101_00110_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0038] <= '1_1_1_1111_1101101_1101101_11001_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0039] <= '1_1_1_1111_1101101_1101101_11000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[003A] <= '1_1_1_1111_1101101_1101101_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[003B] <= '1_1_1_1111_1101101_1101101_10001_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[003C] <= '1_1_1_1111_1101101_1101101_10000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[003D] <= '1_1_1_1111_1000110_1000110_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[003E] <= '1_1_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_01_00_00_0_00000'
+Info: line 5 - code[003F] <= '1_1_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_01_00_00_0_00000'
+Info: line 5 - code[0040] <= '1_1_1_0111_0011011_0110111_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Warning in line 6: overwriting '0000110' with '1000001' at mapper[0009]
+Info: Mapper location 9 set to value '1000001'
+Warning in line 6: overwriting '0000110' with '1000001' at mapper[0020]
+Info: Mapper location 32 set to value '1000001'
+Info: line 5 - code[0041] <= '1_1_1_1010_0011011_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0042] <= '1_1_1_1000_0011011_0000110_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Warning in line 6: overwriting '0000110' with '1000011' at mapper[003A]
+Info: Mapper location 58 set to value '1000011'
+Info: line 5 - code[0043] <= '1_1_1_0111_0000000_0000110_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0044] <= '1_1_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_01_00_00_0_00000'
+Info: line 5 - code[0045] <= '1_1_1_1111_0000000_0011011_00000_1_0_1_0_00_0_000_01_00_00_0_00000'
+Info: line 5 - code[0046] <= '1_1_1_1111_1101101_1101101_00011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0047] <= '1_1_1_1111_1101101_1101101_00100_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0048] <= '1_1_1_0000_0000010_0000010_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0049] <= '1_1_1_0110_0000000_0000010_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[004A] <= '1_1_1_1111_1101101_1101101_00111_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[004B] <= '1_1_1_1111_1101101_1101101_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[004C] <= '1_1_1_1111_1101101_1101101_10011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[004D] <= '1_1_1_1111_1101101_1101101_10010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[004E] <= '1_1_1_1111_1101101_1101101_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[004F] <= '1_1_1_1111_1101101_1101101_01000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0050] <= '1_1_1_1111_1101101_1101101_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0051] <= '1_1_1_1111_1101101_1101101_11001_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0052] <= '1_1_1_1111_1101101_1101101_11000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0053] <= '1_1_1_1111_1101101_1101101_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0054] <= '1_1_1_1111_1101101_1101101_00110_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0055] <= '1_1_1_1111_1101101_1101101_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0056] <= '1_1_1_1111_1101101_1101101_10001_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0057] <= '1_1_1_1111_1101101_1101101_10000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0058] <= '1_1_1_1111_1101101_1101101_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0059] <= '1_1_1_1111_1101101_1101101_01001_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[005A] <= '1_1_1_1111_1101101_1101101_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[005B] <= '1_1_1_1111_1101101_1101101_11101_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[005C] <= '1_1_1_1111_1101101_1101101_11100_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[005D] <= '1_1_1_1111_1101101_1101101_11011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[005E] <= '1_1_1_1111_1101101_1101101_11010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[005F] <= '1_1_1_1111_1101101_1101101_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0060] <= '1_1_1_1111_1101101_1101101_01010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0061] <= '1_1_1_1111_1101101_1101101_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0062] <= '1_1_1_1111_1101101_1101101_10111_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0063] <= '1_1_1_1111_1101101_1101101_10110_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0064] <= '1_1_1_1111_1101101_1101101_10101_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0065] <= '1_1_1_1111_1101101_1101101_10100_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0066] <= '1_1_1_1111_1101101_1101101_00010_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0067] <= '1_1_1_1111_1101101_1101101_00001_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0068] <= '1_1_1_1111_1101101_1101101_01011_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0069] <= '1_1_1_1111_1101101_1101101_11111_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[006A] <= '1_1_1_1111_1101101_1101101_11110_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[006B] <= '1_1_1_1111_1000110_1000110_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[006C] <= '1_1_1_0000_0000010_0000010_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[006D] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[006E] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[006F] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0070] <= '1_1_1_0101_0000010_0000010_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0071] <= '0_1_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0072] <= '0_1_1_0010_0000001_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0073] <= '0_0_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
+Info: line 5 - code[0074] <= '0_0_1_0001_0000010_0000001_00000_1_0_1_0_00_0_000_00_00_00_0_00000'
 Generating code: 
-Warning in line 5: found 31 uninitialized locations:
-0018 .. 001F
-0069 .. 007F
+Warning in line 5: found 14 uninitialized locations:
+001D .. 001F
+0075 .. 007F
 
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.mif' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.cgf' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.coe' (LF only) ... Done (initialized locations: 97, empty locations: 31, total locations: 128).
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.coe' (LF only) ... Done (initialized locations: 114, empty locations: 14, total locations: 128).
 Generating code 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.vhd' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.hex' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code_lendian.bin' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code_bendian.bin' ... Done.
 Generating mapping: 
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.mif' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.cgf' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.coe' (LF only) ... Done (in
