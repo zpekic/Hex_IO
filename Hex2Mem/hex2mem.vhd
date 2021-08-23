@@ -141,11 +141,13 @@ signal lincnt: std_logic_vector(15 downto 0);
 signal hexcnt: std_logic_vector(6 downto 0);	-- hexcnt(0) selects upper or lower hex nibble in the data byte
 alias  bytecnt: std_logic_vector(5 downto 0) is hexcnt(6 downto 1); -- 64 bytes RAM
 signal address: std_logic_vector(15 downto 0);
+signal errcode: std_logic_vector(2 downto 0);
 
 -- internal signals
-signal input_is_zero, bytecnt_at_colon: std_logic;
-signal hexout: std_logic_vector(3 downto 0);
-signal ascii, flags: std_logic_vector(7 downto 0);
+signal input_is_zero, bytecnt_at_colon, compa_equals_compb: std_logic;
+signal hexout, flags: std_logic_vector(3 downto 0);
+signal compa, compb: std_logic_vector(7 downto 0);
+signal ascii: std_logic_vector(7 downto 0);
 signal poscnt_a, poscnt_sum: std_logic_vector(15 downto 0);
 signal lincnt_a, lincnt_sum: std_logic_vector(15 downto 0);
 alias hexin: std_logic_vector(3 downto 0) is h2m_instructionstart(3 downto 0);
@@ -186,8 +188,8 @@ cu_h2m: hex2mem_control_unit
 			  cond(seq_cond_hexcnt_is_odd) => hexcnt(0),
 			  cond(seq_cond_prev_is_crorlf) => prev_is_crorlf,
 			  cond(seq_cond_prev_is_spaceortab) => prev_is_spaceortab,
-			  cond(11) => '1',
-			  cond(12) => '1',
+			  cond(seq_cond_compa_equals_compb) => compa_equals_compb,
+			  cond(seq_cond_resetout_done) => '1',	-- TODO: hookup to logic generating reset for external circuits
 			  cond(13) => '1',
 			  cond(14) => '1',
 			  cond(seq_cond_false) => '0',
@@ -199,6 +201,7 @@ cu_h2m: hex2mem_control_unit
 -- conditions
 input_is_zero <= '1' when (input = X"00") else '0';
 bytecnt_at_colon <= '1' when (bytecnt = ptr_colon) else '0';
+compa_equals_compb <= '1' when (compa = compb) else '0';
 
 -- hack that saves 1 microcode bit width
 TXDSEND <= '1' when (unsigned(h2m_seq_cond) = seq_cond_TXDSEND) else '0';
@@ -248,6 +251,10 @@ DBUS <= ram when (nBUSACK = '0') else "ZZZZZZZZ";
 				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('C')), 8));
 			when TXDCHAR_char_EQU =>
 				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('=')), 8));
+			when TXDCHAR_char_open =>
+				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos('[')), 8));
+			when TXDCHAR_char_close =>
+				TXDCHAR <= std_logic_vector(to_unsigned(natural(character'pos(']')), 8));
 			when TXDCHAR_zero =>
 				TXDCHAR <= (others => '0');
 			when others =>
@@ -259,7 +266,7 @@ end process;
 
 lin_chk <= lincnt when (ERROR = '1') else checksum; -- saves input on the MUX below
 pos_ram <= poscnt(7 downto 0) when (ERROR = '1') else ram; -- saves input on the MUX below
-flags <= prev_is_spaceortab & "00" & prev_is_crorlf & bytecnt_at_colon & "00" & hexcnt(0); 
+flags <= prev_is_spaceortab & prev_is_crorlf & bytecnt_at_colon & hexcnt(0); 
 
 with h2m_TXDCHAR select hexout <= 
 			pos_ram(3 downto 0) when TXDCHAR_pos_ram0,
@@ -276,27 +283,9 @@ with h2m_TXDCHAR select hexout <=
 			address(7 downto 4) when TXDCHAR_addr1,
 			address(11 downto 8) when TXDCHAR_addr2,
 			address(15 downto 12) when TXDCHAR_addr3,
-			flags(7 downto 4) when TXDCHAR_flags1,
-			flags(3 downto 0) when TXDCHAR_flags0,
+			flags when TXDCHAR_flags,
+			'0' & errcode when TXDCHAR_errcode,
 			X"F" when others;
-
---with h2m_TXDCHAR select hexout <= 
---			X"1" when TXDCHAR_pos_ram0,
---			X"2" when TXDCHAR_pos_ram1,
---			X"3" when TXDCHAR_inp0,
---			X"4" when TXDCHAR_inp1,
---			X"5" when TXDCHAR_lin_chk0,
---			X"6" when TXDCHAR_lin_chk1,
---			X"7" when TXDCHAR_lin_chk2,
---			X"8" when TXDCHAR_lin_chk3,
---			X"9" when TXDCHAR_bytecnt0,
---			X"A" when TXDCHAR_bytecnt1,
---			X"B" when TXDCHAR_addr0,
---			X"C" when TXDCHAR_addr1,
---			X"D" when TXDCHAR_addr2,
---			X"E" when TXDCHAR_addr3,
---			X"F" when TXDCHAR_flags,
---			X"0" when others;
 			
 ascii <= hex2ascii(to_integer(unsigned(hexout)));
 
@@ -311,6 +300,12 @@ ascii <= hex2ascii(to_integer(unsigned(hexout)));
 				hexcnt <= std_logic_vector(unsigned(hexcnt) + 1);
 			when hexcnt_ptr_colon =>
 				hexcnt <= ptr_colon & '0';
+			when hexcnt_ptr_len =>
+				hexcnt <= ptr_len & '0';
+			when hexcnt_ptr_type =>
+				hexcnt <= ptr_type & '0';
+			when hexcnt_zero =>
+				hexcnt <= (others => '0');
 			when others =>
 				null;
 		end case;
@@ -400,24 +395,6 @@ ram_ext <= X"00" & ram;
  end process;
 ---- End boilerplate code
 
--- Start boilerplate code (use with utmost caution!)
- update_error: process(clk, h2m_error)
- begin
-	if (rising_edge(clk)) then
-		case h2m_error is
---			when error_same =>
---				error <= error;
-			when error_on =>
-				ERROR <= '1';
-			when error_off =>
-				ERROR <= '0';
-			when others =>
-				null;
-		end case;
- end if;
- end process;
--- End boilerplate code
-
 ---- Start boilerplate code (use with utmost caution!)
  update_address: process(clk, h2m_address)
  begin
@@ -434,6 +411,46 @@ ram_ext <= X"00" & ram;
 		end case;
  end if;
  end process;
+---- End boilerplate code
+
+ERROR <= '0' when (errcode = errcode_ok) else '1';
+-- Start boilerplate code (use with utmost caution!)
+ update_errcode: process(clk, h2m_errcode)
+ begin
+	if (rising_edge(clk)) then
+		case h2m_errcode is
+			when errcode_ok =>
+				errcode <= errcode_ok;
+			when errcode_err_badchar =>
+				errcode <= errcode_err_badchar;
+			when errcode_err_unexpected =>
+				errcode <= errcode_err_unexpected;
+			when errcode_err_badchecksum =>
+				errcode <= errcode_err_badchecksum;
+			when errcode_err_badrecordtype =>
+				errcode <= errcode_err_badrecordtype;
+			when errcode_err_badrecordlength =>
+				errcode <= errcode_err_badrecordlength;
+--			when errcode_same =>
+--				errcode <= errcode;
+			when others =>
+				null;
+		end case;
+ end if;
+ end process;
+-- End boilerplate code
+
+---- Start boilerplate code (use with utmost caution!)
+compa <= checksum(7 downto 0) when (h2m_compa = compa_checksum_lsb) else ram;
+---- End boilerplate code
+
+---- Start boilerplate code (use with utmost caution!)
+ with h2m_compb select compb <=
+--      (others => '0') when compb_zero, -- default value
+      X"01" when compb_one,
+      "000" & bytecnt when compb_bytecnt,
+      "000" & std_logic_vector(unsigned(bytecnt) - 1) when compb_bytecnt_dec,
+		(others => '0') when others; 
 ---- End boilerplate code
 
 -- input register is clocked by ser 2 par UART, and cleared by reset or internal signal
