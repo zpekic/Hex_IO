@@ -34,7 +34,9 @@ use work.hex2mem_map.all;
 
 entity hex2mem is
     Port ( clk : in  STD_LOGIC;
-           reset : in  STD_LOGIC;
+           reset_in : in  STD_LOGIC;
+			  reset_out: buffer STD_LOGIC;
+			  reset_page: in STD_LOGIC_VECTOR(7 downto 0);
 			  --
    		  debug: out STD_LOGIC_VECTOR(15 downto 0);
 			  --
@@ -49,7 +51,9 @@ entity hex2mem is
 			  HEXIN_READY: in STD_LOGIC;
 			  HEXIN_CHAR: in STD_LOGIC_VECTOR (7 downto 0);
 			  --
-			  TRACEENABLED: in STD_LOGIC;
+			  TRACE_ERROR: in STD_LOGIC;
+			  TRACE_WRITE: in STD_LOGIC;
+			  TRACE_CHAR: in STD_LOGIC;
            ERROR : buffer  STD_LOGIC;
            TXDREADY : in  STD_LOGIC;
 			  TXDSEND: out STD_LOGIC;
@@ -89,6 +93,7 @@ component hex2mem_control_unit is
           ui_address : out  STD_LOGIC_VECTOR (CODE_DEPTH - 1 downto 0));
 end component;
 
+-- TODO: move to a package
 type lookup is array(0 to 15) of std_logic_vector(7 downto 0);
 constant hex2ascii: lookup := (
 	std_logic_vector(to_unsigned(natural(character'pos('0')), 8)),	
@@ -141,6 +146,7 @@ signal lincnt: std_logic_vector(15 downto 0);
 signal hexcnt: std_logic_vector(6 downto 0);	-- hexcnt(0) selects upper or lower hex nibble in the data byte
 alias  bytecnt: std_logic_vector(5 downto 0) is hexcnt(6 downto 1); -- 64 bytes RAM
 signal address: std_logic_vector(15 downto 0);
+alias block8k: std_logic_vector(2 downto 0) is address(15 downto 13);
 signal errcode: std_logic_vector(2 downto 0);
 
 -- internal signals
@@ -153,6 +159,8 @@ signal lincnt_a, lincnt_sum: std_logic_vector(15 downto 0);
 alias hexin: std_logic_vector(3 downto 0) is h2m_instructionstart(3 downto 0);
 signal lin_chk: std_logic_vector(15 downto 0);
 signal pos_ram: std_logic_vector(7 downto 0);
+signal resetout_done: std_logic;
+signal txdready_sync: std_logic;
 
 begin
 
@@ -169,7 +177,7 @@ cu_h2m: hex2mem_control_unit
           )
      Port map ( 
           -- standard inputs
-          reset => reset,
+          reset => reset_in,
           clk => clk,
           -- design specific inputs
           seq_cond => h2m_seq_cond,
@@ -181,22 +189,30 @@ cu_h2m: hex2mem_control_unit
 			  cond(seq_cond_nWAIT) => nWAIT,
 			  cond(seq_cond_nBUSACK) => nBUSACK,
 			  cond(seq_cond_input_is_zero) => input_is_zero,
-			  cond(seq_cond_TXDREADY) => TXDREADY,
+			  cond(seq_cond_TXDREADY) => txdready_sync,
 			  cond(seq_cond_TXDSEND) => '1', -- HACKHACK (this will generate pulse for sending the char)
-			  cond(seq_cond_TRACEENABLED) => traceenabled,
+			  cond(seq_cond_TRACE_ERROR) => TRACE_ERROR,
+			  cond(seq_cond_TRACE_WRITE) => TRACE_WRITE,
+			  cond(seq_cond_TRACE_CHAR) => TRACE_CHAR,
 			  cond(seq_cond_bytecnt_at_colon) => bytecnt_at_colon,
 			  cond(seq_cond_hexcnt_is_odd) => hexcnt(0),
 			  cond(seq_cond_prev_is_crorlf) => prev_is_crorlf,
 			  cond(seq_cond_prev_is_spaceortab) => prev_is_spaceortab,
 			  cond(seq_cond_compa_equals_compb) => compa_equals_compb,
-			  cond(seq_cond_resetout_done) => '1',	-- TODO: hookup to logic generating reset for external circuits
-			  cond(13) => '1',
-			  cond(14) => '1',
+			  cond(seq_cond_resetout_done) => '1',	-- HACKHACK (this will generate pulse to clear reset_out)
 			  cond(seq_cond_false) => '0',
           -- outputs
           ui_nextinstr => ui_nextinstr,
           ui_address => ui_address
 		);
+
+-- sync external signals to catch them at the end of cycle for condition check
+sync: process(clk)
+begin
+	if (rising_edge(clk)) then
+		txdready_sync <= TXDREADY;
+	end if;
+end process;
 
 -- conditions
 input_is_zero <= '1' when (input = X"00") else '0';
@@ -215,7 +231,7 @@ nWR <= h2m_nWR when (nBUSACK = '0') else 'Z';
 ---- End boilerplate code
 
 ---- Start boilerplate code (use with utmost caution!)
-BUSY <= h2m_BUSY;
+BUSY <= h2m_BUSY or (not input_is_zero);
 ---- End boilerplate code
 
 ABUS <= address when (nBUSACK = '0') else "ZZZZZZZZZZZZZZZZ";
@@ -448,15 +464,15 @@ compa <= checksum(7 downto 0) when (h2m_compa = compa_checksum_lsb) else ram;
  with h2m_compb select compb <=
 --      (others => '0') when compb_zero, -- default value
       X"01" when compb_one,
-      "000" & bytecnt when compb_bytecnt,
-      "000" & std_logic_vector(unsigned(bytecnt) - 1) when compb_bytecnt_dec,
+      "00" & bytecnt when compb_bytecnt,
+      "00" & std_logic_vector(unsigned(bytecnt) - 1) when compb_bytecnt_dec,
 		(others => '0') when others; 
 ---- End boilerplate code
 
 -- input register is clocked by ser 2 par UART, and cleared by reset or internal signal
-on_hexin_ready: process(reset, h2m_input_reset, HEXIN_READY, HEXIN_CHAR, input)
+on_hexin_ready: process(reset_in, h2m_input_reset, HEXIN_READY, HEXIN_CHAR, input)
 begin
-	if ((reset or h2m_input_reset) = '1') then
+	if ((reset_in or h2m_input_reset) = '1') then
 		input <= X"00";
 		prev_is_spaceortab <= '0';
 		prev_is_crorlf <= '0';
@@ -475,6 +491,20 @@ begin
 					prev_is_spaceortab <= '0';
 					prev_is_crorlf <= '0';
 			end case;
+		end if;
+	end if;
+end process;
+
+-- reset out logic
+-- hack that saves 1 microcode bit width
+resetout_done <= '1' when (unsigned(h2m_seq_cond) = seq_cond_resetout_done) else '0';
+on_h2m_nWR: process(reset_in, resetout_done, h2m_nWR)
+begin
+	if ((reset_in or resetout_done) = '1') then
+		reset_out <= '0';
+	else
+		if (falling_edge(h2m_nWR)) then
+			reset_out <= reset_page(to_integer(unsigned(block8k)));
 		end if;
 	end if;
 end process;

@@ -147,7 +147,9 @@ end component;
 
 component hex2mem is
     Port ( clk : in  STD_LOGIC;
-           reset : in  STD_LOGIC;
+           reset_in : in  STD_LOGIC;
+			  reset_out: buffer STD_LOGIC;
+			  reset_page: in STD_LOGIC_VECTOR(7 downto 0);
 			  --
    		  debug: out STD_LOGIC_VECTOR(15 downto 0);
 			  --
@@ -162,7 +164,9 @@ component hex2mem is
 			  HEXIN_READY: in STD_LOGIC;
 			  HEXIN_CHAR: in STD_LOGIC_VECTOR (7 downto 0);
 			  --
-			  TRACEENABLED: in STD_LOGIC;
+			  TRACE_ERROR: in STD_LOGIC;
+			  TRACE_WRITE: in STD_LOGIC;
+			  TRACE_CHAR: in STD_LOGIC;
            ERROR : buffer  STD_LOGIC;
            TXDREADY : in  STD_LOGIC;
 			  TXDSEND: out STD_LOGIC;
@@ -188,6 +192,22 @@ component uart_ser2par is
            valid : out  STD_LOGIC;
            rxd : in  STD_LOGIC);
 end component;
+
+component tracer is
+    Port ( reset : in  STD_LOGIC;
+           uart_data : out  STD_LOGIC_VECTOR (7 downto 0);
+           uart_send : out  STD_LOGIC;
+           uart_ready : in  STD_LOGIC;
+           dev_data : in  STD_LOGIC_VECTOR (7 downto 0);
+           dev_send : in  STD_LOGIC;
+           dev_ready : out  STD_LOGIC;
+			  trace: in STD_LOGIC;
+           enable : in  STD_LOGIC;
+           debug : in  STD_LOGIC_VECTOR (15 downto 0);
+           prefix : in STD_LOGIC_VECTOR (7 downto 0);
+           dev_clk : out  STD_LOGIC);
+end component;
+
 
 -- Misc components
 component sn74hc4040 is
@@ -258,7 +278,7 @@ component clocksync is
            clk : out  STD_LOGIC);
 end component;
 
-constant color_transparent:				std_logic_vector(7 downto 0):= "00000000";
+constant color_transparent:				std_logic_vector(7 downto 0):= "11111010";
 constant color_medgreen: 					std_logic_vector(7 downto 0):= "00010000";
 constant color_dkgreen:						std_logic_vector(7 downto 0):= "00001000";
 constant color_dkblue:						std_logic_vector(7 downto 0):= "00000010";
@@ -279,11 +299,21 @@ constant color_white:						std_logic_vector(7 downto 0):= "11111111";
 constant color_ltgray:						std_logic_vector(7 downto 0):= "01101110"; 
 constant color_dkgray,  color_gray:		std_logic_vector(7 downto 0):= "10010010";
 
+---- basic colors (BBGGGRRR)
+--constant color8_black : std_logic_vector(7 downto 0) := "00000000"; 
+--constant color8_red	 : std_logic_vector(7 downto 0) := "00000111"; 
+--constant color8_green : std_logic_vector(7 downto 0) := "00111000"; 
+--constant color8_yellow: std_logic_vector(7 downto 0) := "00111111"; 
+--constant color8_blue	 : std_logic_vector(7 downto 0) := "11000000"; 
+--constant color8_purple: std_logic_vector(7 downto 0) := "11000111"; 
+--constant color8_cyan	 : std_logic_vector(7 downto 0) := "11111000"; 
+--constant color8_white : std_logic_vector(7 downto 0) := "11111111"; 
+
 type color_lookup is array (0 to 15) of std_logic_vector(7 downto 0);
 
 -- standard TMS9918 16-color palette (http://www.cs.columbia.edu/~sedwards/papers/TMS9918.pdf page 26) 
 signal video_color: color_lookup := (
-	color_transparent,	-- VGA does not support is, so "black"
+	color_transparent,	-- VGA does not support is, so "pinkish"
 	color_black,
 	color_medgreen,	
 	color_ltgreen,
@@ -328,7 +358,11 @@ alias PMOD_CTS: std_logic is PMOD(7);	-- not used
 signal hexdata, showdigit, showdot: std_logic_vector(3 downto 0);
 signal charpat: std_logic_vector(7 downto 0);
 signal display, sum, counter_debug, hexin_debug, hexout_debug: std_logic_vector(15 downto 0);
----
+-- tracer
+signal tr_clk, tr_txdready, tr_txdsend, tr_enable: std_logic; 
+signal tr_txdchar: std_logic_vector(7 downto 0);
+signal hexin_busy: std_logic;
+
 
 --- frequency signals
 signal freq96M: std_logic;
@@ -347,10 +381,10 @@ signal vga_x: std_logic_vector(8 downto 0); -- 512 pixels horizontally
 signal vga_y: std_logic_vector(8 downto 0); -- 512 pixels vertically (either 256 or 384 are used)
 signal vga_a: std_logic_vector(14 downto 0);
 signal h, v: std_logic_vector(9 downto 0);
-alias col: std_logic_vector(6 downto 0) is h(9 downto 3);
-alias row: std_logic_vector(6 downto 0) is v(9 downto 3);
+--alias col: std_logic_vector(6 downto 0) is h(9 downto 3);
+--alias row: std_logic_vector(6 downto 0) is v(9 downto 3);
 -- video data signals
-signal vga_color, text_color: std_logic_vector(7 downto 0);
+signal vga_color, text_color, window_color: std_logic_vector(7 downto 0);
 signal pair, color_sel: std_logic_vector(1 downto 0); -- 2 bit pixel and color lookup
 signal char, pattern: std_logic_vector(7 downto 0);
 signal text_pix: std_logic;
@@ -368,6 +402,7 @@ alias switch_hexout:	std_logic is switch(0);
 alias switch_tms: std_logic is switch(1);
 alias switch_hexclk: std_logic_vector(2 downto 0) is switch(4 downto 2);
 alias switch_baudrate: std_logic_vector(2 downto 0) is switch(7 downto 5);
+alias switch_trace: std_logic_vector(2 downto 0) is switch(7 downto 5);
 signal offset_cmd: std_logic_vector(3 downto 0);
 signal color_index, nibble: std_logic_vector(3 downto 0);
 
@@ -412,7 +447,8 @@ begin
 	if (rising_edge(freq96M)) then
 		if (prescale_baud = 0) then
 			baudrate_x8 <= not baudrate_x8;
-			prescale_baud <= prescale_value(to_integer(unsigned(switch_baudrate)));
+			--prescale_baud <= prescale_value(to_integer(unsigned(switch_baudrate)));
+			prescale_baud <= prescale_value(7); -- 38400 
 		else
 			prescale_baud <= prescale_baud - 1;
 		end if;
@@ -447,7 +483,8 @@ baudgen: sn74hc4040 port map (
 -- common clock for hex input and output processors
 --hex_clk <= freq(to_integer(4 + unsigned(switch_hexclk)));
 with switch_hexclk select hex_clk <=
-	freq1 when "000",		-- slooow
+--	freq1 when "000",			-- slooow
+	tr_clk when "000",	-- tracer speed
 	baudrate_x2 when "001",
 	baudrate_x4 when "010",
 	baudrate_x8 when "011",
@@ -544,29 +581,38 @@ with vga_x(1) select nibble <=
 
 -- index depends on the V9958 or TIM mode
 --color_index <= '1' & nibble(2 downto 0) when (switch_tms = '1') else '0' & switch_timpalette & pair;	
-color_index <= nibble when (switch_tms = '1') else '1' & switch_timpalette & pair;	
+color_index <= nibble when (switch_tms = '1') else "11" & pair;	
 
+--window_color <=
+--			nibble(3) & nibble(2) & nibble(2) & nibble(3) & nibble(1) & nibble(1) & nibble(3) & nibble(0) when (switch_tms = '1') else
+--			pair(1) & pair(1) & pair(1) & pair(0) & pair(0) & pair(0) & "00";
+			
 -- color index also takes into account selected palette and if in TIM window
-color_sel <= vga_window & tim_window; 
-with color_sel select vga_color <=
-	color_white when "00",													-- should never show
-	text_color when "10",													-- text outside tim window
-	video_color(to_integer(unsigned(color_index))) when "11",	-- tim or vdp pixel 
-	color_black when others;												-- outside pixel area (border)
+--color_sel <= vga_window & tim_window; 
+--with color_sel select vga_color <=
+--	"11111111" when "00",													-- should never show
+--	"11100000" when "01",
+--	"00011100" when "10",
+--	text_color when "10",													-- text outside tim window
+--	window_color when others;	-- tim or vdp pixel 
+--	video_color(to_integer(unsigned(color_index))) when others,	-- tim or vdp pixel 
+--	"00000011" when others;												-- outside pixel area (border)
 	
+vga_color <= video_color(to_integer(unsigned(color_index))) when (tim_window = '1') else text_color;
+
 -- now convert to VGA 8-bit color
 RED <= vga_color(7 downto 5);
 GRN <= vga_color(4 downto 2);
 BLU <= vga_color(1 downto 0);
 
 -- background text display for fun
-char <= (row & '0') xor (col & '0');
-
-chargen: chargen_rom Port map ( 
-		a(10 downto 3) => char,
-		a(2 downto 0) => v(2 downto 0),
-      d => pattern
-	);
+--char <= (row & '0') xor (col & '0');
+--
+--chargen: chargen_rom Port map ( 
+--		a(10 downto 3) => char,
+--		a(2 downto 0) => v(2 downto 0),
+--      d => pattern
+--	);
 
 with h(2 downto 0) select text_pix <= 
 	pattern(7) when O"0",
@@ -578,7 +624,8 @@ with h(2 downto 0) select text_pix <=
 	pattern(1) when O"6",
 	pattern(0) when others;
 	
-text_color <= color_cyan when (text_pix = '1') else color_blue;
+--text_color <= color_blue when (text_pix = '1') else color_cyan;
+text_color <= h(5 downto 3) & v(5 downto 3) & h(6) & v(6);
 							
 -- memory to serial output path, in Intel Hex format
 hexout_nbusack <= hexout_nbusreq or (not v_sync);
@@ -620,7 +667,9 @@ hexout_txd: uart_par2ser Port map (
 -- serial to memory input path, in Intel Hex format
 hexin: hex2mem Port map ( 
 			clk => hexin_clk,
-			reset => reset,
+			reset_in => reset,
+			reset_out => open,
+			reset_page => "00000001", -- reset_out pulse if writing into lowest 8k
 			--
 			debug => hexin_debug,
 			--
@@ -631,17 +680,21 @@ hexin: hex2mem Port map (
 			ABUS(15) => hexin_a15,
 			ABUS(14 downto 0) => vram_addra,
 			DBUS => vram_dina,
-			BUSY => LED(0),
+			BUSY => hexin_busy,
 			-- Receive Hex file stream
 			HEXIN_READY => hexin_ready,
 			HEXIN_CHAR => hexin_char,
 			-- Send echo or error
-			TRACEENABLED => '1',
+			TRACE_ERROR => switch_trace(2),
+			TRACE_WRITE => switch_trace(1),
+			TRACE_CHAR =>  switch_trace(0),
 			ERROR => hexin_error,
-			TXDREADY => hexin_txdready,
-			TXDSEND => hexin_txdsend,
-			TXDCHAR => hexin_txdchar
+			TXDREADY => tr_txdready,	--hexin_txdready,
+			TXDSEND => tr_txdsend, 		--hexin_txdsend,
+			TXDCHAR => tr_txdchar 		--hexin_txdchar
 		);
+		
+PMOD_CTS <= hexin_busy; -- allows using "hardware" protocol when sending HEX file to device
 		
 -- serial input of hex file		
 hexin_rxd: uart_ser2par Port map ( 
@@ -666,6 +719,23 @@ hexin_txd: uart_par2ser Port map (
          ready => hexin_txdready,
          txd => hexin_serout		-- looking from the PC side
 		);
+		
+tr: tracer Port map ( 
+			reset => reset,
+			uart_data => hexin_txdchar,
+			uart_send => hexin_txdsend,
+			uart_ready => hexin_txdready,
+			dev_data => tr_txdchar,
+			dev_send => tr_txdsend,
+			dev_ready => tr_txdready,
+			trace => hexin_busy,
+			enable => tr_enable,
+			debug => hexin_debug,
+			prefix => tr_txdchar,
+			dev_clk => tr_clk
+		);
+		
+tr_enable <= '1' when (switch_hexclk = "000") else '0';
 		
 -- switch 0:
 -- 0: hex input to serial (echo and error info), allow window move on VGA, ignore buttons

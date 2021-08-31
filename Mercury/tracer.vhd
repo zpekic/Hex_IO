@@ -1,0 +1,124 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    20:18:17 08/28/2021 
+-- Design Name: 
+-- Module Name:    tracer - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity tracer is
+    Port ( reset : in  STD_LOGIC;
+           uart_data : out  STD_LOGIC_VECTOR (7 downto 0);
+           uart_send : out  STD_LOGIC;
+           uart_ready : in  STD_LOGIC;
+           dev_data : in  STD_LOGIC_VECTOR(7 downto 0);
+           dev_send : in  STD_LOGIC;
+           dev_ready : out  STD_LOGIC;
+			  trace: in STD_LOGIC;
+           enable : in  STD_LOGIC;
+           debug : in  STD_LOGIC_VECTOR (15 downto 0);
+			  prefix: in STD_LOGIC_VECTOR(7 downto 0);
+           dev_clk : out  STD_LOGIC);
+end tracer;
+
+architecture Behavioral of tracer is
+
+-- TODO: move to a package
+type lookup is array(0 to 15) of std_logic_vector(7 downto 0);
+constant hex2ascii: lookup := (
+	std_logic_vector(to_unsigned(natural(character'pos('0')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('1')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('2')), 8)), 	
+	std_logic_vector(to_unsigned(natural(character'pos('3')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('4')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('5')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('6')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('7')), 8)),
+	std_logic_vector(to_unsigned(natural(character'pos('8')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('9')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('A')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('B')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('C')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('D')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('E')), 8)),	
+	std_logic_vector(to_unsigned(natural(character'pos('F')), 8))
+);
+
+signal cnt: std_logic_vector(2 downto 0);
+signal debug_data, ascii_hex, ascii_fix: std_logic_vector(7 downto 0);
+signal debug_send: std_logic;
+signal hexout: std_logic_vector(3 downto 0);
+
+begin
+
+uart_data <= dev_data when (enable = '0') else debug_data;
+uart_send <= dev_send when (enable = '0') else debug_send;
+dev_ready <= uart_ready when (enable = '0') else '1'; -- fool the device into not waiting for output
+dev_clk <= cnt(2);
+
+debug_send <= trace and uart_ready;
+
+on_debug_send: process(reset, debug_send)
+begin
+	if (reset = '1') then
+		cnt <= (others => '0');
+	else
+		if (rising_edge(debug_send)) then
+			cnt <= std_logic_vector(unsigned(cnt) + 1);
+		end if;
+	end if;
+end process;
+
+-- assemble 8-characted output record
+with cnt select debug_data <=
+	ascii_hex when O"0",	-- debug
+	ascii_hex when O"1",	-- debug
+	ascii_hex when O"2",	-- debug
+	ascii_hex when O"3",	-- debug
+	ascii_fix when O"4", -- sanitized prefix
+	X"0D" when O"5",  -- CR
+	X"0A" when O"6", 	-- LF
+	X"20" when others;
+	
+-- sanitize ascii code coming through prefix port to make it displayable
+with prefix(7 downto 5) select ascii_fix <= 
+	X"2E" when "000",		-- 00..1F (show dot)
+	prefix when "001",	-- 20..3F
+	prefix when "010",	-- 40..5F
+	prefix when "011",	-- 60..7F
+	X"7E" when others;	-- 80..FF (show tilde)
+
+-- data from debug port
+ascii_hex <= hex2ascii(to_integer(unsigned(hexout)));
+with cnt select hexout <=
+	debug(7 downto 4) when O"0",
+	debug(3 downto 0) when O"1",
+	debug(15 downto 12) when O"2",
+	debug(11 downto 8) when O"3",
+	X"0" when others;
+	
+end Behavioral;
+
