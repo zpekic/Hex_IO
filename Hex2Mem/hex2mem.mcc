@@ -204,7 +204,7 @@ _reset3:	clear;
 //	indicate availability and wait for start signal
 //	---------------------------------------------------------------------------
 deadloop:	BUSY = 0, if input_is_zero then repeat else next;
-//			trace;
+			trace;
 			poscnt_inc, if true then fork else fork;	// jump to entry point per character code (see .map statements below)
 
 			.map 0b????????;
@@ -230,6 +230,7 @@ printerror:	emit char_E;		// ERR
 			emit inp1;			// FF hex code of offending char
 			hexcnt <= ptr_colon, emit inp0;	// force sync with next ':'
 			print_crlf;
+			.map 0;
 nextchar:	errcode <= ok, input_reset = 1, goto deadloop;
 
 emitChar:	if TXDREADY then next else repeat;	// sync with baudrate clock that drives UART

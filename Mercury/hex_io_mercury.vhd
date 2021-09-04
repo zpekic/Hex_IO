@@ -205,9 +205,17 @@ component tracer is
            enable : in  STD_LOGIC;
            debug : in  STD_LOGIC_VECTOR (15 downto 0);
            prefix : in STD_LOGIC_VECTOR (7 downto 0);
+			  source_a: out STD_LOGIC_VECTOR(12 downto 0);
+			  source_d: in STD_LOGIC_VECTOR(7 downto 0);
            dev_clk : out  STD_LOGIC);
 end component;
 
+component waitgen is
+    Port ( clear : in  STD_LOGIC;
+           clk : in  STD_LOGIC;
+           delay : in  STD_LOGIC_VECTOR (2 downto 0);
+           nWait : out  STD_LOGIC);
+end component;
 
 -- Misc components
 component sn74hc4040 is
@@ -336,14 +344,15 @@ signal video_color: color_lookup := (
 
 type prescale_lookup is array (0 to 7) of integer range 0 to 65535;
 signal prescale_value: prescale_lookup := (
-		(96000000 / (16 * 300)),
+--		(96000000 / (16 * 300)),
 		(96000000 / (16 * 600)),
 		(96000000 / (16 * 1200)),
 		(96000000 / (16 * 2400)),
 		(96000000 / (16 * 4800)),
 		(96000000 / (16 * 9600)),
 		(96000000 / (16 * 19200)),
-		(96000000 / (16 * 38400)) - 1
+		(96000000 / (16 * 38400)) - 1,
+		(96000000 / (16 * 57600)) - 1
 	);
 	
 signal RESET: std_logic;
@@ -362,7 +371,6 @@ signal display, sum, counter_debug, hexin_debug, hexout_debug: std_logic_vector(
 signal tr_clk, tr_txdready, tr_txdsend, tr_enable: std_logic; 
 signal tr_txdchar: std_logic_vector(7 downto 0);
 signal hexin_busy: std_logic;
-
 
 --- frequency signals
 signal freq96M: std_logic;
@@ -397,7 +405,7 @@ signal vram_wea: std_logic_vector(0 downto 0);
 ---
 signal switch, button: std_logic_vector(7 downto 0);
 alias switch_bcd: std_logic is switch(0);
-alias switch_timpalette: std_logic is switch(0);
+alias switch_timpalette: std_logic_vector(1 downto 0) is switch(4 downto 3);
 alias switch_hexout:	std_logic is switch(0);
 alias switch_tms: std_logic is switch(1);
 alias switch_hexclk: std_logic_vector(2 downto 0) is switch(4 downto 2);
@@ -414,13 +422,13 @@ signal hex_clk: std_logic;
 signal hexout_send, hexout_ready, hexout_nrd, hexout_nbusreq, hexout_nbusack, hexout_start, hexout_serout: std_logic;
 signal hexout_char: std_logic_vector(7 downto 0);
 signal hexout_a: std_logic_vector(15 downto 0);
-signal hexout_clk: std_logic;
+signal hexout_clk, hexout_nwait: std_logic;
 
 -- HEX input path
 signal hexin_ready, hexin_txdready, hexin_serout: std_logic;
 signal hexin_char, hexin_txdchar: std_logic_vector(7 downto 0);
 signal hexin_nwr, hexin_a15, hexin_error, hexin_txdsend: std_logic;
-signal hexin_clk: std_logic;
+signal hexin_clk, hexin_nwait: std_logic;
 
 begin
 
@@ -581,7 +589,7 @@ with vga_x(1) select nibble <=
 
 -- index depends on the V9958 or TIM mode
 --color_index <= '1' & nibble(2 downto 0) when (switch_tms = '1') else '0' & switch_timpalette & pair;	
-color_index <= nibble when (switch_tms = '1') else "11" & pair;	
+color_index <= nibble when (switch_tms = '1') else (switch_timpalette & pair);	
 
 --window_color <=
 --			nibble(3) & nibble(2) & nibble(2) & nibble(3) & nibble(1) & nibble(1) & nibble(3) & nibble(0) when (switch_tms = '1') else
@@ -614,21 +622,28 @@ BLU <= vga_color(1 downto 0);
 --      d => pattern
 --	);
 
-with h(2 downto 0) select text_pix <= 
-	pattern(7) when O"0",
-	pattern(6) when O"1",
-	pattern(5) when O"2",
-	pattern(4) when O"3",
-	pattern(3) when O"4",
-	pattern(2) when O"5",
-	pattern(1) when O"6",
-	pattern(0) when others;
+--with h(2 downto 0) select text_pix <= 
+--	pattern(7) when O"0",
+--	pattern(6) when O"1",
+--	pattern(5) when O"2",
+--	pattern(4) when O"3",
+--	pattern(3) when O"4",
+--	pattern(2) when O"5",
+--	pattern(1) when O"6",
+--	pattern(0) when others;
 	
 --text_color <= color_blue when (text_pix = '1') else color_cyan;
 text_color <= h(5 downto 3) & v(5 downto 3) & h(6) & v(6);
 							
 -- memory to serial output path, in Intel Hex format
 hexout_nbusack <= hexout_nbusreq or (not v_sync);
+
+hexout_wait: waitgen Port map (
+		clear => hexout_nrd,
+      clk => hexout_clk,
+      delay => switch_hexclk,
+      nWait => hexout_nwait
+	);
 	
 hexout: mem2hex Port map ( 
 			clk => hexout_clk,
@@ -639,7 +654,7 @@ hexout: mem2hex Port map (
 			nRD => hexout_nrd,
 			nBUSREQ => hexout_nbusreq,
 			nBUSACK => hexout_nbusack, -- access when required and v_sync allows 
-			nWAIT => '1',
+			nWAIT => hexout_nwait,
 			ABUS => hexout_a,
 			DBUS => vram_doutb,
 			START => hexout_start,
@@ -652,7 +667,7 @@ hexout: mem2hex Port map (
 		);			
 		
 -- serial output of hex file
-hexout_clk <= hex_clk when (hexout_ready = '0') else hex_clk;
+hexout_clk <= hex_clk;-- when (hexout_ready = '0') else hex_clk;
 
 hexout_txd: uart_par2ser Port map (
 			reset => reset,
@@ -664,7 +679,16 @@ hexout_txd: uart_par2ser Port map (
          txd => hexout_serout		-- looking from the PC side
 		);
 		
+--------------------------------------------------------------		
 -- serial to memory input path, in Intel Hex format
+--------------------------------------------------------------
+hexin_wait: waitgen Port map (
+		clear => hexin_nwr,
+      clk => hexin_clk,
+      delay => switch_hexclk,
+      nWait => hexin_nwait
+	);
+
 hexin: hex2mem Port map ( 
 			clk => hexin_clk,
 			reset_in => reset,
@@ -676,7 +700,7 @@ hexin: hex2mem Port map (
 			nWR => hexin_nwr,
 			nBUSREQ => open,
 			nBUSACK => '0',
-			nWAIT => '1',
+			nWAIT => hexin_nwait,
 			ABUS(15) => hexin_a15,
 			ABUS(14 downto 0) => vram_addra,
 			DBUS => vram_dina,
@@ -708,7 +732,7 @@ hexin_rxd: uart_ser2par Port map (
 		);
 
 -- serial output of echo and error during hex file input
-hexin_clk <= hex_clk when (hexin_txdready = '0') else hex_clk;
+hexin_clk <= hex_clk;-- when (hexin_txdready = '0') else hex_clk;
 
 hexin_txd: uart_par2ser Port map (
 			reset => reset,
@@ -732,6 +756,8 @@ tr: tracer Port map (
 			enable => tr_enable,
 			debug => hexin_debug,
 			prefix => tr_txdchar,
+			source_a => open,		-- TODO: connect to source ROM
+			source_d => X"2A",	-- TODO: connect to source ROM
 			dev_clk => tr_clk
 		);
 		

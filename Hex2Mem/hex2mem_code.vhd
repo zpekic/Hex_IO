@@ -482,107 +482,107 @@ constant h2m_microcode: h2m_code_memory := (
 --  nBUSREQ = 1, nWR = 1, BUSY = 0, if (0011) then 0000001 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 4 => '1' & '1' & '0' & X"3" & "0000001" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0208@0005.  poscnt_cin = 1, if true then fork else fork
+-- L0207@0005.  if false then trace else trace
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 1100111 else 1100111, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+5 => '1' & '1' & '1' & X"F" & "1100111" & "1100111" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+
+-- L0208@0006.  poscnt_cin = 1, if true then fork else fork
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0000) then 0000011 else 0000011, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 1, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-5 => '1' & '1' & '1' & X"0" & "0000011" & "0000011" & "00000" & '1' & '0' & '1' & '1' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+6 => '1' & '1' & '1' & X"0" & "0000011" & "0000011" & "00000" & '1' & '0' & '1' & '1' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0211@0006.badchar:  errcode <= err_badchar, if TRACE_ERROR then printerror else nextchar
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0001100 else 0011100, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 001, compa = 0, compb = 00;
-6 => '1' & '1' & '1' & X"6" & "0001100" & "0011100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"1" & '0' & "00",
+-- L0211@0007.badchar:  errcode <= err_badchar, if TRACE_ERROR then printerror else nextchar
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0001101 else 0011101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 001, compa = 0, compb = 00;
+7 => '1' & '1' & '1' & X"6" & "0001101" & "0011101" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"1" & '0' & "00",
 
--- L0212@0007.badcolon:  errcode <= err_unexpected, if TRACE_ERROR then printerror else nextchar
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0001100 else 0011100, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 010, compa = 0, compb = 00;
-7 => '1' & '1' & '1' & X"6" & "0001100" & "0011100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"2" & '0' & "00",
+-- L0212@0008.badcolon:  errcode <= err_unexpected, if TRACE_ERROR then printerror else nextchar
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0001101 else 0011101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 010, compa = 0, compb = 00;
+8 => '1' & '1' & '1' & X"6" & "0001101" & "0011101" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"2" & '0' & "00",
 
--- L0213@0008.badchecksum:  errcode <= err_badchecksum, if TRACE_ERROR then printerror else nextchar
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0001100 else 0011100, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 011, compa = 0, compb = 00;
-8 => '1' & '1' & '1' & X"6" & "0001100" & "0011100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"3" & '0' & "00",
+-- L0213@0009.badchecksum:  errcode <= err_badchecksum, if TRACE_ERROR then printerror else nextchar
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0001101 else 0011101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 011, compa = 0, compb = 00;
+9 => '1' & '1' & '1' & X"6" & "0001101" & "0011101" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"3" & '0' & "00",
 
--- L0214@0009.badtype:  errcode <= err_badrecordtype, if TRACE_ERROR then printerror else nextchar
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0001100 else 0011100, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 100, compa = 0, compb = 00;
-9 => '1' & '1' & '1' & X"6" & "0001100" & "0011100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"4" & '0' & "00",
+-- L0214@000A.badtype:  errcode <= err_badrecordtype, if TRACE_ERROR then printerror else nextchar
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0001101 else 0011101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 100, compa = 0, compb = 00;
+10 => '1' & '1' & '1' & X"6" & "0001101" & "0011101" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"4" & '0' & "00",
 
--- L0215@000A.badlength:  errcode <= err_badrecordlength,if TRACE_ERROR then printerror else nextchar
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0001100 else 0011100, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 101, compa = 0, compb = 00;
-10 => '1' & '1' & '1' & X"6" & "0001100" & "0011100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"5" & '0' & "00",
+-- L0215@000B.badlength:  errcode <= err_badrecordlength,if TRACE_ERROR then printerror else nextchar
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0001101 else 0011101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 101, compa = 0, compb = 00;
+11 => '1' & '1' & '1' & X"6" & "0001101" & "0011101" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"5" & '0' & "00",
 
--- L0216@000B.badhex:  errcode <= err_unexpected, if TRACE_ERROR then next else nextchar
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0000000 else 0011100, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 010, compa = 0, compb = 00;
-11 => '1' & '1' & '1' & X"6" & "0000000" & "0011100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"2" & '0' & "00",
+-- L0216@000C.badhex:  errcode <= err_unexpected, if TRACE_ERROR then next else nextchar
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0110) then 0000000 else 0011101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 010, compa = 0, compb = 00;
+12 => '1' & '1' & '1' & X"6" & "0000000" & "0011101" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"2" & '0' & "00",
 
--- L0217@000C.printerror:  if false then emitChar else emitChar, TXDCHAR <= char_E
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00101, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-12 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00101" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0217@000D.printerror:  if false then emitChar else emitChar, TXDCHAR <= char_E
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00101, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+13 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00101" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0218@000D.  if false then emitChar else emitChar, TXDCHAR <= char_R
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-13 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0218@000E.  if false then emitChar else emitChar, TXDCHAR <= char_R
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+14 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0219@000E.  if false then emitChar else emitChar, TXDCHAR <= char_R
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-14 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0219@000F.  if false then emitChar else emitChar, TXDCHAR <= char_R
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+15 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0220@000F.  if false then emitChar else emitChar, TXDCHAR <= errcode
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 11111, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-15 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "11111" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0220@0010.  if false then emitChar else emitChar, TXDCHAR <= errcode
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 11111, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+16 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "11111" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0221@0010.  if false then emitChar else emitChar, TXDCHAR <= char_space
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-16 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0221@0011.  if false then emitChar else emitChar, TXDCHAR <= char_space
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+17 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0222@0011.  if false then emitChar else emitChar, TXDCHAR <= lin_chk3
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10111, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-17 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10111" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0222@0012.  if false then emitChar else emitChar, TXDCHAR <= lin_chk3
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10111, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+18 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10111" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0223@0012.  if false then emitChar else emitChar, TXDCHAR <= lin_chk2
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-18 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0223@0013.  if false then emitChar else emitChar, TXDCHAR <= lin_chk2
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+19 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0224@0013.  if false then emitChar else emitChar, TXDCHAR <= lin_chk1
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10101, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-19 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10101" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0224@0014.  if false then emitChar else emitChar, TXDCHAR <= lin_chk1
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10101, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+20 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10101" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0225@0014.  if false then emitChar else emitChar, TXDCHAR <= lin_chk0
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10100, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-20 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10100" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0225@0015.  if false then emitChar else emitChar, TXDCHAR <= lin_chk0
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10100, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+21 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10100" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0226@0015.  if false then emitChar else emitChar, TXDCHAR <= char_space
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-21 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0226@0016.  if false then emitChar else emitChar, TXDCHAR <= char_space
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+22 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0227@0016.  if false then emitChar else emitChar, TXDCHAR <= pos_ram1
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-22 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0227@0017.  if false then emitChar else emitChar, TXDCHAR <= pos_ram1
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+23 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0228@0017.  if false then emitChar else emitChar, TXDCHAR <= pos_ram0
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-23 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0228@0018.  if false then emitChar else emitChar, TXDCHAR <= pos_ram0
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+24 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0229@0018.  if false then emitChar else emitChar, TXDCHAR <= char_space
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-24 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0229@0019.  if false then emitChar else emitChar, TXDCHAR <= char_space
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+25 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0230@0019.  if false then emitChar else emitChar, TXDCHAR <= inp1
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-25 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0230@001A.  if false then emitChar else emitChar, TXDCHAR <= inp1
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+26 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0231@001A.  hexcnt <= ptr_colon, if false then emitChar else emitChar, TXDCHAR <= inp0
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 010, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-26 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"2" & "00" & '0' & O"6" & '0' & "00",
+-- L0231@001B.  hexcnt <= ptr_colon, if false then emitChar else emitChar, TXDCHAR <= inp0
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 010, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+27 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"2" & "00" & '0' & O"6" & '0' & "00",
 
--- L0232@001B.  if false then print_crlf else print_crlf
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0100101 else 0100101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-27 => '1' & '1' & '1' & X"F" & "0100101" & "0100101" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0232@001C.  if false then print_crlf else print_crlf
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0100110 else 0100110, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+28 => '1' & '1' & '1' & X"F" & "0100110" & "0100110" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0233@001C.nextchar:  errcode <= ok, input_reset = 1, if false then next else deadloop
+-- L0234@001D.nextchar:  errcode <= ok, input_reset = 1, if false then next else deadloop
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 0000100, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 1, errcode <= 000, compa = 0, compb = 00;
-28 => '1' & '1' & '1' & X"F" & "0000000" & "0000100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '1' & O"0" & '0' & "00",
+29 => '1' & '1' & '1' & X"F" & "0000000" & "0000100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '1' & O"0" & '0' & "00",
 
--- L0235@001D.emitChar:  if TXDREADY then next else repeat
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0100) then 0000000 else 0000001, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-29 => '1' & '1' & '1' & X"4" & "0000000" & "0000001" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
-
--- L0236@001E.  if TXDREADY then next else repeat
+-- L0236@001E.emitChar:  if TXDREADY then next else repeat
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0100) then 0000000 else 0000001, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 30 => '1' & '1' & '1' & X"4" & "0000000" & "0000001" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
@@ -590,372 +590,376 @@ constant h2m_microcode: h2m_code_memory := (
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0100) then 0000000 else 0000001, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 31 => '1' & '1' & '1' & X"4" & "0000000" & "0000001" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0238@0020.  if TXDSEND then return else return
+-- L0238@0020.  if TXDREADY then next else repeat
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0100) then 0000000 else 0000001, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+32 => '1' & '1' & '1' & X"4" & "0000000" & "0000001" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+
+-- L0239@0021.  if TXDSEND then return else return
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0101) then 0000010 else 0000010, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-32 => '1' & '1' & '1' & X"5" & "0000010" & "0000010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+33 => '1' & '1' & '1' & X"5" & "0000010" & "0000010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0240@0021.printramR:  if false then emitChar else emitChar, TXDCHAR <= char_R
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-33 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0241@0022.printramR:  if false then emitChar else emitChar, TXDCHAR <= char_R
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+34 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0241@0022.printram:  if false then emitChar else emitChar, TXDCHAR <= char_EQU
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 01011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-34 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "01011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0242@0023.printram:  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 01011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+35 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "01011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0242@0023.  if false then emitChar else emitChar, TXDCHAR <= pos_ram1
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-35 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0243@0024.  if false then emitChar else emitChar, TXDCHAR <= pos_ram1
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+36 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0243@0024.  if false then emitChar else emitChar, TXDCHAR <= pos_ram0
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-36 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0244@0025.  if false then emitChar else emitChar, TXDCHAR <= pos_ram0
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+37 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0244@0025.print_crlf:  if false then emitChar else emitChar, TXDCHAR <= char_cr
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-37 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0245@0026.print_crlf:  if false then emitChar else emitChar, TXDCHAR <= char_cr
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+38 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0245@0026.  if false then emitChar else emitChar, TXDCHAR <= char_lf
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00100, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-38 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00100" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0246@0027.  if false then emitChar else emitChar, TXDCHAR <= char_lf
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00100, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+39 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00100" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0246@0027.  if true then return else return
+-- L0247@0028.  if true then return else return
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0000) then 0000010 else 0000010, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-39 => '1' & '1' & '1' & X"0" & "0000010" & "0000010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+40 => '1' & '1' & '1' & X"0" & "0000010" & "0000010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0248@0028.printaddr:  if false then emitChar else emitChar, TXDCHAR <= addr3
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 11101, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-40 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "11101" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0249@0029.printaddr:  if false then emitChar else emitChar, TXDCHAR <= addr3
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 11101, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+41 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "11101" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0249@0029.  if false then emitChar else emitChar, TXDCHAR <= addr2
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 11100, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-41 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "11100" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0250@002A.  if false then emitChar else emitChar, TXDCHAR <= addr2
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 11100, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+42 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "11100" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0250@002A.  if false then emitChar else emitChar, TXDCHAR <= addr1
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 11011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-42 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "11011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0251@002B.  if false then emitChar else emitChar, TXDCHAR <= addr1
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 11011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+43 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "11011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0251@002B.  if false then emitChar else emitChar, TXDCHAR <= addr0
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 11010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-43 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "11010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0252@002C.  if false then emitChar else emitChar, TXDCHAR <= addr0
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 11010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+44 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "11010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0252@002C.  if true then return else return
+-- L0253@002D.  if true then return else return
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0000) then 0000010 else 0000010, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-44 => '1' & '1' & '1' & X"0" & "0000010" & "0000010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+45 => '1' & '1' & '1' & X"0" & "0000010" & "0000010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0257@0030.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0258@0030.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 48 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0261@0031.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0262@0031.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 49 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0265@0032.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0266@0032.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 50 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0269@0033.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0270@0033.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 51 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0273@0034.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0274@0034.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 52 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0277@0035.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0278@0035.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 53 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0281@0036.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0282@0036.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 54 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0285@0037.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0286@0037.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 55 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0289@0038.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0290@0038.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 56 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0293@0039.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0294@0039.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 57 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0298@003A.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0299@003A.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 58 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0303@003B.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0304@003B.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 59 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0308@003C.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0309@003C.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 60 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0313@003D.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0314@003D.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 61 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0318@003E.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
+-- L0319@003E.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 62 => '1' & '1' & '1' & X"F" & "0000000" & "1000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0323@003F.  ram_write = 1, ram_addr = bytecnt
+-- L0324@003F.  ram_write = 1, ram_addr = bytecnt
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0000) then 0000000 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 1, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 63 => '1' & '1' & '1' & X"0" & "0000000" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '1' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0324@0040.hexchar:  if bytecnt_at_colon then badhex
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1001) then 0001011 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-64 => '1' & '1' & '1' & X"9" & "0001011" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0325@0040.hexchar:  if bytecnt_at_colon then badhex
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1001) then 0001100 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+64 => '1' & '1' & '1' & X"9" & "0001100" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0325@0041.  if hexcnt_is_odd then next else dontadd
+-- L0326@0041.  if hexcnt_is_odd then next else dontadd
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1010) then 0000000 else 1000011, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 65 => '1' & '1' & '1' & X"A" & "0000000" & "1000011" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0326@0042.  ram_addr = bytecnt, checksum <= add_ram
+-- L0327@0042.  ram_addr = bytecnt, checksum <= add_ram
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0000) then 0000000 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 10, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 66 => '1' & '1' & '1' & X"0" & "0000000" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "10" & '0' & O"6" & '0' & "00",
 
--- L0327@0043.dontadd:  hexcnt <= inc, if false then next else nextchar
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 0011100, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 001, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-67 => '1' & '1' & '1' & X"F" & "0000000" & "0011100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"1" & "00" & '0' & O"6" & '0' & "00",
+-- L0328@0043.dontadd:  hexcnt <= inc, if false then next else nextchar
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 0011101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 001, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+67 => '1' & '1' & '1' & X"F" & "0000000" & "0011101" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"1" & "00" & '0' & O"6" & '0' & "00",
 
--- L0330@0044.  if prev_is_crorlf then nextchar else newline
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1011) then 0011100 else 1000110, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-68 => '1' & '1' & '1' & X"B" & "0011100" & "1000110" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0331@0044.  if prev_is_crorlf then nextchar else newline
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1011) then 0011101 else 1000110, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+68 => '1' & '1' & '1' & X"B" & "0011101" & "1000110" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0333@0045.  if prev_is_crorlf then nextchar else next
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1011) then 0011100 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-69 => '1' & '1' & '1' & X"B" & "0011100" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0334@0045.  if prev_is_crorlf then nextchar else next
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1011) then 0011101 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+69 => '1' & '1' & '1' & X"B" & "0011101" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0334@0046.newline:  compa = checksum_lsb, compb = zero, if compa_equals_compb then next else badchecksum
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1101) then 0000000 else 0001000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 1, compb = 00;
-70 => '1' & '1' & '1' & X"D" & "0000000" & "0001000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '1' & "00",
+-- L0335@0046.newline:  compa = checksum_lsb, compb = zero, if compa_equals_compb then next else badchecksum
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1101) then 0000000 else 0001001, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 1, compb = 00;
+70 => '1' & '1' & '1' & X"D" & "0000000" & "0001001" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '1' & "00",
 
--- L0335@0047.  poscnt_a = zero, lincnt_cin = 1, if hexcnt_is_odd then badhex else next
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1010) then 0001011 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 1, poscnt_a = 0, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-71 => '1' & '1' & '1' & X"A" & "0001011" & "0000000" & "00000" & '1' & '1' & '0' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0336@0047.  poscnt_a = zero, lincnt_cin = 1, if hexcnt_is_odd then badhex else next
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1010) then 0001100 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 1, poscnt_a = 0, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+71 => '1' & '1' & '1' & X"A" & "0001100" & "0000000" & "00000" & '1' & '1' & '0' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0336@0048.  ram_addr = ptr_type, compa = ram, compb = one, if compa_equals_compb then lastrec
+-- L0337@0048.  ram_addr = ptr_type, compa = ram, compb = one, if compa_equals_compb then lastrec
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1101) then 1011010 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 100, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 01;
 72 => '1' & '1' & '1' & X"D" & "1011010" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"4" & O"0" & "00" & '0' & O"6" & '0' & "01",
 
--- L0337@0049.  ram_addr = ptr_type, compa = ram, compb = zero, if compa_equals_compb then next else badtype
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1101) then 0000000 else 0001001, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 100, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-73 => '1' & '1' & '1' & X"D" & "0000000" & "0001001" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"4" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0338@0049.  ram_addr = ptr_type, compa = ram, compb = zero, if compa_equals_compb then next else badtype
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1101) then 0000000 else 0001010, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 100, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+73 => '1' & '1' & '1' & X"D" & "0000000" & "0001010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"4" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0338@004A.  ram_addr = ptr_len, compa = ram, compb = bytecnt_dec, if compa_equals_compb then next else badlength
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1101) then 0000000 else 0001010, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 001, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 11;
-74 => '1' & '1' & '1' & X"D" & "0000000" & "0001010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"1" & O"0" & "00" & '0' & O"6" & '0' & "11",
+-- L0339@004A.  ram_addr = ptr_len, compa = ram, compb = bytecnt_dec, if compa_equals_compb then next else badlength
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1101) then 0000000 else 0001011, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 001, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 11;
+74 => '1' & '1' & '1' & X"D" & "0000000" & "0001011" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"1" & O"0" & "00" & '0' & O"6" & '0' & "11",
 
--- L0340@004B.  ram_addr = ptr_addr_hi, address <= shift8ram, hexcnt <= zero
+-- L0341@004B.  ram_addr = ptr_addr_hi, address <= shift8ram, hexcnt <= zero
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0000) then 0000000 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 10, ram_write = 0, ram_addr = 010, hexcnt <= 111, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 75 => '1' & '1' & '1' & X"0" & "0000000" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "10" & '0' & O"2" & O"7" & "00" & '0' & O"6" & '0' & "00",
 
--- L0341@004C.  ram_addr = ptr_addr_lo, address <= shift8ram, hexcnt <= zero
+-- L0342@004C.  ram_addr = ptr_addr_lo, address <= shift8ram, hexcnt <= zero
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0000) then 0000000 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 10, ram_write = 0, ram_addr = 011, hexcnt <= 111, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 76 => '1' & '1' & '1' & X"0" & "0000000" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "10" & '0' & O"3" & O"7" & "00" & '0' & O"6" & '0' & "00",
 
--- L0343@004D.writeloop:  ram_addr = ptr_len, compa = ram, compb = bytecnt, if compa_equals_compb then nextrec
+-- L0344@004D.writeloop:  ram_addr = ptr_len, compa = ram, compb = bytecnt, if compa_equals_compb then nextrec
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1101) then 1011100 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 001, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 10;
 77 => '1' & '1' & '1' & X"D" & "1011100" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"1" & O"0" & "00" & '0' & O"6" & '0' & "10",
 
--- L0345@004E.writemem:  ram_addr = bytecnt, nBUSREQ = 0
+-- L0346@004E.writemem:  ram_addr = bytecnt, nBUSREQ = 0
 --  nBUSREQ = 0, nWR = 1, BUSY = 1, if (0000) then 0000000 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 78 => '0' & '1' & '1' & X"0" & "0000000" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0346@004F.  ram_addr = bytecnt, nBUSREQ = 0, if nBUSACK then repeat else next
+-- L0347@004F.  ram_addr = bytecnt, nBUSREQ = 0, if nBUSACK then repeat else next
 --  nBUSREQ = 0, nWR = 1, BUSY = 1, if (0010) then 0000001 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 79 => '0' & '1' & '1' & X"2" & "0000001" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0347@0050.  ram_addr = bytecnt, nBUSREQ = 0, nWR = 0
+-- L0348@0050.  ram_addr = bytecnt, nBUSREQ = 0, nWR = 0
 --  nBUSREQ = 0, nWR = 0, BUSY = 1, if (0000) then 0000000 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 80 => '0' & '0' & '1' & X"0" & "0000000" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0348@0051.  ram_addr = bytecnt, nBUSREQ = 0, nWR = 0, if nWAIT then next else repeat
+-- L0349@0051.  ram_addr = bytecnt, nBUSREQ = 0, nWR = 0, if nWAIT then next else repeat
 --  nBUSREQ = 0, nWR = 0, BUSY = 1, if (0001) then 0000000 else 0000001, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 81 => '0' & '0' & '1' & X"1" & "0000000" & "0000001" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0350@0052.  if TRACE_WRITE then next else nextaddr
+-- L0351@0052.  if TRACE_WRITE then next else nextaddr
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0111) then 0000000 else 1011000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 82 => '1' & '1' & '1' & X"7" & "0000000" & "1011000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0351@0053.  if false then emitChar else emitChar, TXDCHAR <= char_A
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 01001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-83 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "01001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0352@0053.  if false then emitChar else emitChar, TXDCHAR <= char_A
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 01001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+83 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "01001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0352@0054.  if false then emitChar else emitChar, TXDCHAR <= char_open
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 01100, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-84 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "01100" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0353@0054.  if false then emitChar else emitChar, TXDCHAR <= char_open
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 01100, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+84 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "01100" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0353@0055.  if false then printaddr else printaddr
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0101000 else 0101000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-85 => '1' & '1' & '1' & X"F" & "0101000" & "0101000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0354@0055.  if false then printaddr else printaddr
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0101001 else 0101001, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+85 => '1' & '1' & '1' & X"F" & "0101001" & "0101001" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0354@0056.  if false then emitChar else emitChar, TXDCHAR <= char_close
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 01101, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-86 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "01101" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0355@0056.  if false then emitChar else emitChar, TXDCHAR <= char_close
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 01101, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+86 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "01101" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0355@0057.  if false then printram else printram
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0100010 else 0100010, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-87 => '1' & '1' & '1' & X"F" & "0100010" & "0100010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0356@0057.  if false then printram else printram
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0100011 else 0100011, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+87 => '1' & '1' & '1' & X"F" & "0100011" & "0100011" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0357@0058.nextaddr:  hexcnt <= inc
+-- L0358@0058.nextaddr:  hexcnt <= inc
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0000) then 0000000 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 001, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 88 => '1' & '1' & '1' & X"0" & "0000000" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"1" & "00" & '0' & O"6" & '0' & "00",
 
--- L0358@0059.  hexcnt <= inc, address <= inc, if false then next else writeloop
+-- L0359@0059.  hexcnt <= inc, address <= inc, if false then next else writeloop
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 1001101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 01, ram_write = 0, ram_addr = 000, hexcnt <= 001, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 89 => '1' & '1' & '1' & X"F" & "0000000" & "1001101" & "00000" & '1' & '0' & '1' & '0' & "01" & '0' & O"0" & O"1" & "00" & '0' & O"6" & '0' & "00",
 
--- L0360@005A.lastrec:  lincnt_a = zero, if resetout_done then next else next
+-- L0361@005A.lastrec:  lincnt_a = zero, if resetout_done then next else next
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1110) then 0000000 else 0000000, TXDCHAR <= 00000, lincnt_a = 0, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 90 => '1' & '1' & '1' & X"E" & "0000000" & "0000000" & "00000" & '0' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0361@005B.  ram_addr = ptr_len, compa = ram, compb = zero, if compa_equals_compb then next else badlength
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1101) then 0000000 else 0001010, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 001, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-91 => '1' & '1' & '1' & X"D" & "0000000" & "0001010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"1" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0362@005B.  ram_addr = ptr_len, compa = ram, compb = zero, if compa_equals_compb then next else badlength
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1101) then 0000000 else 0001011, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 001, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+91 => '1' & '1' & '1' & X"D" & "0000000" & "0001011" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"1" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0362@005C.nextrec:  hexcnt <= ptr_colon, if false then next else nextchar
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 0011100, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 010, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-92 => '1' & '1' & '1' & X"F" & "0000000" & "0011100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"2" & "00" & '0' & O"6" & '0' & "00",
+-- L0363@005C.nextrec:  hexcnt <= ptr_colon, if false then next else nextchar
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 0011101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 010, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+92 => '1' & '1' & '1' & X"F" & "0000000" & "0011101" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"2" & "00" & '0' & O"6" & '0' & "00",
 
--- L0364@005D.dumpram:  if false then emitChar else emitChar, TXDCHAR <= char_R
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-93 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0365@005D.dumpram:  if false then emitChar else emitChar, TXDCHAR <= char_R
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+93 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0365@005E.  if false then emitChar else emitChar, TXDCHAR <= bytecnt1
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 11001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-94 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "11001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0366@005E.  if false then emitChar else emitChar, TXDCHAR <= bytecnt1
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 11001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+94 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "11001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0366@005F.  if false then emitChar else emitChar, TXDCHAR <= bytecnt0
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 11000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-95 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "11000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0367@005F.  if false then emitChar else emitChar, TXDCHAR <= bytecnt0
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 11000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+95 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "11000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0367@0060.  if false then printram else printram
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0100010 else 0100010, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-96 => '1' & '1' & '1' & X"F" & "0100010" & "0100010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0368@0060.  if false then printram else printram
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0100011 else 0100011, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+96 => '1' & '1' & '1' & X"F" & "0100011" & "0100011" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0368@0061.  if true then return else return
+-- L0369@0061.  if true then return else return
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0000) then 0000010 else 0000010, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 97 => '1' & '1' & '1' & X"0" & "0000010" & "0000010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0372@0062.space:  if prev_is_spaceortab then nextchar else next
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1100) then 0011100 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-98 => '1' & '1' & '1' & X"C" & "0011100" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0373@0062.space:  if prev_is_spaceortab then nextchar else next
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1100) then 0011101 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+98 => '1' & '1' & '1' & X"C" & "0011101" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0373@0063.  if hexcnt_is_odd then badchar else nextchar
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1010) then 0000110 else 0011100, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-99 => '1' & '1' & '1' & X"A" & "0000110" & "0011100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0374@0063.  if hexcnt_is_odd then badchar else nextchar
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1010) then 0000111 else 0011101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+99 => '1' & '1' & '1' & X"A" & "0000111" & "0011101" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0376@0064.colon:  checksum <= zero, if bytecnt_at_colon then next else badcolon
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1001) then 0000000 else 0000111, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 01, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-100 => '1' & '1' & '1' & X"9" & "0000000" & "0000111" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "01" & '0' & O"6" & '0' & "00",
+-- L0377@0064.colon:  checksum <= zero, if bytecnt_at_colon then next else badcolon
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1001) then 0000000 else 0001000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 01, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+100 => '1' & '1' & '1' & X"9" & "0000000" & "0001000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "01" & '0' & O"6" & '0' & "00",
 
--- L0377@0065.  hexcnt <= inc
+-- L0378@0065.  hexcnt <= inc
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (0000) then 0000000 else 0000000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 001, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 101 => '1' & '1' & '1' & X"0" & "0000000" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"1" & "00" & '0' & O"6" & '0' & "00",
 
--- L0378@0066.  hexcnt <= inc, if false then next else nextchar
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 0011100, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 001, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-102 => '1' & '1' & '1' & X"F" & "0000000" & "0011100" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"1" & "00" & '0' & O"6" & '0' & "00",
+-- L0379@0066.  hexcnt <= inc, if false then next else nextchar
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 0011101, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 001, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+102 => '1' & '1' & '1' & X"F" & "0000000" & "0011101" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"1" & "00" & '0' & O"6" & '0' & "00",
 
--- L0380@0067.trace:  if TRACE_CHAR then next else return
+-- L0381@0067.trace:  if TRACE_CHAR then next else return
 --  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1000) then 0000000 else 0000010, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
 103 => '1' & '1' & '1' & X"8" & "0000000" & "0000010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0382@0068.  if false then emitChar else emitChar, TXDCHAR <= char_I
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00111, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-104 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00111" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0383@0068.  if false then emitChar else emitChar, TXDCHAR <= char_I
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00111, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+104 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00111" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0383@0069.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 01011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-105 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "01011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0384@0069.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 01011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+105 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "01011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0384@006A.  if false then emitChar else emitChar, TXDCHAR <= inp1
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-106 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0385@006A.  if false then emitChar else emitChar, TXDCHAR <= inp1
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+106 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0385@006B.  if false then emitChar else emitChar, TXDCHAR <= inp0
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-107 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0386@006B.  if false then emitChar else emitChar, TXDCHAR <= inp0
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+107 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0386@006C.  if false then emitChar else emitChar, TXDCHAR <= char_space
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-108 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0387@006C.  if false then emitChar else emitChar, TXDCHAR <= char_space
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+108 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0388@006D.  if false then emitChar else emitChar, TXDCHAR <= char_A
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 01001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-109 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "01001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0389@006D.  if false then emitChar else emitChar, TXDCHAR <= char_A
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 01001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+109 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "01001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0389@006E.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 01011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-110 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "01011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0390@006E.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 01011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+110 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "01011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0390@006F.  if false then printaddr else printaddr
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0101000 else 0101000, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-111 => '1' & '1' & '1' & X"F" & "0101000" & "0101000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0391@006F.  if false then printaddr else printaddr
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0101001 else 0101001, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+111 => '1' & '1' & '1' & X"F" & "0101001" & "0101001" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0391@0070.  if false then emitChar else emitChar, TXDCHAR <= char_space
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-112 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0392@0070.  if false then emitChar else emitChar, TXDCHAR <= char_space
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+112 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0393@0071.  if false then emitChar else emitChar, TXDCHAR <= char_C
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 01010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-113 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "01010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0394@0071.  if false then emitChar else emitChar, TXDCHAR <= char_C
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 01010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+113 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "01010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0394@0072.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 01011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-114 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "01011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0395@0072.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 01011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+114 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "01011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0395@0073.  if false then emitChar else emitChar, TXDCHAR <= lin_chk3
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10111, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-115 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10111" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0396@0073.  if false then emitChar else emitChar, TXDCHAR <= lin_chk3
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10111, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+115 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10111" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0396@0074.  if false then emitChar else emitChar, TXDCHAR <= lin_chk2
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-116 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0397@0074.  if false then emitChar else emitChar, TXDCHAR <= lin_chk2
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10110, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+116 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10110" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0397@0075.  if false then emitChar else emitChar, TXDCHAR <= lin_chk1
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10101, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-117 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10101" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0398@0075.  if false then emitChar else emitChar, TXDCHAR <= lin_chk1
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10101, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+117 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10101" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0398@0076.  if false then emitChar else emitChar, TXDCHAR <= lin_chk0
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 10100, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-118 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "10100" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0399@0076.  if false then emitChar else emitChar, TXDCHAR <= lin_chk0
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 10100, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+118 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "10100" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0399@0077.  if false then emitChar else emitChar, TXDCHAR <= char_space
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-119 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0400@0077.  if false then emitChar else emitChar, TXDCHAR <= char_space
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+119 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0406@0078.  if false then emitChar else emitChar, TXDCHAR <= char_B
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 01000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-120 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "01000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0407@0078.  if false then emitChar else emitChar, TXDCHAR <= char_B
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 01000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+120 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "01000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0407@0079.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 01011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-121 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "01011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0408@0079.  if false then emitChar else emitChar, TXDCHAR <= char_EQU
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 01011, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+121 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "01011" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0408@007A.  if false then emitChar else emitChar, TXDCHAR <= bytecnt1
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 11001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-122 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "11001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0409@007A.  if false then emitChar else emitChar, TXDCHAR <= bytecnt1
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 11001, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+122 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "11001" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0409@007B.  if false then emitChar else emitChar, TXDCHAR <= bytecnt0
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 11000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-123 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "11000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0410@007B.  if false then emitChar else emitChar, TXDCHAR <= bytecnt0
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 11000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+123 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "11000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0410@007C.  if false then emitChar else emitChar, TXDCHAR <= char_space
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011101 else 0011101, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-124 => '1' & '1' & '1' & X"F" & "0011101" & "0011101" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0411@007C.  if false then emitChar else emitChar, TXDCHAR <= char_space
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0011110 else 0011110, TXDCHAR <= 00010, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+124 => '1' & '1' & '1' & X"F" & "0011110" & "0011110" & "00010" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- L0412@007D.  if false then next else printramR
---  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 0100001, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
-125 => '1' & '1' & '1' & X"F" & "0000000" & "0100001" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
+-- L0413@007D.  if false then next else printramR
+--  nBUSREQ = 1, nWR = 1, BUSY = 1, if (1111) then 0000000 else 0100010, TXDCHAR <= 00000, lincnt_a = 1, lincnt_cin = 0, poscnt_a = 1, poscnt_cin = 0, address <= 00, ram_write = 0, ram_addr = 000, hexcnt <= 000, checksum <= 00, input_reset = 0, errcode <= 110, compa = 0, compb = 00;
+125 => '1' & '1' & '1' & X"F" & "0000000" & "0100010" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00",
 
--- 5 location(s) in following ranges will be filled with default value
--- 002D .. 002F
+-- 4 location(s) in following ranges will be filled with default value
+-- 002E .. 002F
 -- 007E .. 007F
 
 others => '1' & '1' & '1' & X"0" & "0000000" & "0000000" & "00000" & '1' & '0' & '1' & '0' & "00" & '0' & O"0" & O"0" & "00" & '0' & O"6" & '0' & "00"

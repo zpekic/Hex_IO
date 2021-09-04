@@ -41,6 +41,8 @@ entity tracer is
            enable : in  STD_LOGIC;
            debug : in  STD_LOGIC_VECTOR (15 downto 0);
 			  prefix: in STD_LOGIC_VECTOR(7 downto 0);
+			  source_a: out STD_LOGIC_VECTOR(12 downto 0);
+			  source_d: in STD_LOGIC_VECTOR(7 downto 0);
            dev_clk : out  STD_LOGIC);
 end tracer;
 
@@ -67,8 +69,8 @@ constant hex2ascii: lookup := (
 	std_logic_vector(to_unsigned(natural(character'pos('F')), 8))
 );
 
-signal cnt: std_logic_vector(2 downto 0);
-signal debug_data, ascii_hex, ascii_fix: std_logic_vector(7 downto 0);
+signal cnt: std_logic_vector(5 downto 0); -- 64 chars per trace record
+signal debug_data, ascii_hex, ascii_fix, format_d: std_logic_vector(7 downto 0);
 signal debug_send: std_logic;
 signal hexout: std_logic_vector(3 downto 0);
 
@@ -77,7 +79,7 @@ begin
 uart_data <= dev_data when (enable = '0') else debug_data;
 uart_send <= dev_send when (enable = '0') else debug_send;
 dev_ready <= uart_ready when (enable = '0') else '1'; -- fool the device into not waiting for output
-dev_clk <= cnt(2);
+dev_clk <= cnt(5);
 
 debug_send <= trace and uart_ready;
 
@@ -92,17 +94,32 @@ begin
 	end if;
 end process;
 
--- assemble 8-characted output record
-with cnt select debug_data <=
-	ascii_hex when O"0",	-- debug
-	ascii_hex when O"1",	-- debug
-	ascii_hex when O"2",	-- debug
-	ascii_hex when O"3",	-- debug
-	ascii_fix when O"4", -- sanitized prefix
-	X"0D" when O"5",  -- CR
-	X"0A" when O"6", 	-- LF
+-- output from source ROM or internal format
+source_a <= debug(6 downto 0) & std_logic_vector(unsigned(cnt) - 8);
+with cnt(5 downto 3) select debug_data <=
+	format_d when O"0",
+	format_d when O"7",
+	source_d when others;
+	
+with cnt(3 downto 0) select format_d <=
+	ascii_hex when X"1",	-- debug
+	ascii_hex when X"2",	-- debug
+	ascii_hex when X"4",	-- debug
+	ascii_hex when X"5",	-- debug
+	ascii_fix when X"7", -- sanitized prefix
+	X"0D" when X"E",  -- CR
+	X"0A" when X"F", 	-- LF
 	X"20" when others;
 	
+-- data from debug port
+ascii_hex <= hex2ascii(to_integer(unsigned(hexout)));
+with cnt(3 downto 0) select hexout <=
+	debug(7 downto 4) when X"1",
+	debug(3 downto 0) when X"2",
+	debug(15 downto 12) when X"4",
+	debug(11 downto 8) when X"5",
+	X"0" when others;
+
 -- sanitize ascii code coming through prefix port to make it displayable
 with prefix(7 downto 5) select ascii_fix <= 
 	X"2E" when "000",		-- 00..1F (show dot)
@@ -110,15 +127,6 @@ with prefix(7 downto 5) select ascii_fix <=
 	prefix when "010",	-- 40..5F
 	prefix when "011",	-- 60..7F
 	X"7E" when others;	-- 80..FF (show tilde)
-
--- data from debug port
-ascii_hex <= hex2ascii(to_integer(unsigned(hexout)));
-with cnt select hexout <=
-	debug(7 downto 4) when O"0",
-	debug(3 downto 0) when O"1",
-	debug(15 downto 12) when O"2",
-	debug(11 downto 8) when O"3",
-	X"0" when others;
 	
 end Behavioral;
 
