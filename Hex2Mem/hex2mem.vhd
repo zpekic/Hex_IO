@@ -231,7 +231,7 @@ nWR <= h2m_nWR when (nBUSACK = '0') else 'Z';
 ---- End boilerplate code
 
 ---- Start boilerplate code (use with utmost caution!)
-BUSY <= h2m_BUSY;
+BUSY <= h2m_BUSY or (not input_is_zero);
 ---- End boilerplate code
 
 ABUS <= address when (nBUSACK = '0') else "ZZZZZZZZZZZZZZZZ";

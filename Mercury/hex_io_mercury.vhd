@@ -205,8 +205,6 @@ component tracer is
            enable : in  STD_LOGIC;
            debug : in  STD_LOGIC_VECTOR (15 downto 0);
            prefix : in STD_LOGIC_VECTOR (7 downto 0);
-			  source_a: out STD_LOGIC_VECTOR(12 downto 0);
-			  source_d: in STD_LOGIC_VECTOR(7 downto 0);
            dev_clk : out  STD_LOGIC);
 end component;
 
@@ -365,7 +363,9 @@ alias PMOD_CTS: std_logic is PMOD(7);	-- not used
 
 -- debug
 signal hexdata, showdigit, showdot: std_logic_vector(3 downto 0);
-signal charpat: std_logic_vector(7 downto 0);
+--signal charpat: std_logic_vector(7 downto 0);
+signal symbol_d: std_logic_vector(7 downto 0);
+signal symbol_a: std_logic_vector(12 downto 0);
 signal display, sum, counter_debug, hexin_debug, hexout_debug: std_logic_vector(15 downto 0);
 -- tracer
 signal tr_clk, tr_txdready, tr_txdsend, tr_enable: std_logic; 
@@ -756,13 +756,11 @@ tr: tracer Port map (
 			enable => tr_enable,
 			debug => hexin_debug,
 			prefix => tr_txdchar,
-			source_a => open,		-- TODO: connect to source ROM
-			source_d => X"2A",	-- TODO: connect to source ROM
 			dev_clk => tr_clk
 		);
 		
 tr_enable <= '1' when (switch_hexclk = "000") else '0';
-		
+
 -- switch 0:
 -- 0: hex input to serial (echo and error info), allow window move on VGA, ignore buttons
 -- 1: hex output to serial, no window move on VGA, but any button click start memory dump in hex

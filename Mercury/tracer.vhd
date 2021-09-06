@@ -28,6 +28,8 @@ use IEEE.NUMERIC_STD.ALL;
 -- any Xilinx primitives in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
+use work.hex2mem_sym.all;
+
 
 entity tracer is
     Port ( reset : in  STD_LOGIC;
@@ -41,8 +43,6 @@ entity tracer is
            enable : in  STD_LOGIC;
            debug : in  STD_LOGIC_VECTOR (15 downto 0);
 			  prefix: in STD_LOGIC_VECTOR(7 downto 0);
-			  source_a: out STD_LOGIC_VECTOR(12 downto 0);
-			  source_d: in STD_LOGIC_VECTOR(7 downto 0);
            dev_clk : out  STD_LOGIC);
 end tracer;
 
@@ -69,12 +69,23 @@ constant hex2ascii: lookup := (
 	std_logic_vector(to_unsigned(natural(character'pos('F')), 8))
 );
 
-signal cnt: std_logic_vector(5 downto 0); -- 64 chars per trace record
+signal cnt, chr: std_logic_vector(5 downto 0); -- 64 chars per trace record
 signal debug_data, ascii_hex, ascii_fix, format_d: std_logic_vector(7 downto 0);
 signal debug_send: std_logic;
 signal hexout: std_logic_vector(3 downto 0);
+alias ui_address: std_logic_vector(6 downto 0) is debug(6 downto 0); -- 128 words microcode
+-- for tracer
 
 begin
+
+gen_r: for r in 0 to SYMBOL_ADDRESS_LAST generate
+begin
+	gen_c: for c in 0 to SYMBOL_BYTE_LAST generate
+	begin
+			assert false report "r= " & integer'image(r) & " c= " & integer'image(c) severity note;
+			h2m_symbol_byte(r * (SYMBOL_BYTE_LAST + 1) + c) <= h2m_symbol_entry(r)(SYMBOL_DATA_WIDTH - 8 * c - 1 downto SYMBOL_DATA_WIDTH - 8 * (c + 1));
+	end generate;
+end generate;
 
 uart_data <= dev_data when (enable = '0') else debug_data;
 uart_send <= dev_send when (enable = '0') else debug_send;
@@ -95,11 +106,17 @@ begin
 end process;
 
 -- output from source ROM or internal format
-source_a <= debug(6 downto 0) & std_logic_vector(unsigned(cnt) - 8);
+chr <= std_logic_vector(unsigned(cnt) - 8);
+h2m_sym_a <= ui_address & chr(4 downto 0);
+h2m_sym_d <= h2m_symbol_byte(to_integer(unsigned(h2m_sym_a)));
 with cnt(5 downto 3) select debug_data <=
 	format_d when O"0",
+	h2m_sym_d when O"1",
+	h2m_sym_d when O"2",
+	h2m_sym_d when O"3",
+	h2m_sym_d when O"4",
 	format_d when O"7",
-	source_d when others;
+	X"20" when others;
 	
 with cnt(3 downto 0) select format_d <=
 	ascii_hex when X"1",	-- debug

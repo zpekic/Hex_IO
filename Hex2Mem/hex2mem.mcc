@@ -5,6 +5,7 @@
 			.code 7, 48, hex2mem_code.mif, hex2mem_code.cgf, hex2mem_code.coe, h2m:hex2mem_code.vhd, hex2mem_code.hex, hex2mem_code.bin, 8;
 			.mapper 8, 7, hex2mem_map.mif, hex2mem_map.cgf, hex2mem_map.coe, h2m:hex2mem_map.vhd, hex2mem_map.hex, hex2mem_map.bin, 1;
 			.controller hex2mem_control_unit.vhd, 8;
+			.symbol 7, 256, hex2mem_sym.mif, hex2mem_sym.cgf, hex2mem_sym.coe, h2m:hex2mem_sym.vhd, hex2mem_sym.hex, hex2mem_sym.bin, 32;
 
 // System interface signals
 nBUSREQ			.valfield 1 values 0, 1 default 1;
