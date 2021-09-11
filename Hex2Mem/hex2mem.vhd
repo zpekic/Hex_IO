@@ -231,7 +231,7 @@ nWR <= h2m_nWR when (nBUSACK = '0') else 'Z';
 ---- End boilerplate code
 
 ---- Start boilerplate code (use with utmost caution!)
-BUSY <= h2m_BUSY or (not input_is_zero);
+BUSY <= h2m_BUSY;
 ---- End boilerplate code
 
 ABUS <= address when (nBUSACK = '0') else "ZZZZZZZZZZZZZZZZ";
@@ -474,8 +474,8 @@ on_hexin_ready: process(reset_in, h2m_input_reset, HEXIN_READY, HEXIN_CHAR, inpu
 begin
 	if ((reset_in or h2m_input_reset) = '1') then
 		input <= X"00";
-		prev_is_spaceortab <= '0';
-		prev_is_crorlf <= '0';
+		prev_is_spaceortab <= reset_in;
+		prev_is_crorlf <= reset_in;
 	else
 		if (rising_edge(HEXIN_READY)) then
 			input <= HEXIN_CHAR;

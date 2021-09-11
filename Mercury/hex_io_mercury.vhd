@@ -195,6 +195,7 @@ end component;
 
 component tracer is
     Port ( reset : in  STD_LOGIC;
+			  clk: in STD_LOGIC;
            uart_data : out  STD_LOGIC_VECTOR (7 downto 0);
            uart_send : out  STD_LOGIC;
            uart_ready : in  STD_LOGIC;
@@ -204,7 +205,7 @@ component tracer is
 			  trace: in STD_LOGIC;
            enable : in  STD_LOGIC;
            debug : in  STD_LOGIC_VECTOR (15 downto 0);
-           prefix : in STD_LOGIC_VECTOR (7 downto 0);
+           ext_char : in STD_LOGIC_VECTOR (7 downto 0);
            dev_clk : out  STD_LOGIC);
 end component;
 
@@ -315,10 +316,30 @@ constant color_dkgray,  color_gray:		std_logic_vector(7 downto 0):= "10010010";
 --constant color8_cyan	 : std_logic_vector(7 downto 0) := "11111000"; 
 --constant color8_white : std_logic_vector(7 downto 0) := "11111111"; 
 
-type color_lookup is array (0 to 15) of std_logic_vector(7 downto 0);
+type color_lookup is array (0 to 31) of std_logic_vector(7 downto 0);
 
--- standard TMS9918 16-color palette (http://www.cs.columbia.edu/~sedwards/papers/TMS9918.pdf page 26) 
 signal video_color: color_lookup := (
+-- TIM-011 has a 4-color palette, here we have 2 variations of those
+	color_black,	-- grayish
+	color_dkgray,
+	color_ltgray,
+	color_white,
+
+	color_black,	-- reddish
+	color_dkred,
+	color_ltred,
+	color_white,
+
+	color_black,	-- greenish
+	color_dkgreen,
+	color_ltgreen,
+	color_white,
+
+	color_black,	-- blueish
+	color_dkblue,
+	color_ltblue,
+	color_white,
+-- standard TMS9918 16-color palette (http://www.cs.columbia.edu/~sedwards/papers/TMS9918.pdf page 26) 
 	color_transparent,	-- VGA does not support is, so "pinkish"
 	color_black,
 	color_medgreen,	
@@ -356,10 +377,10 @@ signal prescale_value: prescale_lookup := (
 signal RESET: std_logic;
 
 -- Connect to PmodUSBUART 
-alias PMOD_RTS: std_logic is PMOD(4);	-- not used
+alias PMOD_RTS: std_logic is PMOD(4);	
 alias PMOD_RXD: std_logic is PMOD(5);
 alias PMOD_TXD: std_logic is PMOD(6);
-alias PMOD_CTS: std_logic is PMOD(7);	-- not used
+alias PMOD_CTS: std_logic is PMOD(7);	
 
 -- debug
 signal hexdata, showdigit, showdot: std_logic_vector(3 downto 0);
@@ -368,7 +389,7 @@ signal symbol_d: std_logic_vector(7 downto 0);
 signal symbol_a: std_logic_vector(12 downto 0);
 signal display, sum, counter_debug, hexin_debug, hexout_debug: std_logic_vector(15 downto 0);
 -- tracer
-signal tr_clk, tr_txdready, tr_txdsend, tr_enable: std_logic; 
+signal tr_clk, tr_txdready, tr_txdsend, tr_enable, tr_trace, tr_triggered: std_logic; 
 signal tr_txdchar: std_logic_vector(7 downto 0);
 signal hexin_busy: std_logic;
 
@@ -394,8 +415,10 @@ signal h, v: std_logic_vector(9 downto 0);
 -- video data signals
 signal vga_color, text_color, window_color: std_logic_vector(7 downto 0);
 signal pair, color_sel: std_logic_vector(1 downto 0); -- 2 bit pixel and color lookup
-signal char, pattern: std_logic_vector(7 downto 0);
-signal text_pix: std_logic;
+--signal char, pattern: std_logic_vector(7 downto 0);
+--signal text_pix: std_logic;
+signal color_index: std_logic_vector(4 downto 0);
+signal nibble: std_logic_vector(3 downto 0);
 
 -- video memory bus
 signal vram_dina, vram_doutb: std_logic_vector(7 downto 0);
@@ -404,15 +427,14 @@ signal vram_wea: std_logic_vector(0 downto 0);
 
 ---
 signal switch, button: std_logic_vector(7 downto 0);
-alias switch_bcd: std_logic is switch(0);
-alias switch_timpalette: std_logic_vector(1 downto 0) is switch(4 downto 3);
+--alias switch_bcd: std_logic is switch(0);
 alias switch_hexout:	std_logic is switch(0);
 alias switch_tms: std_logic is switch(1);
 alias switch_hexclk: std_logic_vector(2 downto 0) is switch(4 downto 2);
 alias switch_baudrate: std_logic_vector(2 downto 0) is switch(7 downto 5);
 alias switch_trace: std_logic_vector(2 downto 0) is switch(7 downto 5);
+alias switch_timpalette: std_logic_vector(1 downto 0) is switch(6 downto 5);
 signal offset_cmd: std_logic_vector(3 downto 0);
-signal color_index, nibble: std_logic_vector(3 downto 0);
 
 -- HEX common 
 signal baudrate_x1, baudrate_x2, baudrate_x4, baudrate_x8: std_logic;
@@ -497,9 +519,9 @@ with switch_hexclk select hex_clk <=
 	baudrate_x4 when "010",
 	baudrate_x8 when "011",
 	freq(4) when "100",	-- 3MHz
-	freq(3) when "101",	-- 6MHz	-- TODO: fix for Mem2Hex (last record missing?)
-	freq(2) when "110",	-- 12MHz	-- TODO: fix for Hex2Mem mem write (wait?), works for Mem2Hex 
-	freq(1) when others;	-- 24MHz	-- TODO: fix for Hex2Mem mem write (wait?), fix for Mem2Hex
+	freq(3) when "101",	-- 6MHz	
+	freq(2) when "110",	-- 12MHz	
+	freq(1) when others;	-- 24MHz	
 
 -- internal 50MHz clock is only used for VGA
 on_clk: process(CLK)
@@ -589,7 +611,7 @@ with vga_x(1) select nibble <=
 
 -- index depends on the V9958 or TIM mode
 --color_index <= '1' & nibble(2 downto 0) when (switch_tms = '1') else '0' & switch_timpalette & pair;	
-color_index <= nibble when (switch_tms = '1') else (switch_timpalette & pair);	
+color_index <= ('1' & nibble) when (switch_tms = '1') else ('0' & switch_timpalette & pair);	
 
 --window_color <=
 --			nibble(3) & nibble(2) & nibble(2) & nibble(3) & nibble(1) & nibble(1) & nibble(3) & nibble(0) when (switch_tms = '1') else
@@ -633,7 +655,8 @@ BLU <= vga_color(1 downto 0);
 --	pattern(0) when others;
 	
 --text_color <= color_blue when (text_pix = '1') else color_cyan;
-text_color <= h(5 downto 3) & v(5 downto 3) & h(6) & v(6);
+--text_color <= h(5 downto 3) & v(5 downto 3) & h(6) & v(6);
+text_color <= h(8 downto 6) & v(8 downto 6) & h(9) & v(9);
 							
 -- memory to serial output path, in Intel Hex format
 hexout_nbusack <= hexout_nbusreq or (not v_sync);
@@ -718,7 +741,7 @@ hexin: hex2mem Port map (
 			TXDCHAR => tr_txdchar 		--hexin_txdchar
 		);
 		
-PMOD_CTS <= hexin_busy; -- allows using "hardware" protocol when sending HEX file to device
+PMOD_CTS <= tr_trace; -- allows using "hardware" protocol when sending HEX file to device
 		
 -- serial input of hex file		
 hexin_rxd: uart_ser2par Port map ( 
@@ -746,44 +769,47 @@ hexin_txd: uart_par2ser Port map (
 		
 tr: tracer Port map ( 
 			reset => reset,
+			clk => baudrate_x1,
 			uart_data => hexin_txdchar,
 			uart_send => hexin_txdsend,
 			uart_ready => hexin_txdready,
 			dev_data => tr_txdchar,
 			dev_send => tr_txdsend,
 			dev_ready => tr_txdready,
-			trace => hexin_busy,
+			trace => tr_trace,
 			enable => tr_enable,
 			debug => hexin_debug,
-			prefix => tr_txdchar,
+			ext_char => tr_txdchar,
 			dev_clk => tr_clk
 		);
 		
 tr_enable <= '1' when (switch_hexclk = "000") else '0';
+tr_trace <= hexin_busy when (hexin_debug(15 downto 8) = X"00") else '1'; 
+
+--on_hexin_ready: process(hexin_ready, hexin_busy)
+--begin
+--	if (hexin_busy = '1') then
+--		tr_triggered <= '0';
+--	else
+--		if (rising_edge(hexin_ready)) then
+--			tr_triggered <= '1';
+--		end if;
+--	end if;
+--end process;
 
 -- switch 0:
 -- 0: hex input to serial (echo and error info), allow window move on VGA, ignore buttons
 -- 1: hex output to serial, no window move on VGA, but any button click start memory dump in hex
 PMOD_RXD <= hexout_serout when (switch_hexout = '1') else hexin_serout;
+PMOD_RTS <= hexout_ready when (switch_hexout = '1') else hexin_ready;
 offset_cmd <= 	 "0000" when (switch_hexout = '1') else button(3 downto 0);
 hexout_start <= (button(3) or button(2) or button(1) or button(0)) when (switch_hexout = '1') else '0';
 		
---on_hexin_ready: process(reset, hexin_ready, hexin_char)
---begin
---	if (reset = '1') then
---		hexin_debug <= X"DEAD";
---	else
---		if (rising_edge(hexin_ready)) then
---			hexin_debug <= display(7 downto 0) & hexin_char;
---		end if;
---	end if;
---end process;
-				
 counter: freqcounter Port map ( 
 		reset => RESET,
       clk => freq1,
       freq => baudrate_x1,
-		bcd => switch_bcd,
+		bcd => '1',
 		add => X"0001",
 		cin => '1',
 		cout => open,

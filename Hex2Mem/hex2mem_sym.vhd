@@ -29,6 +29,15 @@ signal h2m_sym_a: std_logic_vector(SYMBOL_ADDRESS_WIDTH + SYMBOL_BYTE_WIDTH - 1 
 ----Start boilerplate code(use with utmost caution!)
 -- h2m_sym_a <= -- TODO concatenate microinstruction address and character address
 -- h2m_sym_d <= h2m_symbol_byte(to_integer(unsigned(h2m_sym_a)));
+----convert symbol entries to byte-oriented ROM
+--gen_r: for r in 0 to SYMBOL_ADDRESS_LAST generate
+--begin
+--    gen_c: for c in 0 to SYMBOL_BYTE_LAST generate
+--   begin
+--           --assert false report "r = " & integer'image(r) & " c = " & integer'image(c) severity note;
+--           h2m_symbol_byte(r * (SYMBOL_BYTE_LAST + 1) + c) <= h2m_symbol_entry(r)(SYMBOL_DATA_WIDTH - 8 * c - 1 downto SYMBOL_DATA_WIDTH - 8 * (c + 1));
+--   end generate;
+--end generate;
 ----End boilerplate code
 
 
