@@ -50,6 +50,7 @@ entity hex2mem is
 			  --
 			  HEXIN_READY: in STD_LOGIC;
 			  HEXIN_CHAR: in STD_LOGIC_VECTOR (7 downto 0);
+			  HEXIN_ZERO: buffer STD_LOGIC;
 			  --
 			  TRACE_ERROR: in STD_LOGIC;
 			  TRACE_WRITE: in STD_LOGIC;
@@ -188,7 +189,7 @@ cu_h2m: hex2mem_control_unit
 			  cond(seq_cond_true) => '1',
 			  cond(seq_cond_nWAIT) => nWAIT,
 			  cond(seq_cond_nBUSACK) => nBUSACK,
-			  cond(seq_cond_input_is_zero) => input_is_zero,
+			  cond(seq_cond_input_is_zero) => HEXIN_ZERO,
 			  cond(seq_cond_TXDREADY) => txdready_sync,
 			  cond(seq_cond_TXDSEND) => '1', -- HACKHACK (this will generate pulse for sending the char)
 			  cond(seq_cond_TRACE_ERROR) => TRACE_ERROR,
@@ -215,7 +216,7 @@ begin
 end process;
 
 -- conditions
-input_is_zero <= '1' when (input = X"00") else '0';
+HEXIN_ZERO <= '1' when (input = X"00") else '0';
 bytecnt_at_colon <= '1' when (bytecnt = ptr_colon) else '0';
 compa_equals_compb <= '1' when (compa = compb) else '0';
 

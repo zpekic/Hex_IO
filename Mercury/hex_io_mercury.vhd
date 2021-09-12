@@ -163,6 +163,7 @@ component hex2mem is
 			  --
 			  HEXIN_READY: in STD_LOGIC;
 			  HEXIN_CHAR: in STD_LOGIC_VECTOR (7 downto 0);
+			  HEXIN_ZERO: buffer STD_LOGIC;
 			  --
 			  TRACE_ERROR: in STD_LOGIC;
 			  TRACE_WRITE: in STD_LOGIC;
@@ -225,7 +226,7 @@ end component;
 
 component fourdigitsevensegled is
     Port ( -- inputs
-			  hexdata : in  STD_LOGIC_VECTOR (3 downto 0);
+			  data : in  STD_LOGIC_VECTOR (15 downto 0);
            digsel : in  STD_LOGIC_VECTOR (1 downto 0);
            showdigit : in  STD_LOGIC_VECTOR (3 downto 0);
            showdot : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -317,9 +318,8 @@ constant color_dkgray,  color_gray:		std_logic_vector(7 downto 0):= "10010010";
 --constant color8_white : std_logic_vector(7 downto 0) := "11111111"; 
 
 type color_lookup is array (0 to 31) of std_logic_vector(7 downto 0);
-
-signal video_color: color_lookup := (
--- TIM-011 has a 4-color palette, here we have 2 variations of those
+constant video_color: color_lookup := (
+-- TIM-011 has a 4-color palette, here we have 4 variations of those
 	color_black,	-- grayish
 	color_dkgray,
 	color_ltgray,
@@ -339,8 +339,9 @@ signal video_color: color_lookup := (
 	color_dkblue,
 	color_ltblue,
 	color_white,
+	
 -- standard TMS9918 16-color palette (http://www.cs.columbia.edu/~sedwards/papers/TMS9918.pdf page 26) 
-	color_transparent,	-- VGA does not support is, so "pinkish"
+	color_transparent,	-- VGA does not support it, so "pinkish"
 	color_black,
 	color_medgreen,	
 	color_ltgreen,
@@ -361,8 +362,20 @@ signal video_color: color_lookup := (
 	color_white
 	);
 
+type uartmode_lookup is array (0 to 7) of std_logic_vector(15 downto 0);
+constant uartmode_debug: uartmode_lookup := (
+	X"8001",	-- 8N1
+	X"8001",
+	X"8001",
+	X"8001",
+	X"8111",	-- 8, parity space, 1 stop
+	X"8002",	-- 8, parity mark, 1 == 8, no parity, 2 stop
+	X"8101",	-- 8, parity even, 1 stop
+	X"8011"	-- 8, parity odd, 1 stop
+);
+
 type prescale_lookup is array (0 to 7) of integer range 0 to 65535;
-signal prescale_value: prescale_lookup := (
+constant prescale_value: prescale_lookup := (
 --		(96000000 / (16 * 300)),
 		(96000000 / (16 * 600)),
 		(96000000 / (16 * 1200)),
@@ -383,11 +396,11 @@ alias PMOD_TXD: std_logic is PMOD(6);
 alias PMOD_CTS: std_logic is PMOD(7);	
 
 -- debug
-signal hexdata, showdigit, showdot: std_logic_vector(3 downto 0);
+signal showdigit, showdot: std_logic_vector(3 downto 0);
 --signal charpat: std_logic_vector(7 downto 0);
-signal symbol_d: std_logic_vector(7 downto 0);
-signal symbol_a: std_logic_vector(12 downto 0);
-signal display, sum, counter_debug, hexin_debug, hexout_debug: std_logic_vector(15 downto 0);
+--signal symbol_d: std_logic_vector(7 downto 0);
+--signal symbol_a: std_logic_vector(12 downto 0);
+signal led_debug, hex_debug, hexin_debug, hexout_debug, baudrate_debug, errcount_debug: std_logic_vector(15 downto 0);
 -- tracer
 signal tr_clk, tr_txdready, tr_txdsend, tr_enable, tr_trace, tr_triggered: std_logic; 
 signal tr_txdchar: std_logic_vector(7 downto 0);
@@ -425,32 +438,34 @@ signal vram_dina, vram_doutb: std_logic_vector(7 downto 0);
 signal vram_addra, vram_addrb: std_logic_vector(14 downto 0);
 signal vram_wea: std_logic_vector(0 downto 0);
 
----
+-- input by switches and buttons
 signal switch, button: std_logic_vector(7 downto 0);
---alias switch_bcd: std_logic is switch(0);
 alias switch_hexout:	std_logic is switch(0);
 alias switch_tms: std_logic is switch(1);
 alias switch_hexclk: std_logic_vector(2 downto 0) is switch(4 downto 2);
-alias switch_baudrate: std_logic_vector(2 downto 0) is switch(7 downto 5);
 alias switch_trace: std_logic_vector(2 downto 0) is switch(7 downto 5);
 alias switch_timpalette: std_logic_vector(1 downto 0) is switch(6 downto 5);
-signal offset_cmd: std_logic_vector(3 downto 0);
+signal btn_command, btn_window: std_logic_vector(3 downto 0);
+
+-- UART control registers
+signal uart_baudsel, uart_modesel: std_logic_vector(2 downto 0);
 
 -- HEX common 
 signal baudrate_x1, baudrate_x2, baudrate_x4, baudrate_x8: std_logic;
 signal hex_clk: std_logic;
 
 -- HEX output path
-signal hexout_send, hexout_ready, hexout_nrd, hexout_nbusreq, hexout_nbusack, hexout_start, hexout_serout: std_logic;
+signal hexout_send, hexout_ready, hexout_nrd, hexout_nbusreq, hexout_nbusack, hexout_serout: std_logic;
 signal hexout_char: std_logic_vector(7 downto 0);
 signal hexout_a: std_logic_vector(15 downto 0);
-signal hexout_clk, hexout_nwait: std_logic;
+signal hexout_nwait: std_logic;
+alias hexout_start: std_logic is btn_command(0);
 
 -- HEX input path
 signal hexin_ready, hexin_txdready, hexin_serout: std_logic;
 signal hexin_char, hexin_txdchar: std_logic_vector(7 downto 0);
-signal hexin_nwr, hexin_a15, hexin_error, hexin_txdsend: std_logic;
-signal hexin_clk, hexin_nwait: std_logic;
+signal hexin_nwr, hexin_a15, hexin_error, hexin_txdsend, hexin_zero: std_logic;
+signal hexin_nwait: std_logic;
 
 begin
 
@@ -472,13 +487,13 @@ clockgen: sn74hc4040 port map (
 			q => freq 
 		);
 		
-prescale: process(freq96M, baudrate_x8, freq4096, switch_baudrate)
+prescale: process(freq96M, baudrate_x8, freq4096, uart_baudsel)
 begin
 	if (rising_edge(freq96M)) then
 		if (prescale_baud = 0) then
 			baudrate_x8 <= not baudrate_x8;
-			--prescale_baud <= prescale_value(to_integer(unsigned(switch_baudrate)));
-			prescale_baud <= prescale_value(7); -- 38400 
+			prescale_baud <= prescale_value(to_integer(unsigned(uart_baudsel)));
+			--prescale_baud <= prescale_value(7); -- 57600 
 		else
 			prescale_baud <= prescale_baud - 1;
 		end if;
@@ -555,7 +570,7 @@ vga: vga_controller Port map (
       clk => freq25M,
 		mode_tms => switch_tms,
 		offsetclk => freq4, 
-		offsetcmd => offset_cmd, 
+		offsetcmd => btn_window, 
       hsync => h_sync,
       vsync => v_sync,
 		h_valid => h_valid,
@@ -663,13 +678,13 @@ hexout_nbusack <= hexout_nbusreq or (not v_sync);
 
 hexout_wait: waitgen Port map (
 		clear => hexout_nrd,
-      clk => hexout_clk,
+      clk => hex_clk,
       delay => switch_hexclk,
       nWait => hexout_nwait
 	);
 	
 hexout: mem2hex Port map ( 
-			clk => hexout_clk,
+			clk => hex_clk,
 			reset => RESET,
 			
    		debug => hexout_debug,
@@ -688,15 +703,12 @@ hexout: mem2hex Port map (
 			TXDSEND => hexout_send,
 			CHAR => hexout_char
 		);			
-		
--- serial output of hex file
-hexout_clk <= hex_clk;-- when (hexout_ready = '0') else hex_clk;
 
 hexout_txd: uart_par2ser Port map (
 			reset => reset,
 			txd_clk => baudrate_x1,
 			send => hexout_send,
-			mode => "000", --switch(4 downto 2), -- no parity (extra stop bit will be generated)
+			mode => uart_modesel,
 			data => hexout_char,
          ready => hexout_ready,
          txd => hexout_serout		-- looking from the PC side
@@ -707,13 +719,13 @@ hexout_txd: uart_par2ser Port map (
 --------------------------------------------------------------
 hexin_wait: waitgen Port map (
 		clear => hexin_nwr,
-      clk => hexin_clk,
+      clk => hex_clk,
       delay => switch_hexclk,
       nWait => hexin_nwait
 	);
 
 hexin: hex2mem Port map ( 
-			clk => hexin_clk,
+			clk => hex_clk,
 			reset_in => reset,
 			reset_out => open,
 			reset_page => "00000001", -- reset_out pulse if writing into lowest 8k
@@ -731,6 +743,7 @@ hexin: hex2mem Port map (
 			-- Receive Hex file stream
 			HEXIN_READY => hexin_ready,
 			HEXIN_CHAR => hexin_char,
+			HEXIN_ZERO => hexin_zero,
 			-- Send echo or error
 			TRACE_ERROR => switch_trace(2),
 			TRACE_WRITE => switch_trace(1),
@@ -741,27 +754,23 @@ hexin: hex2mem Port map (
 			TXDCHAR => tr_txdchar 		--hexin_txdchar
 		);
 		
-PMOD_CTS <= tr_trace; -- allows using "hardware" protocol when sending HEX file to device
-		
+
 -- serial input of hex file		
 hexin_rxd: uart_ser2par Port map ( 
 			reset => reset,
          rxd_clk => baudrate_x4,
-         mode => "000", --switch(4 downto 2), -- no parity
+         mode => uart_modesel,
          char => hexin_char,
          ready => hexin_ready,
          valid => open, 		-- not yet implemented
          rxd => PMOD_TXD		-- looking from the PC side
 		);
 
--- serial output of echo and error during hex file input
-hexin_clk <= hex_clk;-- when (hexin_txdready = '0') else hex_clk;
-
 hexin_txd: uart_par2ser Port map (
 			reset => reset,
 			txd_clk => baudrate_x1,
 			send => hexin_txdsend,
-			mode => "000", --switch(4 downto 2), -- no parity (extra stop bit will be generated)
+			mode => uart_modesel, 
 			data => hexin_txdchar,
          ready => hexin_txdready,
          txd => hexin_serout		-- looking from the PC side
@@ -784,26 +793,38 @@ tr: tracer Port map (
 		);
 		
 tr_enable <= '1' when (switch_hexclk = "000") else '0';
-tr_trace <= hexin_busy when (hexin_debug(15 downto 8) = X"00") else '1'; 
+tr_trace <= hexin_busy when (hexin_zero = '1') else '1'; 
 
---on_hexin_ready: process(hexin_ready, hexin_busy)
---begin
---	if (hexin_busy = '1') then
---		tr_triggered <= '0';
---	else
---		if (rising_edge(hexin_ready)) then
---			tr_triggered <= '1';
---		end if;
---	end if;
---end process;
 
 -- switch 0:
--- 0: hex input to serial (echo and error info), allow window move on VGA, ignore buttons
--- 1: hex output to serial, no window move on VGA, but any button click start memory dump in hex
+-- 0: hex input to serial (echo and error info), buttons move window on VGA
+-- 1: hex output to serial, no window move on VGA, buttons are commands
 PMOD_RXD <= hexout_serout when (switch_hexout = '1') else hexin_serout;
 PMOD_RTS <= hexout_ready when (switch_hexout = '1') else hexin_ready;
-offset_cmd <= 	 "0000" when (switch_hexout = '1') else button(3 downto 0);
-hexout_start <= (button(3) or button(2) or button(1) or button(0)) when (switch_hexout = '1') else '0';
+PMOD_CTS <= tr_trace; -- allows using "hardware" protocol when sending HEX file to device
+btn_window <= 	"0000" when (switch_hexout = '1') else button(3 downto 0);
+btn_command <= button(3 downto 0) when (switch_hexout = '1') else "0000";
+hex_debug	<= hexout_debug when (switch_hexout = '1') else hexin_debug;
+		
+-- set UART control registers
+on_btn_command: process(reset, btn_command, uart_baudsel, uart_modesel)
+begin
+	if (reset = '1') then
+		uart_baudsel <= O"7";	-- start at 57600
+		uart_modesel <= O"0";	-- start at 8N1
+	else
+		if (rising_edge(btn_command(1))) then
+			case btn_command(3 downto 2) is
+				when "01" =>	-- cycle through modes 0..7..0...
+					uart_modesel <= std_logic_vector(unsigned(uart_modesel) + 1);
+				when "10" =>	-- cycle through baudrates 0..7..0...
+					uart_baudsel <= std_logic_vector(unsigned(uart_baudsel) + 1);
+				when others =>
+					null;
+			end case;
+		end if;
+	end if;
+end process;
 		
 counter: freqcounter Port map ( 
 		reset => RESET,
@@ -813,7 +834,7 @@ counter: freqcounter Port map (
 		add => X"0001",
 		cin => '1',
 		cout => open,
-      value => counter_debug
+      value => baudrate_debug
 	);
 			
 -- 7 seg LED debug display		
@@ -822,7 +843,7 @@ showdot <= "1111" when ((hexin_error and freq8) = '1') else "0000";	-- flash the
 
 leds: fourdigitsevensegled Port map ( 
 			-- inputs
-			hexdata => hexdata,
+			data => led_debug,
 			digsel => digsel,
 			showdigit => showdigit,
 			showdot => showdot,
@@ -832,15 +853,22 @@ leds: fourdigitsevensegled Port map (
 			segment(6 downto 0) => A_TO_G
 		);
 
-with switch(1 downto 0) select
-	display <= 	hexin_debug when "00",
-					hexout_debug when "01",
-					counter_debug when others;
+with btn_command(3 downto 2) select
+	led_debug <= 	hex_debug when "00",				-- debug output from either hex2mem or mem2hex
+						uartmode_debug(to_integer(unsigned(uart_modesel))) when "01",			-- set UART mode
+						baudrate_debug when "10",		-- set UART baudrate
+						errcount_debug when others;	-- number of errors at receive
 					
-with digsel select
-	hexdata <= 	display(3 downto 0) when "00",	
-					display(7 downto 4) when "01",
-					display(11 downto 8) when "10",
-					display(15 downto 12) when others;
+-- counting the number of hexin errors					
+on_hexin_error: process(reset, hexin_error)
+begin
+	if (reset = '1') then
+		errcount_debug <= (others => '0');
+	else
+		if (rising_edge(hexin_error)) then
+			errcount_debug <= std_logic_vector(unsigned(errcount_debug) + 1);
+		end if;
+	end if;
+end process;					
 
 end;

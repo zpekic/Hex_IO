@@ -31,7 +31,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity fourdigitsevensegled is
     Port ( -- inputs
-			  hexdata : in  STD_LOGIC_VECTOR (3 downto 0);
+			  data : in  STD_LOGIC_VECTOR (15 downto 0);
            digsel : in  STD_LOGIC_VECTOR (1 downto 0);
            showdigit : in  STD_LOGIC_VECTOR (3 downto 0);
            showdot : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -45,8 +45,16 @@ architecture structural of fourdigitsevensegled is
 
 signal internalseg: std_logic_vector(6 downto 0); -- 7th is the dot!
 signal dot: std_logic;
+signal hexdata: std_logic_vector(3 downto 0);
 
 begin
+---- digit selection
+with digsel select
+	hexdata <= 	data(3 downto 0) when "00",	
+					data(7 downto 4) when "01",
+					data(11 downto 8) when "10",
+					data(15 downto 12) when others;
+					
 ---- DP for each digit individually
 	with digsel select dot <= 
 				not showdot(0) when "00",
