@@ -9,7 +9,7 @@
 -- Target Devices: 
 -- Tool versions: 
 -- Description: 
---
+-- https://hackaday.io/project/181664-intel-hex-file-inputoutput-for-fpgas/log/197808-mem2hex-component-read-from-memory-and-generate-hex-character-stream
 -- Dependencies: 
 --
 -- Revision: 

@@ -37,29 +37,29 @@ entity hex_io_mercury is
 				-- 50MHz on the Mercury board
 				CLK: in std_logic;
 				
-				-- 12MHz external clock
+				-- 96MHz external clock
 				EXT_CLK: in std_logic;
 				
 				-- Master reset button on Mercury board
 				USR_BTN: in std_logic; 
 
 				-- Switches on baseboard
-				-- SW(0) -- 
-				-- SW(1) -- 
-				-- SW(2) -- 
-				-- SW(3) -- 
-				-- SW(4) -- 
-				-- SW(5) -- 
-				-- SW(6) -- 
-				-- SW(7)	-- 
+				-- SW(0) -- OFF: accept HEX input, ON: generate HEX output
+				-- SW(1) -- OFF: TIM-011 video (512*256, 4 colors), ON: V99X8 video (256*192, 16 colors)
+				-- SW(2) -- HEX_CLK speed sel 0 (000 = trace mode, tracer is active)
+				-- SW(3) -- HEX_CLK speed sel 1
+				-- SW(4) -- HEX_CLK speed sel 2 (111 = 12MHz)
+				-- SW(5) -- ON: Enable character echo trace for HEXOUT
+				-- SW(6) -- ON: Enable write to memory trace for HEXOUT
+				-- SW(7)	-- ON: Enable error trace for HEXOUT
 
 				SW: in std_logic_vector(7 downto 0); 
 
 				-- Push buttons on baseboard
-				-- BTN0 - 
-				-- BTN1 - 
-				-- BTN2 -
-				-- BTN3 -
+				-- BTN0 - HEX input mode: move window right	; HEX output mode: start output
+				-- BTN1 - HEX input mode: move window left	; HEX output mode: increment mode register
+				-- BTN2 - HEX input mode: move window down	; HEX output mode: select uart_mode
+				-- BTN3 - HEX input mode: move window up		; HEX output mode: select uart_baudrate
 				BTN: in std_logic_vector(3 downto 0); 
 
 				-- Stereo audio output on baseboard
@@ -124,6 +124,7 @@ COMPONENT ram32k8_dualport
   );
 END COMPONENT;
 
+-- https://hackaday.io/project/181664-intel-hex-file-inputoutput-for-fpgas/log/197808-mem2hex-component-read-from-memory-and-generate-hex-character-stream
 component mem2hex is
     Port ( clk : in  STD_LOGIC;
            reset : in  STD_LOGIC;
@@ -145,6 +146,7 @@ component mem2hex is
            CHAR : out  STD_LOGIC_VECTOR (7 downto 0));
 end component;
 
+-- https://hackaday.io/project/181664-intel-hex-file-inputoutput-for-fpgas/log/197807-hex2mem-component-accept-hex-character-stream-and-write-to-memory
 component hex2mem is
     Port ( clk : in  STD_LOGIC;
            reset_in : in  STD_LOGIC;
@@ -174,6 +176,7 @@ component hex2mem is
            TXDCHAR : buffer  STD_LOGIC_VECTOR (7 downto 0));
 end component;
 
+-- https://hackaday.io/project/181664-intel-hex-file-inputoutput-for-fpgas/log/197809-par2ser-a-novel-uart-trasmitter
 component uart_par2ser is
     Port ( reset : in  STD_LOGIC;
 			  txd_clk: in STD_LOGIC;
@@ -184,6 +187,7 @@ component uart_par2ser is
            txd : out  STD_LOGIC);
 end component;
 
+-- https://hackaday.io/project/181664-intel-hex-file-inputoutput-for-fpgas/log/197810-ser2par-a-novel-uart-receiver
 component uart_ser2par is
     Port ( reset : in  STD_LOGIC;
            rxd_clk : in  STD_LOGIC;
@@ -307,16 +311,6 @@ constant color_white:						std_logic_vector(7 downto 0):= "11111111";
 constant color_ltgray:						std_logic_vector(7 downto 0):= "01101110"; 
 constant color_dkgray,  color_gray:		std_logic_vector(7 downto 0):= "10010010";
 
----- basic colors (BBGGGRRR)
---constant color8_black : std_logic_vector(7 downto 0) := "00000000"; 
---constant color8_red	 : std_logic_vector(7 downto 0) := "00000111"; 
---constant color8_green : std_logic_vector(7 downto 0) := "00111000"; 
---constant color8_yellow: std_logic_vector(7 downto 0) := "00111111"; 
---constant color8_blue	 : std_logic_vector(7 downto 0) := "11000000"; 
---constant color8_purple: std_logic_vector(7 downto 0) := "11000111"; 
---constant color8_cyan	 : std_logic_vector(7 downto 0) := "11111000"; 
---constant color8_white : std_logic_vector(7 downto 0) := "11111111"; 
-
 type color_lookup is array (0 to 31) of std_logic_vector(7 downto 0);
 constant video_color: color_lookup := (
 -- TIM-011 has a 4-color palette, here we have 4 variations of those
@@ -376,7 +370,6 @@ constant uartmode_debug: uartmode_lookup := (
 
 type prescale_lookup is array (0 to 7) of integer range 0 to 65535;
 constant prescale_value: prescale_lookup := (
---		(96000000 / (16 * 300)),
 		(96000000 / (16 * 600)),
 		(96000000 / (16 * 1200)),
 		(96000000 / (16 * 2400)),
@@ -423,13 +416,13 @@ signal vga_x: std_logic_vector(8 downto 0); -- 512 pixels horizontally
 signal vga_y: std_logic_vector(8 downto 0); -- 512 pixels vertically (either 256 or 384 are used)
 signal vga_a: std_logic_vector(14 downto 0);
 signal h, v: std_logic_vector(9 downto 0);
---alias col: std_logic_vector(6 downto 0) is h(9 downto 3);
---alias row: std_logic_vector(6 downto 0) is v(9 downto 3);
+alias col: std_logic_vector(6 downto 0) is h(9 downto 3);
+alias row: std_logic_vector(6 downto 0) is v(9 downto 3);
 -- video data signals
 signal vga_color, text_color, window_color: std_logic_vector(7 downto 0);
 signal pair, color_sel: std_logic_vector(1 downto 0); -- 2 bit pixel and color lookup
---signal char, pattern: std_logic_vector(7 downto 0);
---signal text_pix: std_logic;
+signal char, pattern: std_logic_vector(7 downto 0);
+signal text_pix: std_logic;
 signal color_index: std_logic_vector(4 downto 0);
 signal nibble: std_logic_vector(3 downto 0);
 
@@ -533,10 +526,10 @@ with switch_hexclk select hex_clk <=
 	baudrate_x2 when "001",
 	baudrate_x4 when "010",
 	baudrate_x8 when "011",
-	freq(4) when "100",	-- 3MHz
-	freq(3) when "101",	-- 6MHz	
-	freq(2) when "110",	-- 12MHz	
-	freq(1) when others;	-- 24MHz	
+	freq(5) when "100",	-- 1.5MHz
+	freq(4) when "101",	-- 3MHz	
+	freq(3) when "110",	-- 6MHz	
+	freq(2) when others;	-- 12MHz	
 
 -- internal 50MHz clock is only used for VGA
 on_clk: process(CLK)
@@ -625,23 +618,7 @@ with vga_x(1) select nibble <=
 	vram_doutb(7 downto 4) when others;
 
 -- index depends on the V9958 or TIM mode
---color_index <= '1' & nibble(2 downto 0) when (switch_tms = '1') else '0' & switch_timpalette & pair;	
 color_index <= ('1' & nibble) when (switch_tms = '1') else ('0' & switch_timpalette & pair);	
-
---window_color <=
---			nibble(3) & nibble(2) & nibble(2) & nibble(3) & nibble(1) & nibble(1) & nibble(3) & nibble(0) when (switch_tms = '1') else
---			pair(1) & pair(1) & pair(1) & pair(0) & pair(0) & pair(0) & "00";
-			
--- color index also takes into account selected palette and if in TIM window
---color_sel <= vga_window & tim_window; 
---with color_sel select vga_color <=
---	"11111111" when "00",													-- should never show
---	"11100000" when "01",
---	"00011100" when "10",
---	text_color when "10",													-- text outside tim window
---	window_color when others;	-- tim or vdp pixel 
---	video_color(to_integer(unsigned(color_index))) when others,	-- tim or vdp pixel 
---	"00000011" when others;												-- outside pixel area (border)
 	
 vga_color <= video_color(to_integer(unsigned(color_index))) when (tim_window = '1') else text_color;
 
@@ -650,7 +627,7 @@ RED <= vga_color(7 downto 5);
 GRN <= vga_color(4 downto 2);
 BLU <= vga_color(1 downto 0);
 
--- background text display for fun
+--background text display for fun
 --char <= (row & '0') xor (col & '0');
 --
 --chargen: chargen_rom Port map ( 
@@ -658,7 +635,7 @@ BLU <= vga_color(1 downto 0);
 --		a(2 downto 0) => v(2 downto 0),
 --      d => pattern
 --	);
-
+--
 --with h(2 downto 0) select text_pix <= 
 --	pattern(7) when O"0",
 --	pattern(6) when O"1",

@@ -9,7 +9,7 @@
 -- Target Devices: 
 -- Tool versions: 
 -- Description: 
---
+-- https://hackaday.io/project/181664-intel-hex-file-inputoutput-for-fpgas/log/197810-ser2par-a-novel-uart-receiver
 -- Dependencies: 
 --
 -- Revision: 
