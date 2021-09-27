@@ -102,9 +102,6 @@ entity hex_io_mercury is
 				--PMOD interface
 				--connection to https://store.digilentinc.com/pmod-kypd-16-button-keypad/
 				PMOD: inout std_logic_vector(7 downto 0)
-				--PMOD(7 downto 6): in std_logic_vector(1 downto 0);
-				--PMOD(5 downto 4): out std_logic_vector(1 downto 0);
-				--PMOD(3 downto 0): in std_logic_vector(3 downto 0)
           );
 end hex_io_mercury;
 

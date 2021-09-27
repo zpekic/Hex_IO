@@ -1,5 +1,5 @@
 --------------------------------------------------------
--- mcc V1.0.0904 - Custom microcode compiler (c)2020-... 
+-- mcc V1.0.0926 - Custom microcode compiler (c)2020-... 
 --    https://github.com/zpekic/MicroCodeCompiler
 --------------------------------------------------------
 -- Auto-generated file, do not modify. To customize, create 'mapper_template.vhd' file in mcc.exe folder
@@ -27,7 +27,7 @@ signal h2m_instructionstart: std_logic_vector(6 downto 0);
 
 constant h2m_mapper: h2m_mapper_memory := (
 
--- L0234@001D. .map 0;
+-- L0232@001D. .map 0;
 0 => "0011101",
 
 1 => "0000111",
@@ -46,7 +46,7 @@ constant h2m_mapper: h2m_mapper_memory := (
 
 8 => "0000111",
 
--- L0372@0062. .map 0x09;
+-- L0373@0062. .map 0x09;
 9 => "1100010",
 
 -- L0331@0044. .map 0x0A;
@@ -95,7 +95,7 @@ constant h2m_mapper: h2m_mapper_memory := (
 
 31 => "0000111",
 
--- L0373@0062. .map ' ';
+-- L0374@0062. .map ' ';
 32 => "1100010",
 
 33 => "0000111",
@@ -158,7 +158,7 @@ constant h2m_mapper: h2m_mapper_memory := (
 -- L0294@0039. .map '9';
 57 => "0111001",
 
--- L0377@0064. .map ':';
+-- L0378@0064. .map ':';
 58 => "1100100",
 
 59 => "0000111",

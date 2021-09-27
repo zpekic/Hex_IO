@@ -1,5 +1,5 @@
 --------------------------------------------------------
--- mcc V1.0.0904 - Custom microcode compiler (c)2020-... 
+-- mcc V1.0.0926 - Custom microcode compiler (c)2020-... 
 --    https://github.com/zpekic/MicroCodeCompiler
 --------------------------------------------------------
 -- Auto-generated file, do not modify. To customize, create 'symbol_template.vhd' file in mcc.exe folder
@@ -47,185 +47,185 @@ signal h2m_sym_a: std_logic_vector(SYMBOL_ADDRESS_WIDTH + SYMBOL_BYTE_WIDTH - 1 
 
 constant h2m_symbol_entry: t_h2m_symbol_entry := (
 
--- L0197@0000._reset:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
+-- L0195@0000._reset:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
 -- _reset: TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
 0 => X"5F_72_65_73_65_74_3A_20_54_58_44_43_48_41_52_20_3C_3D_20_7A_65_72_6F_2C_20_65_72_72_63_6F_64_65",
 
--- L0199@0001._reset1:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
+-- L0197@0001._reset1:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
 -- _reset1: TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
 1 => X"5F_72_65_73_65_74_31_3A_20_54_58_44_43_48_41_52_20_3C_3D_20_7A_65_72_6F_2C_20_65_72_72_63_6F_64",
 
--- L0201@0002._reset2:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
+-- L0199@0002._reset2:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
 -- _reset2: TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
 2 => X"5F_72_65_73_65_74_32_3A_20_54_58_44_43_48_41_52_20_3C_3D_20_7A_65_72_6F_2C_20_65_72_72_63_6F_64",
 
--- L0203@0003._reset3:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
+-- L0201@0003._reset3:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
 -- _reset3: TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
 3 => X"5F_72_65_73_65_74_33_3A_20_54_58_44_43_48_41_52_20_3C_3D_20_7A_65_72_6F_2C_20_65_72_72_63_6F_64",
 
--- L0207@0004.deadloop:  BUSY = 0, if input_is_zero then repeat else next;
+-- L0205@0004.deadloop:  BUSY = 0, if input_is_zero then repeat else next;
 -- deadloop: BUSY = 0, if input_is_zero then repeat else next;
 4 => X"64_65_61_64_6C_6F_6F_70_3A_20_42_55_53_59_20_3D_20_30_2C_20_69_66_20_69_6E_70_75_74_5F_69_73_5F",
 
--- L0208@0005.  if false then trace else trace;
--- if false then trace else trace;
-5 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_74_72_61_63_65_20_65_6C_73_65_20_74_72_61_63_65_3B_20",
+-- L0206@0005.  trace();
+-- trace();
+5 => X"74_72_61_63_65_28_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0209@0006.  poscnt_cin = 1, if true then fork else fork;
+-- L0207@0006.  poscnt_cin = 1, if true then fork else fork;
 -- poscnt_cin = 1, if true then fork else fork;
 6 => X"70_6F_73_63_6E_74_5F_63_69_6E_20_3D_20_31_2C_20_69_66_20_74_72_75_65_20_74_68_65_6E_20_66_6F_72",
 
--- L0212@0007.badchar:  errcode <= err_badchar, if TRACE_ERROR then printerror else nextchar;
+-- L0210@0007.badchar:  errcode <= err_badchar, if TRACE_ERROR then printerror else nextchar;
 -- badchar: errcode <= err_badchar, if TRACE_ERROR then printerror else nextchar;
 7 => X"62_61_64_63_68_61_72_3A_20_65_72_72_63_6F_64_65_20_3C_3D_20_65_72_72_5F_62_61_64_63_68_61_72_2C",
 
--- L0213@0008.badcolon:  errcode <= err_unexpected, if TRACE_ERROR then printerror else nextchar;
+-- L0211@0008.badcolon:  errcode <= err_unexpected, if TRACE_ERROR then printerror else nextchar;
 -- badcolon: errcode <= err_unexpected, if TRACE_ERROR then printerror else nextchar;
 8 => X"62_61_64_63_6F_6C_6F_6E_3A_20_65_72_72_63_6F_64_65_20_3C_3D_20_65_72_72_5F_75_6E_65_78_70_65_63",
 
--- L0214@0009.badchecksum:  errcode <= err_badchecksum, if TRACE_ERROR then printerror else nextchar;
+-- L0212@0009.badchecksum:  errcode <= err_badchecksum, if TRACE_ERROR then printerror else nextchar;
 -- badchecksum: errcode <= err_badchecksum, if TRACE_ERROR then printerror else nextchar;
 9 => X"62_61_64_63_68_65_63_6B_73_75_6D_3A_20_65_72_72_63_6F_64_65_20_3C_3D_20_65_72_72_5F_62_61_64_63",
 
--- L0215@000A.badtype:  errcode <= err_badrecordtype, if TRACE_ERROR then printerror else nextchar;
+-- L0213@000A.badtype:  errcode <= err_badrecordtype, if TRACE_ERROR then printerror else nextchar;
 -- badtype: errcode <= err_badrecordtype, if TRACE_ERROR then printerror else nextchar;
 10 => X"62_61_64_74_79_70_65_3A_20_65_72_72_63_6F_64_65_20_3C_3D_20_65_72_72_5F_62_61_64_72_65_63_6F_72",
 
--- L0216@000B.badlength:  errcode <= err_badrecordlength,if TRACE_ERROR then printerror else nextchar;
+-- L0214@000B.badlength:  errcode <= err_badrecordlength,if TRACE_ERROR then printerror else nextchar;
 -- badlength: errcode <= err_badrecordlength,if TRACE_ERROR then printerror else nextchar;
 11 => X"62_61_64_6C_65_6E_67_74_68_3A_20_65_72_72_63_6F_64_65_20_3C_3D_20_65_72_72_5F_62_61_64_72_65_63",
 
--- L0217@000C.badhex:  errcode <= err_unexpected, if TRACE_ERROR then next else nextchar;
+-- L0215@000C.badhex:  errcode <= err_unexpected, if TRACE_ERROR then next else nextchar;
 -- badhex: errcode <= err_unexpected, if TRACE_ERROR then next else nextchar;
 12 => X"62_61_64_68_65_78_3A_20_65_72_72_63_6F_64_65_20_3C_3D_20_65_72_72_5F_75_6E_65_78_70_65_63_74_65",
 
--- L0218@000D.printerror:  if false then emitChar else emitChar, TXDCHAR <= char_E;
--- printerror: if false then emitChar else emitChar, TXDCHAR <= char_E;
-13 => X"70_72_69_6E_74_65_72_72_6F_72_3A_20_69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68",
+-- L0216@000D.printerror:  emit(char_E);
+-- printerror: emit(char_E);
+13 => X"70_72_69_6E_74_65_72_72_6F_72_3A_20_65_6D_69_74_28_63_68_61_72_5F_45_29_3B_20_20_20_20_20_20_20",
 
--- L0219@000E.  if false then emitChar else emitChar, TXDCHAR <= char_R;
--- if false then emitChar else emitChar, TXDCHAR <= char_R;
-14 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0217@000E.  emit(char_R);
+-- emit(char_R);
+14 => X"65_6D_69_74_28_63_68_61_72_5F_52_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0220@000F.  if false then emitChar else emitChar, TXDCHAR <= char_R;
--- if false then emitChar else emitChar, TXDCHAR <= char_R;
-15 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0218@000F.  emit(char_R);
+-- emit(char_R);
+15 => X"65_6D_69_74_28_63_68_61_72_5F_52_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0221@0010.  if false then emitChar else emitChar, TXDCHAR <= errcode;
--- if false then emitChar else emitChar, TXDCHAR <= errcode;
-16 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0219@0010.  emit(errcode);
+-- emit(errcode);
+16 => X"65_6D_69_74_28_65_72_72_63_6F_64_65_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0222@0011.  if false then emitChar else emitChar, TXDCHAR <= char_space;
--- if false then emitChar else emitChar, TXDCHAR <= char_space;
-17 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0220@0011.  emit(char_space);
+-- emit(char_space);
+17 => X"65_6D_69_74_28_63_68_61_72_5F_73_70_61_63_65_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0223@0012.  if false then emitChar else emitChar, TXDCHAR <= lin_chk3;
--- if false then emitChar else emitChar, TXDCHAR <= lin_chk3;
-18 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0221@0012.  emit(lin_chk3);
+-- emit(lin_chk3);
+18 => X"65_6D_69_74_28_6C_69_6E_5F_63_68_6B_33_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0224@0013.  if false then emitChar else emitChar, TXDCHAR <= lin_chk2;
--- if false then emitChar else emitChar, TXDCHAR <= lin_chk2;
-19 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0222@0013.  emit(lin_chk2);
+-- emit(lin_chk2);
+19 => X"65_6D_69_74_28_6C_69_6E_5F_63_68_6B_32_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0225@0014.  if false then emitChar else emitChar, TXDCHAR <= lin_chk1;
--- if false then emitChar else emitChar, TXDCHAR <= lin_chk1;
-20 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0223@0014.  emit(lin_chk1);
+-- emit(lin_chk1);
+20 => X"65_6D_69_74_28_6C_69_6E_5F_63_68_6B_31_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0226@0015.  if false then emitChar else emitChar, TXDCHAR <= lin_chk0;
--- if false then emitChar else emitChar, TXDCHAR <= lin_chk0;
-21 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0224@0015.  emit(lin_chk0);
+-- emit(lin_chk0);
+21 => X"65_6D_69_74_28_6C_69_6E_5F_63_68_6B_30_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0227@0016.  if false then emitChar else emitChar, TXDCHAR <= char_space;
--- if false then emitChar else emitChar, TXDCHAR <= char_space;
-22 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0225@0016.  emit(char_space);
+-- emit(char_space);
+22 => X"65_6D_69_74_28_63_68_61_72_5F_73_70_61_63_65_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0228@0017.  if false then emitChar else emitChar, TXDCHAR <= pos_ram1;
--- if false then emitChar else emitChar, TXDCHAR <= pos_ram1;
-23 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0226@0017.  emit(pos_ram1);
+-- emit(pos_ram1);
+23 => X"65_6D_69_74_28_70_6F_73_5F_72_61_6D_31_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0229@0018.  if false then emitChar else emitChar, TXDCHAR <= pos_ram0;
--- if false then emitChar else emitChar, TXDCHAR <= pos_ram0;
-24 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0227@0018.  emit(pos_ram0);
+-- emit(pos_ram0);
+24 => X"65_6D_69_74_28_70_6F_73_5F_72_61_6D_30_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0230@0019.  if false then emitChar else emitChar, TXDCHAR <= char_space;
--- if false then emitChar else emitChar, TXDCHAR <= char_space;
-25 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0228@0019.  emit(char_space);
+-- emit(char_space);
+25 => X"65_6D_69_74_28_63_68_61_72_5F_73_70_61_63_65_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0231@001A.  if false then emitChar else emitChar, TXDCHAR <= inp1;
--- if false then emitChar else emitChar, TXDCHAR <= inp1;
-26 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0229@001A.  emit(inp1);
+-- emit(inp1);
+26 => X"65_6D_69_74_28_69_6E_70_31_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0232@001B.  hexcnt <= ptr_colon, if false then emitChar else emitChar, TXDCHAR <= inp0;
--- hexcnt <= ptr_colon, if false then emitChar else emitChar, TXDCHAR <= inp0;
-27 => X"68_65_78_63_6E_74_20_3C_3D_20_70_74_72_5F_63_6F_6C_6F_6E_2C_20_69_66_20_66_61_6C_73_65_20_74_68",
+-- L0230@001B.  hexcnt <= ptr_colon, emit(inp0);
+-- hexcnt <= ptr_colon, emit(inp0);
+27 => X"68_65_78_63_6E_74_20_3C_3D_20_70_74_72_5F_63_6F_6C_6F_6E_2C_20_65_6D_69_74_28_69_6E_70_30_29_3B",
 
--- L0233@001C.  if false then print_crlf else print_crlf;
--- if false then print_crlf else print_crlf;
-28 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_70_72_69_6E_74_5F_63_72_6C_66_20_65_6C_73_65_20_70_72",
+-- L0231@001C.  print_crlf();
+-- print_crlf();
+28 => X"70_72_69_6E_74_5F_63_72_6C_66_28_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0235@001D.nextchar:  errcode <= ok, input_reset = 1, if false then next else deadloop;
+-- L0233@001D.nextchar:  errcode <= ok, input_reset = 1, if false then next else deadloop;
 -- nextchar: errcode <= ok, input_reset = 1, if false then next else deadloop;
 29 => X"6E_65_78_74_63_68_61_72_3A_20_65_72_72_63_6F_64_65_20_3C_3D_20_6F_6B_2C_20_69_6E_70_75_74_5F_72",
 
--- L0237@001E.emitChar:  if TXDREADY then next else repeat;
--- emitChar: if TXDREADY then next else repeat;
-30 => X"65_6D_69_74_43_68_61_72_3A_20_69_66_20_54_58_44_52_45_41_44_59_20_74_68_65_6E_20_6E_65_78_74_20",
+-- L0235@001E.emit:  if TXDREADY then next else repeat;
+-- emit: if TXDREADY then next else repeat;
+30 => X"65_6D_69_74_3A_20_69_66_20_54_58_44_52_45_41_44_59_20_74_68_65_6E_20_6E_65_78_74_20_65_6C_73_65",
 
--- L0238@001F.  if TXDREADY then next else repeat;
+-- L0236@001F.  if TXDREADY then next else repeat;
 -- if TXDREADY then next else repeat;
 31 => X"69_66_20_54_58_44_52_45_41_44_59_20_74_68_65_6E_20_6E_65_78_74_20_65_6C_73_65_20_72_65_70_65_61",
 
--- L0239@0020.  if TXDREADY then next else repeat;
+-- L0237@0020.  if TXDREADY then next else repeat;
 -- if TXDREADY then next else repeat;
 32 => X"69_66_20_54_58_44_52_45_41_44_59_20_74_68_65_6E_20_6E_65_78_74_20_65_6C_73_65_20_72_65_70_65_61",
 
--- L0240@0021.  if TXDSEND then return else return;
+-- L0238@0021.  if TXDSEND then return else return;
 -- if TXDSEND then return else return;
 33 => X"69_66_20_54_58_44_53_45_4E_44_20_74_68_65_6E_20_72_65_74_75_72_6E_20_65_6C_73_65_20_72_65_74_75",
 
--- L0242@0022.printramR:  if false then emitChar else emitChar, TXDCHAR <= char_R;
--- printramR: if false then emitChar else emitChar, TXDCHAR <= char_R;
-34 => X"70_72_69_6E_74_72_61_6D_52_3A_20_69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61",
+-- L0240@0022.printramR:  emit(char_R);
+-- printramR: emit(char_R);
+34 => X"70_72_69_6E_74_72_61_6D_52_3A_20_65_6D_69_74_28_63_68_61_72_5F_52_29_3B_20_20_20_20_20_20_20_20",
 
--- L0243@0023.printram:  if false then emitChar else emitChar, TXDCHAR <= char_EQU;
--- printram: if false then emitChar else emitChar, TXDCHAR <= char_EQU;
-35 => X"70_72_69_6E_74_72_61_6D_3A_20_69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72",
+-- L0242@0023.printram:  emit(char_EQU);
+-- printram: emit(char_EQU);
+35 => X"70_72_69_6E_74_72_61_6D_3A_20_65_6D_69_74_28_63_68_61_72_5F_45_51_55_29_3B_20_20_20_20_20_20_20",
 
--- L0244@0024.  if false then emitChar else emitChar, TXDCHAR <= pos_ram1;
--- if false then emitChar else emitChar, TXDCHAR <= pos_ram1;
-36 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0243@0024.  emit(pos_ram1);
+-- emit(pos_ram1);
+36 => X"65_6D_69_74_28_70_6F_73_5F_72_61_6D_31_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0245@0025.  if false then emitChar else emitChar, TXDCHAR <= pos_ram0;
--- if false then emitChar else emitChar, TXDCHAR <= pos_ram0;
-37 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0244@0025.  emit(pos_ram0);
+-- emit(pos_ram0);
+37 => X"65_6D_69_74_28_70_6F_73_5F_72_61_6D_30_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0246@0026.print_crlf:  if false then emitChar else emitChar, TXDCHAR <= char_cr;
--- print_crlf: if false then emitChar else emitChar, TXDCHAR <= char_cr;
-38 => X"70_72_69_6E_74_5F_63_72_6C_66_3A_20_69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68",
+-- L0246@0026.print_crlf:  emit(char_cr);
+-- print_crlf: emit(char_cr);
+38 => X"70_72_69_6E_74_5F_63_72_6C_66_3A_20_65_6D_69_74_28_63_68_61_72_5F_63_72_29_3B_20_20_20_20_20_20",
 
--- L0247@0027.  if false then emitChar else emitChar, TXDCHAR <= char_lf;
--- if false then emitChar else emitChar, TXDCHAR <= char_lf;
-39 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0247@0027.  emit(char_lf);
+-- emit(char_lf);
+39 => X"65_6D_69_74_28_63_68_61_72_5F_6C_66_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
 -- L0248@0028.  if true then return else return;
 -- if true then return else return;
 40 => X"69_66_20_74_72_75_65_20_74_68_65_6E_20_72_65_74_75_72_6E_20_65_6C_73_65_20_72_65_74_75_72_6E_3B",
 
--- L0250@0029.printaddr:  if false then emitChar else emitChar, TXDCHAR <= addr3;
--- printaddr: if false then emitChar else emitChar, TXDCHAR <= addr3;
-41 => X"70_72_69_6E_74_61_64_64_72_3A_20_69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61",
+-- L0250@0029.printaddr:  emit(addr3);
+-- printaddr: emit(addr3);
+41 => X"70_72_69_6E_74_61_64_64_72_3A_20_65_6D_69_74_28_61_64_64_72_33_29_3B_20_20_20_20_20_20_20_20_20",
 
--- L0251@002A.  if false then emitChar else emitChar, TXDCHAR <= addr2;
--- if false then emitChar else emitChar, TXDCHAR <= addr2;
-42 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0251@002A.  emit(addr2);
+-- emit(addr2);
+42 => X"65_6D_69_74_28_61_64_64_72_32_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0252@002B.  if false then emitChar else emitChar, TXDCHAR <= addr1;
--- if false then emitChar else emitChar, TXDCHAR <= addr1;
-43 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0252@002B.  emit(addr1);
+-- emit(addr1);
+43 => X"65_6D_69_74_28_61_64_64_72_31_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0253@002C.  if false then emitChar else emitChar, TXDCHAR <= addr0;
--- if false then emitChar else emitChar, TXDCHAR <= addr0;
-44 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0253@002C.  emit(addr0);
+-- emit(addr0);
+44 => X"65_6D_69_74_28_61_64_64_72_30_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
 -- L0254@002D.  if true then return else return;
 -- if true then return else return;
@@ -355,195 +355,195 @@ constant h2m_symbol_entry: t_h2m_symbol_entry := (
 -- writeloop: ram_addr = ptr_len, compa = ram, compb = bytecnt, if compa_equals_compb then nextrec;
 77 => X"77_72_69_74_65_6C_6F_6F_70_3A_20_72_61_6D_5F_61_64_64_72_20_3D_20_70_74_72_5F_6C_65_6E_2C_20_63",
 
--- L0347@004E.writemem:  ram_addr = bytecnt, nBUSREQ = 0;
+-- L0348@004E.writemem:  ram_addr = bytecnt, nBUSREQ = 0;
 -- writemem: ram_addr = bytecnt, nBUSREQ = 0;
 78 => X"77_72_69_74_65_6D_65_6D_3A_20_72_61_6D_5F_61_64_64_72_20_3D_20_62_79_74_65_63_6E_74_2C_20_6E_42",
 
--- L0348@004F.  ram_addr = bytecnt, nBUSREQ = 0, if nBUSACK then repeat else next;
+-- L0349@004F.  ram_addr = bytecnt, nBUSREQ = 0, if nBUSACK then repeat else next;
 -- ram_addr = bytecnt, nBUSREQ = 0, if nBUSACK then repeat else next;
 79 => X"72_61_6D_5F_61_64_64_72_20_3D_20_62_79_74_65_63_6E_74_2C_20_6E_42_55_53_52_45_51_20_3D_20_30_2C",
 
--- L0349@0050.  ram_addr = bytecnt, nBUSREQ = 0, nWR = 0;
+-- L0350@0050.  ram_addr = bytecnt, nBUSREQ = 0, nWR = 0;
 -- ram_addr = bytecnt, nBUSREQ = 0, nWR = 0;
 80 => X"72_61_6D_5F_61_64_64_72_20_3D_20_62_79_74_65_63_6E_74_2C_20_6E_42_55_53_52_45_51_20_3D_20_30_2C",
 
--- L0350@0051.  ram_addr = bytecnt, nBUSREQ = 0, nWR = 0, if nWAIT then next else repeat;
+-- L0351@0051.  ram_addr = bytecnt, nBUSREQ = 0, nWR = 0, if nWAIT then next else repeat;
 -- ram_addr = bytecnt, nBUSREQ = 0, nWR = 0, if nWAIT then next else repeat;
 81 => X"72_61_6D_5F_61_64_64_72_20_3D_20_62_79_74_65_63_6E_74_2C_20_6E_42_55_53_52_45_51_20_3D_20_30_2C",
 
--- L0352@0052.  if TRACE_WRITE then next else nextaddr;
+-- L0353@0052.  if TRACE_WRITE then next else nextaddr;
 -- if TRACE_WRITE then next else nextaddr;
 82 => X"69_66_20_54_52_41_43_45_5F_57_52_49_54_45_20_74_68_65_6E_20_6E_65_78_74_20_65_6C_73_65_20_6E_65",
 
--- L0353@0053.  if false then emitChar else emitChar, TXDCHAR <= char_A;
--- if false then emitChar else emitChar, TXDCHAR <= char_A;
-83 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0354@0053.  emit(char_A);
+-- emit(char_A);
+83 => X"65_6D_69_74_28_63_68_61_72_5F_41_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0354@0054.  if false then emitChar else emitChar, TXDCHAR <= char_open;
--- if false then emitChar else emitChar, TXDCHAR <= char_open;
-84 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0355@0054.  emit(char_open);
+-- emit(char_open);
+84 => X"65_6D_69_74_28_63_68_61_72_5F_6F_70_65_6E_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0355@0055.  if false then printaddr else printaddr;
--- if false then printaddr else printaddr;
-85 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_70_72_69_6E_74_61_64_64_72_20_65_6C_73_65_20_70_72_69",
+-- L0356@0055.  printaddr();
+-- printaddr();
+85 => X"70_72_69_6E_74_61_64_64_72_28_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0356@0056.  if false then emitChar else emitChar, TXDCHAR <= char_close;
--- if false then emitChar else emitChar, TXDCHAR <= char_close;
-86 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0357@0056.  emit(char_close);
+-- emit(char_close);
+86 => X"65_6D_69_74_28_63_68_61_72_5F_63_6C_6F_73_65_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0357@0057.  if false then printram else printram;
--- if false then printram else printram;
-87 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_70_72_69_6E_74_72_61_6D_20_65_6C_73_65_20_70_72_69_6E",
+-- L0358@0057.  printram();
+-- printram();
+87 => X"70_72_69_6E_74_72_61_6D_28_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0359@0058.nextaddr:  hexcnt <= inc;
+-- L0360@0058.nextaddr:  hexcnt <= inc;
 -- nextaddr: hexcnt <= inc;
 88 => X"6E_65_78_74_61_64_64_72_3A_20_68_65_78_63_6E_74_20_3C_3D_20_69_6E_63_3B_20_20_20_20_20_20_20_20",
 
--- L0360@0059.  hexcnt <= inc, address <= inc, if false then next else writeloop;
+-- L0361@0059.  hexcnt <= inc, address <= inc, if false then next else writeloop;
 -- hexcnt <= inc, address <= inc, if false then next else writeloop;
 89 => X"68_65_78_63_6E_74_20_3C_3D_20_69_6E_63_2C_20_61_64_64_72_65_73_73_20_3C_3D_20_69_6E_63_2C_20_69",
 
--- L0362@005A.lastrec:  lincnt_a = zero, if resetout_done then next else next;
+-- L0363@005A.lastrec:  lincnt_a = zero, if resetout_done then next else next;
 -- lastrec: lincnt_a = zero, if resetout_done then next else next;
 90 => X"6C_61_73_74_72_65_63_3A_20_6C_69_6E_63_6E_74_5F_61_20_3D_20_7A_65_72_6F_2C_20_69_66_20_72_65_73",
 
--- L0363@005B.  ram_addr = ptr_len, compa = ram, compb = zero, if compa_equals_compb then next else badlength;
+-- L0364@005B.  ram_addr = ptr_len, compa = ram, compb = zero, if compa_equals_compb then next else badlength;
 -- ram_addr = ptr_len, compa = ram, compb = zero, if compa_equals_compb then next else badlength;
 91 => X"72_61_6D_5F_61_64_64_72_20_3D_20_70_74_72_5F_6C_65_6E_2C_20_63_6F_6D_70_61_20_3D_20_72_61_6D_2C",
 
--- L0364@005C.nextrec:  hexcnt <= ptr_colon, if false then next else nextchar;
+-- L0365@005C.nextrec:  hexcnt <= ptr_colon, if false then next else nextchar;
 -- nextrec: hexcnt <= ptr_colon, if false then next else nextchar;
 92 => X"6E_65_78_74_72_65_63_3A_20_68_65_78_63_6E_74_20_3C_3D_20_70_74_72_5F_63_6F_6C_6F_6E_2C_20_69_66",
 
--- L0366@005D.dumpram:  if false then emitChar else emitChar, TXDCHAR <= char_R;
--- dumpram: if false then emitChar else emitChar, TXDCHAR <= char_R;
-93 => X"64_75_6D_70_72_61_6D_3A_20_69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20",
+-- L0367@005D.dumpram:  emit(char_R);
+-- dumpram: emit(char_R);
+93 => X"64_75_6D_70_72_61_6D_3A_20_65_6D_69_74_28_63_68_61_72_5F_52_29_3B_20_20_20_20_20_20_20_20_20_20",
 
--- L0367@005E.  if false then emitChar else emitChar, TXDCHAR <= bytecnt1;
--- if false then emitChar else emitChar, TXDCHAR <= bytecnt1;
-94 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0368@005E.  emit(bytecnt1);
+-- emit(bytecnt1);
+94 => X"65_6D_69_74_28_62_79_74_65_63_6E_74_31_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0368@005F.  if false then emitChar else emitChar, TXDCHAR <= bytecnt0;
--- if false then emitChar else emitChar, TXDCHAR <= bytecnt0;
-95 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0369@005F.  emit(bytecnt0);
+-- emit(bytecnt0);
+95 => X"65_6D_69_74_28_62_79_74_65_63_6E_74_30_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0369@0060.  if false then printram else printram;
--- if false then printram else printram;
-96 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_70_72_69_6E_74_72_61_6D_20_65_6C_73_65_20_70_72_69_6E",
+-- L0370@0060.  printram();
+-- printram();
+96 => X"70_72_69_6E_74_72_61_6D_28_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0370@0061.  if true then return else return;
+-- L0371@0061.  if true then return else return;
 -- if true then return else return;
 97 => X"69_66_20_74_72_75_65_20_74_68_65_6E_20_72_65_74_75_72_6E_20_65_6C_73_65_20_72_65_74_75_72_6E_3B",
 
--- L0374@0062.space:  if prev_is_spaceortab then nextchar else next;
+-- L0375@0062.space:  if prev_is_spaceortab then nextchar else next;
 -- space: if prev_is_spaceortab then nextchar else next;
 98 => X"73_70_61_63_65_3A_20_69_66_20_70_72_65_76_5F_69_73_5F_73_70_61_63_65_6F_72_74_61_62_20_74_68_65",
 
--- L0375@0063.  if hexcnt_is_odd then badchar else nextchar;
+-- L0376@0063.  if hexcnt_is_odd then badchar else nextchar;
 -- if hexcnt_is_odd then badchar else nextchar;
 99 => X"69_66_20_68_65_78_63_6E_74_5F_69_73_5F_6F_64_64_20_74_68_65_6E_20_62_61_64_63_68_61_72_20_65_6C",
 
--- L0378@0064.colon:  checksum <= zero, if bytecnt_at_colon then next else badcolon;
+-- L0379@0064.colon:  checksum <= zero, if bytecnt_at_colon then next else badcolon;
 -- colon: checksum <= zero, if bytecnt_at_colon then next else badcolon;
 100 => X"63_6F_6C_6F_6E_3A_20_63_68_65_63_6B_73_75_6D_20_3C_3D_20_7A_65_72_6F_2C_20_69_66_20_62_79_74_65",
 
--- L0379@0065.  hexcnt <= inc;
+-- L0380@0065.  hexcnt <= inc;
 -- hexcnt <= inc;
 101 => X"68_65_78_63_6E_74_20_3C_3D_20_69_6E_63_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0380@0066.  hexcnt <= inc, if false then next else nextchar;
+-- L0381@0066.  hexcnt <= inc, if false then next else nextchar;
 -- hexcnt <= inc, if false then next else nextchar;
 102 => X"68_65_78_63_6E_74_20_3C_3D_20_69_6E_63_2C_20_69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_6E_65_78",
 
--- L0382@0067.trace:  if TRACE_CHAR then next else return;
+-- L0383@0067.trace:  if TRACE_CHAR then next else return;
 -- trace: if TRACE_CHAR then next else return;
 103 => X"74_72_61_63_65_3A_20_69_66_20_54_52_41_43_45_5F_43_48_41_52_20_74_68_65_6E_20_6E_65_78_74_20_65",
 
--- L0384@0068.  if false then emitChar else emitChar, TXDCHAR <= char_I;
--- if false then emitChar else emitChar, TXDCHAR <= char_I;
-104 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0385@0068.  emit(char_I);
+-- emit(char_I);
+104 => X"65_6D_69_74_28_63_68_61_72_5F_49_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0385@0069.  if false then emitChar else emitChar, TXDCHAR <= char_EQU;
--- if false then emitChar else emitChar, TXDCHAR <= char_EQU;
-105 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0386@0069.  emit(char_EQU);
+-- emit(char_EQU);
+105 => X"65_6D_69_74_28_63_68_61_72_5F_45_51_55_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0386@006A.  if false then emitChar else emitChar, TXDCHAR <= inp1;
--- if false then emitChar else emitChar, TXDCHAR <= inp1;
-106 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0387@006A.  emit(inp1);
+-- emit(inp1);
+106 => X"65_6D_69_74_28_69_6E_70_31_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0387@006B.  if false then emitChar else emitChar, TXDCHAR <= inp0;
--- if false then emitChar else emitChar, TXDCHAR <= inp0;
-107 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0388@006B.  emit(inp0);
+-- emit(inp0);
+107 => X"65_6D_69_74_28_69_6E_70_30_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0388@006C.  if false then emitChar else emitChar, TXDCHAR <= char_space;
--- if false then emitChar else emitChar, TXDCHAR <= char_space;
-108 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0389@006C.  emit(char_space);
+-- emit(char_space);
+108 => X"65_6D_69_74_28_63_68_61_72_5F_73_70_61_63_65_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0390@006D.  if false then emitChar else emitChar, TXDCHAR <= char_A;
--- if false then emitChar else emitChar, TXDCHAR <= char_A;
-109 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0391@006D.  emit(char_A);
+-- emit(char_A);
+109 => X"65_6D_69_74_28_63_68_61_72_5F_41_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0391@006E.  if false then emitChar else emitChar, TXDCHAR <= char_EQU;
--- if false then emitChar else emitChar, TXDCHAR <= char_EQU;
-110 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0392@006E.  emit(char_EQU);
+-- emit(char_EQU);
+110 => X"65_6D_69_74_28_63_68_61_72_5F_45_51_55_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0392@006F.  if false then printaddr else printaddr;
--- if false then printaddr else printaddr;
-111 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_70_72_69_6E_74_61_64_64_72_20_65_6C_73_65_20_70_72_69",
+-- L0393@006F.  printaddr();
+-- printaddr();
+111 => X"70_72_69_6E_74_61_64_64_72_28_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0393@0070.  if false then emitChar else emitChar, TXDCHAR <= char_space;
--- if false then emitChar else emitChar, TXDCHAR <= char_space;
-112 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0394@0070.  emit(char_space);
+-- emit(char_space);
+112 => X"65_6D_69_74_28_63_68_61_72_5F_73_70_61_63_65_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0395@0071.  if false then emitChar else emitChar, TXDCHAR <= char_C;
--- if false then emitChar else emitChar, TXDCHAR <= char_C;
-113 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0396@0071.  emit(char_C);
+-- emit(char_C);
+113 => X"65_6D_69_74_28_63_68_61_72_5F_43_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0396@0072.  if false then emitChar else emitChar, TXDCHAR <= char_EQU;
--- if false then emitChar else emitChar, TXDCHAR <= char_EQU;
-114 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0397@0072.  emit(char_EQU);
+-- emit(char_EQU);
+114 => X"65_6D_69_74_28_63_68_61_72_5F_45_51_55_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0397@0073.  if false then emitChar else emitChar, TXDCHAR <= lin_chk3;
--- if false then emitChar else emitChar, TXDCHAR <= lin_chk3;
-115 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0398@0073.  emit(lin_chk3);
+-- emit(lin_chk3);
+115 => X"65_6D_69_74_28_6C_69_6E_5F_63_68_6B_33_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0398@0074.  if false then emitChar else emitChar, TXDCHAR <= lin_chk2;
--- if false then emitChar else emitChar, TXDCHAR <= lin_chk2;
-116 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0399@0074.  emit(lin_chk2);
+-- emit(lin_chk2);
+116 => X"65_6D_69_74_28_6C_69_6E_5F_63_68_6B_32_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0399@0075.  if false then emitChar else emitChar, TXDCHAR <= lin_chk1;
--- if false then emitChar else emitChar, TXDCHAR <= lin_chk1;
-117 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0400@0075.  emit(lin_chk1);
+-- emit(lin_chk1);
+117 => X"65_6D_69_74_28_6C_69_6E_5F_63_68_6B_31_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0400@0076.  if false then emitChar else emitChar, TXDCHAR <= lin_chk0;
--- if false then emitChar else emitChar, TXDCHAR <= lin_chk0;
-118 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0401@0076.  emit(lin_chk0);
+-- emit(lin_chk0);
+118 => X"65_6D_69_74_28_6C_69_6E_5F_63_68_6B_30_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0401@0077.  if false then emitChar else emitChar, TXDCHAR <= char_space;
--- if false then emitChar else emitChar, TXDCHAR <= char_space;
-119 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0402@0077.  emit(char_space);
+-- emit(char_space);
+119 => X"65_6D_69_74_28_63_68_61_72_5F_73_70_61_63_65_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0408@0078.  if false then emitChar else emitChar, TXDCHAR <= char_B;
--- if false then emitChar else emitChar, TXDCHAR <= char_B;
-120 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0409@0078.  emit(char_B);
+-- emit(char_B);
+120 => X"65_6D_69_74_28_63_68_61_72_5F_42_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0409@0079.  if false then emitChar else emitChar, TXDCHAR <= char_EQU;
--- if false then emitChar else emitChar, TXDCHAR <= char_EQU;
-121 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0410@0079.  emit(char_EQU);
+-- emit(char_EQU);
+121 => X"65_6D_69_74_28_63_68_61_72_5F_45_51_55_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0410@007A.  if false then emitChar else emitChar, TXDCHAR <= bytecnt1;
--- if false then emitChar else emitChar, TXDCHAR <= bytecnt1;
-122 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0411@007A.  emit(bytecnt1);
+-- emit(bytecnt1);
+122 => X"65_6D_69_74_28_62_79_74_65_63_6E_74_31_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0411@007B.  if false then emitChar else emitChar, TXDCHAR <= bytecnt0;
--- if false then emitChar else emitChar, TXDCHAR <= bytecnt0;
-123 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0412@007B.  emit(bytecnt0);
+-- emit(bytecnt0);
+123 => X"65_6D_69_74_28_62_79_74_65_63_6E_74_30_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0412@007C.  if false then emitChar else emitChar, TXDCHAR <= char_space;
--- if false then emitChar else emitChar, TXDCHAR <= char_space;
-124 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_65_6D_69_74_43_68_61_72_20_65_6C_73_65_20_65_6D_69_74",
+-- L0413@007C.  emit(char_space);
+-- emit(char_space);
+124 => X"65_6D_69_74_28_63_68_61_72_5F_73_70_61_63_65_29_3B_20_20_20_20_20_20_20_20_20_20_20_20_20_20_20",
 
--- L0414@007D.  if false then next else printramR;
+-- L0415@007D.  if false then next else printramR;
 -- if false then next else printramR;
 125 => X"69_66_20_66_61_6C_73_65_20_74_68_65_6E_20_6E_65_78_74_20_65_6C_73_65_20_70_72_69_6E_74_72_61_6D",
 

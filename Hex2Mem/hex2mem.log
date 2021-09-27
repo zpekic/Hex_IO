@@ -1,110 +1,29 @@
 --------------------------------------------------------
--- mcc V1.0.0904 - Custom microcode compiler (c)2020-... 
+-- mcc V1.0.0926 - Custom microcode compiler (c)2020-... 
 --    https://github.com/zpekic/MicroCodeCompiler
 --------------------------------------------------------
 Compiling hex2mem.mcc, pass 1 out of 2.
+Line 195: resolved aliases:  clear, lincnt_zero, poscnt_zero
+L0195@0000._reset:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
+
 Line 197: resolved aliases:  clear, lincnt_zero, poscnt_zero
-L0197@0000._reset:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
+L0197@0001._reset1:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
 
 Line 199: resolved aliases:  clear, lincnt_zero, poscnt_zero
-L0199@0001._reset1:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
+L0199@0002._reset2:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
 
 Line 201: resolved aliases:  clear, lincnt_zero, poscnt_zero
-L0201@0002._reset2:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
+L0201@0003._reset3:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
 
-Line 203: resolved aliases:  clear, lincnt_zero, poscnt_zero
-L0203@0003._reset3:  TXDCHAR <= zero, errcode <= ok, checksum <= zero, poscnt_a = zero, lincnt_a = zero, hexcnt <= ptr_colon;
-
-Line 208: resolved aliases:  trace
-L0208@0005.  if false then trace else trace;
-
-Line 209: resolved aliases:  poscnt_inc
-L0209@0006.  poscnt_cin = 1, if true then fork else fork;
+Line 207: resolved aliases:  poscnt_inc
+L0207@0006.  poscnt_cin = 1, if true then fork else fork;
 
 Warning: mask value 255 detected. Range will be 0 to 255
-Line 218: resolved aliases:  emit
-L0218@000D.printerror:  if false then emitChar else emitChar, TXDCHAR <= char_E;
-
-Line 219: resolved aliases:  emit
-L0219@000E.  if false then emitChar else emitChar, TXDCHAR <= char_R;
-
-Line 220: resolved aliases:  emit
-L0220@000F.  if false then emitChar else emitChar, TXDCHAR <= char_R;
-
-Line 221: resolved aliases:  emit
-L0221@0010.  if false then emitChar else emitChar, TXDCHAR <= errcode;
-
-Line 222: resolved aliases:  emit
-L0222@0011.  if false then emitChar else emitChar, TXDCHAR <= char_space;
-
-Line 223: resolved aliases:  emit
-L0223@0012.  if false then emitChar else emitChar, TXDCHAR <= lin_chk3;
-
-Line 224: resolved aliases:  emit
-L0224@0013.  if false then emitChar else emitChar, TXDCHAR <= lin_chk2;
-
-Line 225: resolved aliases:  emit
-L0225@0014.  if false then emitChar else emitChar, TXDCHAR <= lin_chk1;
-
-Line 226: resolved aliases:  emit
-L0226@0015.  if false then emitChar else emitChar, TXDCHAR <= lin_chk0;
-
-Line 227: resolved aliases:  emit
-L0227@0016.  if false then emitChar else emitChar, TXDCHAR <= char_space;
-
-Line 228: resolved aliases:  emit
-L0228@0017.  if false then emitChar else emitChar, TXDCHAR <= pos_ram1;
-
-Line 229: resolved aliases:  emit
-L0229@0018.  if false then emitChar else emitChar, TXDCHAR <= pos_ram0;
-
-Line 230: resolved aliases:  emit
-L0230@0019.  if false then emitChar else emitChar, TXDCHAR <= char_space;
-
-Line 231: resolved aliases:  emit
-L0231@001A.  if false then emitChar else emitChar, TXDCHAR <= inp1;
-
-Line 232: resolved aliases:  emit
-L0232@001B.  hexcnt <= ptr_colon, if false then emitChar else emitChar, TXDCHAR <= inp0;
-
-Line 233: resolved aliases:  print_crlf
-L0233@001C.  if false then print_crlf else print_crlf;
-
-Line 235: resolved aliases:  goto
-L0235@001D.nextchar:  errcode <= ok, input_reset = 1, if false then next else deadloop;
-
-Line 242: resolved aliases:  emit
-L0242@0022.printramR:  if false then emitChar else emitChar, TXDCHAR <= char_R;
-
-Line 243: resolved aliases:  emit
-L0243@0023.printram:  if false then emitChar else emitChar, TXDCHAR <= char_EQU;
-
-Line 244: resolved aliases:  emit
-L0244@0024.  if false then emitChar else emitChar, TXDCHAR <= pos_ram1;
-
-Line 245: resolved aliases:  emit
-L0245@0025.  if false then emitChar else emitChar, TXDCHAR <= pos_ram0;
-
-Line 246: resolved aliases:  emit
-L0246@0026.print_crlf:  if false then emitChar else emitChar, TXDCHAR <= char_cr;
-
-Line 247: resolved aliases:  emit
-L0247@0027.  if false then emitChar else emitChar, TXDCHAR <= char_lf;
+Line 233: resolved aliases:  goto
+L0233@001D.nextchar:  errcode <= ok, input_reset = 1, if false then next else deadloop;
 
 Line 248: resolved aliases:  back
 L0248@0028.  if true then return else return;
-
-Line 250: resolved aliases:  emit
-L0250@0029.printaddr:  if false then emitChar else emitChar, TXDCHAR <= addr3;
-
-Line 251: resolved aliases:  emit
-L0251@002A.  if false then emitChar else emitChar, TXDCHAR <= addr2;
-
-Line 252: resolved aliases:  emit
-L0252@002B.  if false then emitChar else emitChar, TXDCHAR <= addr1;
-
-Line 253: resolved aliases:  emit
-L0253@002C.  if false then emitChar else emitChar, TXDCHAR <= addr0;
 
 Line 254: resolved aliases:  back
 L0254@002D.  if true then return else return;
@@ -163,115 +82,25 @@ L0337@0047.  poscnt_a = zero, lincnt_cin = 1, if hexcnt_is_odd then badhex else 
 
 Warning: else clause missing in if statement, default value '' will be used
 Warning: else clause missing in if statement, default value '' will be used
-Line 353: resolved aliases:  emit
-L0353@0053.  if false then emitChar else emitChar, TXDCHAR <= char_A;
+Line 361: resolved aliases:  goto
+L0361@0059.  hexcnt <= inc, address <= inc, if false then next else writeloop;
 
-Line 354: resolved aliases:  emit
-L0354@0054.  if false then emitChar else emitChar, TXDCHAR <= char_open;
+Line 363: resolved aliases:  lincnt_zero
+L0363@005A.lastrec:  lincnt_a = zero, if resetout_done then next else next;
 
-Line 355: resolved aliases:  printaddr
-L0355@0055.  if false then printaddr else printaddr;
+Line 365: resolved aliases:  goto
+L0365@005C.nextrec:  hexcnt <= ptr_colon, if false then next else nextchar;
 
-Line 356: resolved aliases:  emit
-L0356@0056.  if false then emitChar else emitChar, TXDCHAR <= char_close;
+Line 371: resolved aliases:  back
+L0371@0061.  if true then return else return;
 
-Line 357: resolved aliases:  printram
-L0357@0057.  if false then printram else printram;
+Line 381: resolved aliases:  goto
+L0381@0066.  hexcnt <= inc, if false then next else nextchar;
 
-Line 360: resolved aliases:  goto
-L0360@0059.  hexcnt <= inc, address <= inc, if false then next else writeloop;
+Line 415: resolved aliases:  goto
+L0415@007D.  if false then next else printramR;
 
-Line 362: resolved aliases:  lincnt_zero
-L0362@005A.lastrec:  lincnt_a = zero, if resetout_done then next else next;
-
-Line 364: resolved aliases:  goto
-L0364@005C.nextrec:  hexcnt <= ptr_colon, if false then next else nextchar;
-
-Line 366: resolved aliases:  emit
-L0366@005D.dumpram:  if false then emitChar else emitChar, TXDCHAR <= char_R;
-
-Line 367: resolved aliases:  emit
-L0367@005E.  if false then emitChar else emitChar, TXDCHAR <= bytecnt1;
-
-Line 368: resolved aliases:  emit
-L0368@005F.  if false then emitChar else emitChar, TXDCHAR <= bytecnt0;
-
-Line 369: resolved aliases:  printram
-L0369@0060.  if false then printram else printram;
-
-Line 370: resolved aliases:  back
-L0370@0061.  if true then return else return;
-
-Line 380: resolved aliases:  goto
-L0380@0066.  hexcnt <= inc, if false then next else nextchar;
-
-Line 384: resolved aliases:  emit
-L0384@0068.  if false then emitChar else emitChar, TXDCHAR <= char_I;
-
-Line 385: resolved aliases:  emit
-L0385@0069.  if false then emitChar else emitChar, TXDCHAR <= char_EQU;
-
-Line 386: resolved aliases:  emit
-L0386@006A.  if false then emitChar else emitChar, TXDCHAR <= inp1;
-
-Line 387: resolved aliases:  emit
-L0387@006B.  if false then emitChar else emitChar, TXDCHAR <= inp0;
-
-Line 388: resolved aliases:  emit
-L0388@006C.  if false then emitChar else emitChar, TXDCHAR <= char_space;
-
-Line 390: resolved aliases:  emit
-L0390@006D.  if false then emitChar else emitChar, TXDCHAR <= char_A;
-
-Line 391: resolved aliases:  emit
-L0391@006E.  if false then emitChar else emitChar, TXDCHAR <= char_EQU;
-
-Line 392: resolved aliases:  printaddr
-L0392@006F.  if false then printaddr else printaddr;
-
-Line 393: resolved aliases:  emit
-L0393@0070.  if false then emitChar else emitChar, TXDCHAR <= char_space;
-
-Line 395: resolved aliases:  emit
-L0395@0071.  if false then emitChar else emitChar, TXDCHAR <= char_C;
-
-Line 396: resolved aliases:  emit
-L0396@0072.  if false then emitChar else emitChar, TXDCHAR <= char_EQU;
-
-Line 397: resolved aliases:  emit
-L0397@0073.  if false then emitChar else emitChar, TXDCHAR <= lin_chk3;
-
-Line 398: resolved aliases:  emit
-L0398@0074.  if false then emitChar else emitChar, TXDCHAR <= lin_chk2;
-
-Line 399: resolved aliases:  emit
-L0399@0075.  if false then emitChar else emitChar, TXDCHAR <= lin_chk1;
-
-Line 400: resolved aliases:  emit
-L0400@0076.  if false then emitChar else emitChar, TXDCHAR <= lin_chk0;
-
-Line 401: resolved aliases:  emit
-L0401@0077.  if false then emitChar else emitChar, TXDCHAR <= char_space;
-
-Line 408: resolved aliases:  emit
-L0408@0078.  if false then emitChar else emitChar, TXDCHAR <= char_B;
-
-Line 409: resolved aliases:  emit
-L0409@0079.  if false then emitChar else emitChar, TXDCHAR <= char_EQU;
-
-Line 410: resolved aliases:  emit
-L0410@007A.  if false then emitChar else emitChar, TXDCHAR <= bytecnt1;
-
-Line 411: resolved aliases:  emit
-L0411@007B.  if false then emitChar else emitChar, TXDCHAR <= bytecnt0;
-
-Line 412: resolved aliases:  emit
-L0412@007C.  if false then emitChar else emitChar, TXDCHAR <= char_space;
-
-Line 414: resolved aliases:  goto
-L0414@007D.  if false then next else printramR;
-
-Success: pass 1 416 line(s) read, 209 statement(s) parsed.
+Success: pass 1 417 line(s) read, 207 statement(s) parsed.
 Compiling hex2mem.mcc, pass 2 out of 2.
 Info: line -1 - symbol[0000] <= 'System.Byte[]'
 Info: line -1 - symbol[0001] <= 'System.Byte[]'
@@ -431,7 +260,7 @@ Info: line 5 - code[0003] <= '1_1_1_0000_0000000_0000000_01111_0_0_0_0_00_0_000_
 Info: line -1 - symbol[0003] <= 'System.Byte[]'
 Info: line 5 - code[0004] <= '1_1_0_0011_0000001_0000000_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0004] <= 'System.Byte[]'
-Info: line 5 - code[0005] <= '1_1_1_1111_1100111_1100111_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0005] <= '1_1_1_0000_1100111_1100111_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0005] <= 'System.Byte[]'
 Info: line 5 - code[0006] <= '1_1_1_0000_0000011_0000011_00000_1_0_1_1_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0006] <= 'System.Byte[]'
@@ -704,37 +533,37 @@ Info: line 5 - code[000B] <= '1_1_1_0110_0001101_0011101_00000_1_0_1_0_00_0_000_
 Info: line -1 - symbol[000B] <= 'System.Byte[]'
 Info: line 5 - code[000C] <= '1_1_1_0110_0000000_0011101_00000_1_0_1_0_00_0_000_000_00_0_010_0_00'
 Info: line -1 - symbol[000C] <= 'System.Byte[]'
-Info: line 5 - code[000D] <= '1_1_1_1111_0011110_0011110_00101_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[000D] <= '1_1_1_0000_0011110_0011110_00101_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[000D] <= 'System.Byte[]'
-Info: line 5 - code[000E] <= '1_1_1_1111_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[000E] <= '1_1_1_0000_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[000E] <= 'System.Byte[]'
-Info: line 5 - code[000F] <= '1_1_1_1111_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[000F] <= '1_1_1_0000_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[000F] <= 'System.Byte[]'
-Info: line 5 - code[0010] <= '1_1_1_1111_0011110_0011110_11111_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0010] <= '1_1_1_0000_0011110_0011110_11111_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0010] <= 'System.Byte[]'
-Info: line 5 - code[0011] <= '1_1_1_1111_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0011] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0011] <= 'System.Byte[]'
-Info: line 5 - code[0012] <= '1_1_1_1111_0011110_0011110_10111_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0012] <= '1_1_1_0000_0011110_0011110_10111_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0012] <= 'System.Byte[]'
-Info: line 5 - code[0013] <= '1_1_1_1111_0011110_0011110_10110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0013] <= '1_1_1_0000_0011110_0011110_10110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0013] <= 'System.Byte[]'
-Info: line 5 - code[0014] <= '1_1_1_1111_0011110_0011110_10101_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0014] <= '1_1_1_0000_0011110_0011110_10101_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0014] <= 'System.Byte[]'
-Info: line 5 - code[0015] <= '1_1_1_1111_0011110_0011110_10100_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0015] <= '1_1_1_0000_0011110_0011110_10100_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0015] <= 'System.Byte[]'
-Info: line 5 - code[0016] <= '1_1_1_1111_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0016] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0016] <= 'System.Byte[]'
-Info: line 5 - code[0017] <= '1_1_1_1111_0011110_0011110_10001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0017] <= '1_1_1_0000_0011110_0011110_10001_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0017] <= 'System.Byte[]'
-Info: line 5 - code[0018] <= '1_1_1_1111_0011110_0011110_10000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0018] <= '1_1_1_0000_0011110_0011110_10000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0018] <= 'System.Byte[]'
-Info: line 5 - code[0019] <= '1_1_1_1111_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0019] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0019] <= 'System.Byte[]'
-Info: line 5 - code[001A] <= '1_1_1_1111_0011110_0011110_10011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[001A] <= '1_1_1_0000_0011110_0011110_10011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[001A] <= 'System.Byte[]'
-Info: line 5 - code[001B] <= '1_1_1_1111_0011110_0011110_10010_1_0_1_0_00_0_000_010_00_0_110_0_00'
+Info: line 5 - code[001B] <= '1_1_1_0000_0011110_0011110_10010_1_0_1_0_00_0_000_010_00_0_110_0_00'
 Info: line -1 - symbol[001B] <= 'System.Byte[]'
-Info: line 5 - code[001C] <= '1_1_1_1111_0100110_0100110_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[001C] <= '1_1_1_0000_0100110_0100110_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[001C] <= 'System.Byte[]'
 Warning in line 6: overwriting '0000111' with '0011101' at mapper[0000]
 Info: Mapper location 0 set to value '0011101'
@@ -748,27 +577,27 @@ Info: line 5 - code[0020] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_
 Info: line -1 - symbol[0020] <= 'System.Byte[]'
 Info: line 5 - code[0021] <= '1_1_1_0101_0000010_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0021] <= 'System.Byte[]'
-Info: line 5 - code[0022] <= '1_1_1_1111_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0022] <= '1_1_1_0000_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0022] <= 'System.Byte[]'
-Info: line 5 - code[0023] <= '1_1_1_1111_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0023] <= '1_1_1_0000_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0023] <= 'System.Byte[]'
-Info: line 5 - code[0024] <= '1_1_1_1111_0011110_0011110_10001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0024] <= '1_1_1_0000_0011110_0011110_10001_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0024] <= 'System.Byte[]'
-Info: line 5 - code[0025] <= '1_1_1_1111_0011110_0011110_10000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0025] <= '1_1_1_0000_0011110_0011110_10000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0025] <= 'System.Byte[]'
-Info: line 5 - code[0026] <= '1_1_1_1111_0011110_0011110_00011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0026] <= '1_1_1_0000_0011110_0011110_00011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0026] <= 'System.Byte[]'
-Info: line 5 - code[0027] <= '1_1_1_1111_0011110_0011110_00100_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0027] <= '1_1_1_0000_0011110_0011110_00100_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0027] <= 'System.Byte[]'
 Info: line 5 - code[0028] <= '1_1_1_0000_0000010_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0028] <= 'System.Byte[]'
-Info: line 5 - code[0029] <= '1_1_1_1111_0011110_0011110_11101_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0029] <= '1_1_1_0000_0011110_0011110_11101_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0029] <= 'System.Byte[]'
-Info: line 5 - code[002A] <= '1_1_1_1111_0011110_0011110_11100_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[002A] <= '1_1_1_0000_0011110_0011110_11100_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[002A] <= 'System.Byte[]'
-Info: line 5 - code[002B] <= '1_1_1_1111_0011110_0011110_11011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[002B] <= '1_1_1_0000_0011110_0011110_11011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[002B] <= 'System.Byte[]'
-Info: line 5 - code[002C] <= '1_1_1_1111_0011110_0011110_11010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[002C] <= '1_1_1_0000_0011110_0011110_11010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[002C] <= 'System.Byte[]'
 Info: line 5 - code[002D] <= '1_1_1_0000_0000010_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[002D] <= 'System.Byte[]'
@@ -890,15 +719,15 @@ Info: line 5 - code[0051] <= '0_0_1_0001_0000000_0000001_00000_1_0_1_0_00_0_000_
 Info: line -1 - symbol[0051] <= 'System.Byte[]'
 Info: line 5 - code[0052] <= '1_1_1_0111_0000000_1011000_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0052] <= 'System.Byte[]'
-Info: line 5 - code[0053] <= '1_1_1_1111_0011110_0011110_01001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0053] <= '1_1_1_0000_0011110_0011110_01001_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0053] <= 'System.Byte[]'
-Info: line 5 - code[0054] <= '1_1_1_1111_0011110_0011110_01100_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0054] <= '1_1_1_0000_0011110_0011110_01100_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0054] <= 'System.Byte[]'
-Info: line 5 - code[0055] <= '1_1_1_1111_0101001_0101001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0055] <= '1_1_1_0000_0101001_0101001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0055] <= 'System.Byte[]'
-Info: line 5 - code[0056] <= '1_1_1_1111_0011110_0011110_01101_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0056] <= '1_1_1_0000_0011110_0011110_01101_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0056] <= 'System.Byte[]'
-Info: line 5 - code[0057] <= '1_1_1_1111_0100011_0100011_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0057] <= '1_1_1_0000_0100011_0100011_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0057] <= 'System.Byte[]'
 Info: line 5 - code[0058] <= '1_1_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_001_00_0_110_0_00'
 Info: line -1 - symbol[0058] <= 'System.Byte[]'
@@ -910,13 +739,13 @@ Info: line 5 - code[005B] <= '1_1_1_1101_0000000_0001011_00000_1_0_1_0_00_0_001_
 Info: line -1 - symbol[005B] <= 'System.Byte[]'
 Info: line 5 - code[005C] <= '1_1_1_1111_0000000_0011101_00000_1_0_1_0_00_0_000_010_00_0_110_0_00'
 Info: line -1 - symbol[005C] <= 'System.Byte[]'
-Info: line 5 - code[005D] <= '1_1_1_1111_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[005D] <= '1_1_1_0000_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[005D] <= 'System.Byte[]'
-Info: line 5 - code[005E] <= '1_1_1_1111_0011110_0011110_11001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[005E] <= '1_1_1_0000_0011110_0011110_11001_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[005E] <= 'System.Byte[]'
-Info: line 5 - code[005F] <= '1_1_1_1111_0011110_0011110_11000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[005F] <= '1_1_1_0000_0011110_0011110_11000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[005F] <= 'System.Byte[]'
-Info: line 5 - code[0060] <= '1_1_1_1111_0100011_0100011_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0060] <= '1_1_1_0000_0100011_0100011_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0060] <= 'System.Byte[]'
 Info: line 5 - code[0061] <= '1_1_1_0000_0000010_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0061] <= 'System.Byte[]'
@@ -938,47 +767,47 @@ Info: line 5 - code[0066] <= '1_1_1_1111_0000000_0011101_00000_1_0_1_0_00_0_000_
 Info: line -1 - symbol[0066] <= 'System.Byte[]'
 Info: line 5 - code[0067] <= '1_1_1_1000_0000000_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0067] <= 'System.Byte[]'
-Info: line 5 - code[0068] <= '1_1_1_1111_0011110_0011110_00111_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0068] <= '1_1_1_0000_0011110_0011110_00111_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0068] <= 'System.Byte[]'
-Info: line 5 - code[0069] <= '1_1_1_1111_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0069] <= '1_1_1_0000_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0069] <= 'System.Byte[]'
-Info: line 5 - code[006A] <= '1_1_1_1111_0011110_0011110_10011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006A] <= '1_1_1_0000_0011110_0011110_10011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006A] <= 'System.Byte[]'
-Info: line 5 - code[006B] <= '1_1_1_1111_0011110_0011110_10010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006B] <= '1_1_1_0000_0011110_0011110_10010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006B] <= 'System.Byte[]'
-Info: line 5 - code[006C] <= '1_1_1_1111_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006C] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006C] <= 'System.Byte[]'
-Info: line 5 - code[006D] <= '1_1_1_1111_0011110_0011110_01001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006D] <= '1_1_1_0000_0011110_0011110_01001_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006D] <= 'System.Byte[]'
-Info: line 5 - code[006E] <= '1_1_1_1111_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006E] <= '1_1_1_0000_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006E] <= 'System.Byte[]'
-Info: line 5 - code[006F] <= '1_1_1_1111_0101001_0101001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006F] <= '1_1_1_0000_0101001_0101001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006F] <= 'System.Byte[]'
-Info: line 5 - code[0070] <= '1_1_1_1111_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0070] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0070] <= 'System.Byte[]'
-Info: line 5 - code[0071] <= '1_1_1_1111_0011110_0011110_01010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0071] <= '1_1_1_0000_0011110_0011110_01010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0071] <= 'System.Byte[]'
-Info: line 5 - code[0072] <= '1_1_1_1111_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0072] <= '1_1_1_0000_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0072] <= 'System.Byte[]'
-Info: line 5 - code[0073] <= '1_1_1_1111_0011110_0011110_10111_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0073] <= '1_1_1_0000_0011110_0011110_10111_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0073] <= 'System.Byte[]'
-Info: line 5 - code[0074] <= '1_1_1_1111_0011110_0011110_10110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0074] <= '1_1_1_0000_0011110_0011110_10110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0074] <= 'System.Byte[]'
-Info: line 5 - code[0075] <= '1_1_1_1111_0011110_0011110_10101_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0075] <= '1_1_1_0000_0011110_0011110_10101_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0075] <= 'System.Byte[]'
-Info: line 5 - code[0076] <= '1_1_1_1111_0011110_0011110_10100_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0076] <= '1_1_1_0000_0011110_0011110_10100_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0076] <= 'System.Byte[]'
-Info: line 5 - code[0077] <= '1_1_1_1111_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0077] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0077] <= 'System.Byte[]'
-Info: line 5 - code[0078] <= '1_1_1_1111_0011110_0011110_01000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0078] <= '1_1_1_0000_0011110_0011110_01000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0078] <= 'System.Byte[]'
-Info: line 5 - code[0079] <= '1_1_1_1111_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0079] <= '1_1_1_0000_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0079] <= 'System.Byte[]'
-Info: line 5 - code[007A] <= '1_1_1_1111_0011110_0011110_11001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[007A] <= '1_1_1_0000_0011110_0011110_11001_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[007A] <= 'System.Byte[]'
-Info: line 5 - code[007B] <= '1_1_1_1111_0011110_0011110_11000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[007B] <= '1_1_1_0000_0011110_0011110_11000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[007B] <= 'System.Byte[]'
-Info: line 5 - code[007C] <= '1_1_1_1111_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[007C] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[007C] <= 'System.Byte[]'
 Info: line 5 - code[007D] <= '1_1_1_1111_0000000_0100010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[007D] <= 'System.Byte[]'
@@ -1006,3 +835,4 @@ Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_sym.mi
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_sym.cgf' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_sym.coe' (LF only) ... Done (initialized locations: 128, empty locations: 0, total locations: 128).
 Generating code 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_sym.vhd' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem
