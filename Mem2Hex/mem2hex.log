@@ -1,124 +1,49 @@
 --------------------------------------------------------
--- mcc V1.0.0807 - Custom microcode compiler (c)2020-... 
+-- mcc V1.0.0926 - Custom microcode compiler (c)2020-... 
 --    https://github.com/zpekic/MicroCodeCompiler
 --------------------------------------------------------
 Compiling mem2hex.mcc, pass 1 out of 2.
 Line 98: resolved aliases:  noop
-L0098@0000._reset:  if true then next else next
+L0098@0000._reset:  if true then next else next;
 
 Line 100: resolved aliases:  noop
-L0100@0001._reset1:  if true then next else next
+L0100@0001._reset1:  if true then next else next;
 
 Line 102: resolved aliases:  noop
-L0102@0002._reset2:  if true then next else next
+L0102@0002._reset2:  if true then next else next;
 
 Line 104: resolved aliases:  noop
-L0104@0003._reset3:  if true then next else next
+L0104@0003._reset3:  if true then next else next;
 
 Warning: mask value 255 detected. Range will be 0 to 255
-Line 116: resolved aliases:  printpage
-L0116@0006.pageloop:  if false then printpage else printpage
-
-Line 125: resolved aliases:  emit
-L0125@0009.  mem_page <= zero, mem_addr <= zero, if false then emitChar else emitChar, CHAR <= char_colon
-
-Line 126: resolved aliases:  emit
-L0126@000A.  if false then emitChar else emitChar, CHAR <= char_space
-
-Line 128: resolved aliases:  printcount
-L0128@000B.  count <= zero, if false then printcount else printcount
-
-Line 130: resolved aliases:  printaddr
-L0130@000C.  if false then printaddr else printaddr
-
 Line 132: resolved aliases:  printd
-L0132@000D.  d <= one, if false then printd else printd
-
-Line 134: resolved aliases:  lineend
-L0134@000E.  if false then lineend else lineend
+L0132@000D.  d <= one, if false then printd else printd;
 
 Line 137: resolved aliases:  goto
-L0137@000F.  if false then next else deadloop
+L0137@000F.  if false then next else deadloop;
 
 Line 141: resolved aliases:  noop
-L0141@0011.page_line:  if true then next else next
-
-Line 143: resolved aliases:  emit
-L0143@0012.  if false then emitChar else emitChar, CHAR <= char_colon
-
-Line 145: resolved aliases:  emit
-L0145@0013.  if false then emitChar else emitChar, CHAR <= char_space
-
-Line 147: resolved aliases:  printcount
-L0147@0014.  count <= load, if false then printcount else printcount
-
-Line 149: resolved aliases:  printaddr
-L0149@0015.  if false then printaddr else printaddr
+L0141@0011.page_line:  if true then next else next;
 
 Line 151: resolved aliases:  printd
-L0151@0016.  d <= zero, if false then printd else printd
-
-Line 154: resolved aliases:  readmem
-L0154@0017.page_byte:  if false then readmem else readmem
+L0151@0016.  d <= zero, if false then printd else printd;
 
 Line 155: resolved aliases:  printd
-L0155@0018.  if false then printd else printd
-
-Line 160: resolved aliases:  lineend
-L0160@001B.  if false then lineend else lineend
-
-Line 167: resolved aliases:  emit
-L0167@001E.  if false then emitChar else emitChar, CHAR <= checksum_hi
-
-Line 168: resolved aliases:  emit
-L0168@001F.  if false then emitChar else emitChar, CHAR <= checksum_lo
-
-Line 169: resolved aliases:  emit
-L0169@0020.  if false then emitChar else emitChar, CHAR <= char_cr
-
-Line 170: resolved aliases:  emit
-L0170@0021.  if false then emitChar else emitChar, CHAR <= char_lf
+L0155@0018.  if false then printd else printd;
 
 Line 171: resolved aliases:  back
-L0171@0022.  if true then return else return
-
-Line 173: resolved aliases:  emit
-L0173@0023.printcount:  if false then emitChar else emitChar, CHAR <= count_hi
-
-Line 174: resolved aliases:  emit
-L0174@0024.  if false then emitChar else emitChar, CHAR <= count_lo
+L0171@0022.  if true then return else return;
 
 Line 175: resolved aliases:  goto
-L0175@0025.  checksum <= count, if false then next else printspace
-
-Line 177: resolved aliases:  emit
-L0177@0026.printaddr:  if false then emitChar else emitChar, CHAR <= addr_msb_hi
-
-Line 178: resolved aliases:  emit
-L0178@0027.  checksum <= add_addr_msb, if false then emitChar else emitChar, CHAR <= addr_msb_lo
-
-Line 179: resolved aliases:  emit
-L0179@0028.  if false then emitChar else emitChar, CHAR <= addr_lsb_hi
-
-Line 180: resolved aliases:  emit
-L0180@0029.  checksum <= add_addr_lsb, if false then emitChar else emitChar, CHAR <= addr_lsb_lo
-
-Line 181: resolved aliases:  emit
-L0181@002A.printspace:  if false then emitChar else emitChar, CHAR <= char_space
+L0175@0025.  checksum <= count, if false then next else printspace;
 
 Line 182: resolved aliases:  back
-L0182@002B.  if true then return else return
-
-Line 184: resolved aliases:  emit
-L0184@002C.printd:  if false then emitChar else emitChar, CHAR <= d_hi
-
-Line 185: resolved aliases:  emit
-L0185@002D.  if false then emitChar else emitChar, CHAR <= d_lo
+L0182@002B.  if true then return else return;
 
 Line 186: resolved aliases:  goto
-L0186@002E.  checksum <= add_d, if false then next else printspace
+L0186@002E.  checksum <= add_d, if false then next else printspace;
 
-Success: pass 1 202 line(s) read, 84 statement(s) parsed.
+Success: pass 1 199 line(s) read, 83 statement(s) parsed.
 Compiling mem2hex.mcc, pass 2 out of 2.
 Field 'nBUSREQ' 33 .. 33
 Field 'nRD' 32 .. 32
@@ -395,48 +320,48 @@ Info: line 6 - mapper[00FE] <= '000101'
 Info: line 6 - mapper[00FF] <= '000101'
 Info: 256 mapper locations from 0 to 255 set to value '000101'
 Info: line 5 - code[0005] <= '1_1_1_0000_000000_000000_01_00_00_000_00_0000'
-Info: line 5 - code[0006] <= '1_1_1_1111_010000_010000_00_00_00_000_00_0000'
+Info: line 5 - code[0006] <= '1_1_1_0000_010000_010000_00_00_00_000_00_0000'
 Info: line 5 - code[0007] <= '1_1_1_0000_000000_000000_10_00_00_000_00_0000'
 Info: line 5 - code[0008] <= '1_1_1_1001_000000_000110_00_00_00_000_00_0000'
 Warning in line 6: overwriting '000101' with '001001' at mapper[0000]
 Info: Mapper location 0 set to value '001001'
-Info: line 5 - code[0009] <= '1_1_1_1111_101111_101111_01_01_00_000_00_0001'
-Info: line 5 - code[000A] <= '1_1_1_1111_101111_101111_00_00_00_000_00_0010'
-Info: line 5 - code[000B] <= '1_1_1_1111_100011_100011_00_00_11_000_00_0000'
-Info: line 5 - code[000C] <= '1_1_1_1111_100110_100110_00_00_00_000_00_0000'
+Info: line 5 - code[0009] <= '1_1_1_0000_101111_101111_01_01_00_000_00_0001'
+Info: line 5 - code[000A] <= '1_1_1_0000_101111_101111_00_00_00_000_00_0010'
+Info: line 5 - code[000B] <= '1_1_1_0000_100011_100011_00_00_11_000_00_0000'
+Info: line 5 - code[000C] <= '1_1_1_0000_100110_100110_00_00_00_000_00_0000'
 Info: line 5 - code[000D] <= '1_1_1_1111_101100_101100_00_00_00_000_11_0000'
-Info: line 5 - code[000E] <= '1_1_1_1111_011101_011101_00_00_00_000_00_0000'
+Info: line 5 - code[000E] <= '1_1_1_0000_011101_011101_00_00_00_000_00_0000'
 Info: line 5 - code[000F] <= '1_1_1_1111_000000_000100_00_00_00_000_00_0000'
 Info: line 5 - code[0010] <= '1_1_1_0100_000000_000010_00_01_00_000_00_0000'
 Info: line 5 - code[0011] <= '1_1_1_0000_000000_000000_00_00_00_000_00_0000'
-Info: line 5 - code[0012] <= '1_1_1_1111_101111_101111_00_00_00_000_00_0001'
-Info: line 5 - code[0013] <= '1_1_1_1111_101111_101111_00_00_00_000_00_0010'
-Info: line 5 - code[0014] <= '1_1_1_1111_100011_100011_00_00_01_000_00_0000'
-Info: line 5 - code[0015] <= '1_1_1_1111_100110_100110_00_00_00_000_00_0000'
+Info: line 5 - code[0012] <= '1_1_1_0000_101111_101111_00_00_00_000_00_0001'
+Info: line 5 - code[0013] <= '1_1_1_0000_101111_101111_00_00_00_000_00_0010'
+Info: line 5 - code[0014] <= '1_1_1_0000_100011_100011_00_00_01_000_00_0000'
+Info: line 5 - code[0015] <= '1_1_1_0000_100110_100110_00_00_00_000_00_0000'
 Info: line 5 - code[0016] <= '1_1_1_1111_101100_101100_00_00_00_000_10_0000'
-Info: line 5 - code[0017] <= '1_1_1_1111_110011_110011_00_00_00_000_00_0000'
+Info: line 5 - code[0017] <= '1_1_1_0000_110011_110011_00_00_00_000_00_0000'
 Info: line 5 - code[0018] <= '1_1_1_1111_101100_101100_00_00_00_000_00_0000'
 Info: line 5 - code[0019] <= '1_1_1_0000_000000_000000_00_10_10_000_00_0000'
 Info: line 5 - code[001A] <= '1_1_1_0110_000000_010111_00_00_00_000_00_0000'
-Info: line 5 - code[001B] <= '1_1_1_1111_011101_011101_00_00_00_000_00_0000'
+Info: line 5 - code[001B] <= '1_1_1_0000_011101_011101_00_00_00_000_00_0000'
 Info: line 5 - code[001C] <= '1_1_1_0101_000010_010001_00_00_00_000_00_0000'
 Info: line 5 - code[001D] <= '1_1_1_0000_000000_000000_00_00_00_101_00_0000'
-Info: line 5 - code[001E] <= '1_1_1_1111_101111_101111_00_00_00_000_00_1110'
-Info: line 5 - code[001F] <= '1_1_1_1111_101111_101111_00_00_00_000_00_1111'
-Info: line 5 - code[0020] <= '1_1_1_1111_101111_101111_00_00_00_000_00_0011'
-Info: line 5 - code[0021] <= '1_1_1_1111_101111_101111_00_00_00_000_00_0100'
+Info: line 5 - code[001E] <= '1_1_1_0000_101111_101111_00_00_00_000_00_1110'
+Info: line 5 - code[001F] <= '1_1_1_0000_101111_101111_00_00_00_000_00_1111'
+Info: line 5 - code[0020] <= '1_1_1_0000_101111_101111_00_00_00_000_00_0011'
+Info: line 5 - code[0021] <= '1_1_1_0000_101111_101111_00_00_00_000_00_0100'
 Info: line 5 - code[0022] <= '1_1_1_0000_000010_000010_00_00_00_000_00_0000'
-Info: line 5 - code[0023] <= '1_1_1_1111_101111_101111_00_00_00_000_00_1000'
-Info: line 5 - code[0024] <= '1_1_1_1111_101111_101111_00_00_00_000_00_1001'
+Info: line 5 - code[0023] <= '1_1_1_0000_101111_101111_00_00_00_000_00_1000'
+Info: line 5 - code[0024] <= '1_1_1_0000_101111_101111_00_00_00_000_00_1001'
 Info: line 5 - code[0025] <= '1_1_1_1111_000000_101010_00_00_00_001_00_0000'
-Info: line 5 - code[0026] <= '1_1_1_1111_101111_101111_00_00_00_000_00_1010'
-Info: line 5 - code[0027] <= '1_1_1_1111_101111_101111_00_00_00_011_00_1011'
-Info: line 5 - code[0028] <= '1_1_1_1111_101111_101111_00_00_00_000_00_1100'
-Info: line 5 - code[0029] <= '1_1_1_1111_101111_101111_00_00_00_010_00_1101'
-Info: line 5 - code[002A] <= '1_1_1_1111_101111_101111_00_00_00_000_00_0010'
+Info: line 5 - code[0026] <= '1_1_1_0000_101111_101111_00_00_00_000_00_1010'
+Info: line 5 - code[0027] <= '1_1_1_0000_101111_101111_00_00_00_011_00_1011'
+Info: line 5 - code[0028] <= '1_1_1_0000_101111_101111_00_00_00_000_00_1100'
+Info: line 5 - code[0029] <= '1_1_1_0000_101111_101111_00_00_00_010_00_1101'
+Info: line 5 - code[002A] <= '1_1_1_0000_101111_101111_00_00_00_000_00_0010'
 Info: line 5 - code[002B] <= '1_1_1_0000_000010_000010_00_00_00_000_00_0000'
-Info: line 5 - code[002C] <= '1_1_1_1111_101111_101111_00_00_00_000_00_0110'
-Info: line 5 - code[002D] <= '1_1_1_1111_101111_101111_00_00_00_000_00_0111'
+Info: line 5 - code[002C] <= '1_1_1_0000_101111_101111_00_00_00_000_00_0110'
+Info: line 5 - code[002D] <= '1_1_1_0000_101111_101111_00_00_00_000_00_0111'
 Info: line 5 - code[002E] <= '1_1_1_1111_000000_101010_00_00_00_100_00_0000'
 Info: line 5 - code[002F] <= '1_1_1_0111_000000_000001_00_00_00_000_00_0000'
 Info: line 5 - code[0030] <= '1_1_1_0111_000000_000001_00_00_00_000_00_0000'
@@ -458,3 +383,10 @@ Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code.h
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code_lendian.bin' ... Done.
 Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_code_bendian.bin' ... Done.
 Generating mapping: 
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.mif' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.cgf' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.coe' (LF only) ... Done (initialized locations: 256, empty locations: 0, total locations: 256).
+Generating mapper 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.vhd' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.hex' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Mem2Hex\mem2hex_map.bin' ... Done.
+Generating symbol:  skippe

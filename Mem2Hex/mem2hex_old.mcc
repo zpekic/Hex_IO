@@ -82,14 +82,14 @@ goto:		.alias if false then next else;
 noop:		.alias if true then next else next;
 back:	    .alias if true then return else return;
 
-// gosub definitions - this works because "jump" pushes return address to stack if both then/else are same
-emit:		.sub CHAR;
-printpage:  .sub;	
-lineend:	.sub;	
-readmem:	.sub;	
-printcount:	.sub;	
-printaddr:	.sub;	
-// leaving the "sub call" in "old style" to illustrate what is actually happening
+// gosub aliases - this works because "jump" pushes return address to stack if both then/else are same
+emit:		.alias if false then emitChar else emitChar, CHAR <=;
+printpage:  .alias if false then printpage else printpage;	
+linestart:	.alias if false then linestart else linestart;	
+lineend:	.alias if false then lineend else lineend;	
+readmem:	.alias if false then readmem else readmem;	
+printcount:	.alias if false then printcount else printcount;	
+printaddr:	.alias if false then printaddr else printaddr;	
 printd:		.alias if false then printd else printd;	
 
 			.org 0;
@@ -113,7 +113,7 @@ deadloop:	CHAR <= zero, BUSY = 0, if START then fork else deadloop;
 			// fork lands here when at least one page bit is on
 			// this is the most generic mask so it should be defined first
 			mem_page <= zero;
-pageloop:	printpage();
+pageloop:	printpage;
 			mem_page <= inc;
 			if page_is_zero then next else pageloop; // page register is 3 bits, so when it wraps to 0 all 8 pages are done
 
@@ -122,16 +122,16 @@ pageloop:	printpage();
 			.map 0b00000000;
 			// last line is hard coded : 00 0000 01 FF<cr><lf>
 			// :
-			mem_page <= zero, mem_addr <= zero, emit(char_colon);
-			emit(char_space);
+			mem_page <= zero, mem_addr <= zero, emit char_colon;
+			emit char_space;
 			// 00
-			count <= zero, printcount();
+			count <= zero, printcount;
 			// 0000
-			printaddr();
+			printaddr;
 			// 01
 			d <= one, printd;
 			// FF (because checksum should add up to it), then <cr><lf>
-			lineend();
+			lineend;
 			
 			// done with this dump, get ready for next
 			goto deadloop;
@@ -140,53 +140,56 @@ printpage:  mem_addr <= zero, if page_match then next else return; // 3-bit page
 
 page_line:	noop;	
 			// :
-			emit(char_colon);
+			emit char_colon;
 			//
-			emit(char_space);
+			emit char_space;
 			// 10 or 20 (record length)
-			count <= load, printcount(); // will be 16 or 32 based on input pin
+			count <= load, printcount; // will be 16 or 32 based on input pin
 			// aaaa
-			printaddr();
+			printaddr;
 			// 00 (type)
 			d <= zero, printd;
 			//
 
-page_byte:	readmem();	// D <= M(page:address)
+page_byte:	readmem;	// D <= M(page:address)
 			printd;
 			mem_addr <= inc, count <= dec;
 			if count_is_zero then next else page_byte;
 			
 			// done with all the data bytes on this line, output end of line
-			lineend();
+			lineend;
 			
 			// mem_addr is 13-bit reg so when it wraps to 0 we are done with 8k page
 			if mem_addr_is_zero then return else page_line;	
 			
 			// all lines end with checksum byte and cr, lf
 lineend:	checksum <= complement;	// checksum <= (!checksum) + 1 (base 2 complement)
-			emit(checksum_hi);		// bits 7:4 converted to ASCII
-			emit(checksum_lo);		// bits 3:0 converted to ASCII
-			emit(char_cr);
-			emit(char_lf);
+			emit checksum_hi;		// bits 7:4 converted to ASCII
+			emit checksum_lo;		// bits 3:0 converted to ASCII
+			emit char_cr;
+			emit char_lf;
 			back;
 						
-printcount:	emit(count_hi);
-			emit(count_lo);
+printcount:	emit count_hi;
+			emit count_lo;
 			checksum <= count, goto printspace;	// count is first byte for checksum, so simply assign
 						
-printaddr:	emit(addr_msb_hi);
-			checksum <= add_addr_msb, emit(addr_msb_lo);
-			emit(addr_lsb_hi);
-			checksum <= add_addr_lsb, emit(addr_lsb_lo);
-printspace:	emit(char_space);
+printaddr:	emit addr_msb_hi;
+			checksum <= add_addr_msb, emit addr_msb_lo;
+			emit addr_lsb_hi;
+			checksum <= add_addr_lsb, emit addr_lsb_lo;
+printspace:	emit char_space;
 			back;
 
-printd:		emit(d_hi);
-			emit(d_lo);
+printd:		emit d_hi;
+			emit d_lo;
 			checksum <= add_d, goto printspace;
 						
 			// "UART" is supposed to signal TDXREADY = 1 when presented 0x00 or when serial trasmit is done
-emit:		if TXDREADY then next else repeat;	// sync with baudrate clock that drives UART
+//emitChar:	if TXDSEND then next else next;
+//emitChar2:if TXDREADY then return else repeat;
+
+emitChar:	if TXDREADY then next else repeat;	// sync with baudrate clock that drives UART
 			if TXDREADY then next else repeat;
 			if TXDREADY then next else repeat;
 			if TXDSEND then return else return;

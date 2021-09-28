@@ -1,5 +1,5 @@
 --------------------------------------------------------
--- mcc V1.0.0807 - Custom microcode compiler (c)2020-... 
+-- mcc V1.0.0926 - Custom microcode compiler (c)2020-... 
 --    https://github.com/zpekic/MicroCodeCompiler
 --------------------------------------------------------
 -- Auto-generated file, do not modify. To customize, create 'mapper_template.vhd' file in mcc.exe folder
@@ -27,7 +27,7 @@ signal m2h_instructionstart: std_logic_vector(5 downto 0);
 
 constant m2h_mapper: m2h_mapper_memory := (
 
--- L0122@0009. .map 0b00000000
+-- L0122@0009. .map 0b00000000;
 0 => O"11",
 
 1 => O"05",
